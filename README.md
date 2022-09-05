@@ -1,1 +1,2 @@
-# spice-idle
+# Spice-Idle
+expand your spice empire
