@@ -1521,7 +1521,7 @@ function auto_toggle(color, unless) {
                         "spice_buy a_enabled"
                 } else {
                     alert(
-                        "Ascension confirmations must be off to turn on Ascension automation!"
+                        "转生确认必须关闭才能开启转生自动化！"
                     )
                 }
             }
@@ -2011,9 +2011,9 @@ function enter_ascension_challenge(id) {
         else {
             if (
                 confirm(
-                    "Are you sure you want to enter Challenge " +
+                    "你确定要进入挑战 " +
                         format_num(id, 0) +
-                        "? You will Ascend!"
+                        "? 你将会进行转生!"
                 )
             ) {
                 challenge_ready = true
@@ -2026,7 +2026,7 @@ function enter_ascension_challenge(id) {
         }
     } else {
         alert(
-            "You cannot enter an Ascension Challenge if you are already in one!"
+            "如果您已经参加了转生挑战赛，您将无法参加！"
         )
     }
 }
