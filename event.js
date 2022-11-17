@@ -1900,7 +1900,7 @@ function recall_runes(mode) {
         if (game.ascend_confirm) {
             if (
                 confirm(
-                    "Are you sure you want to recall all converted runes? This will reset your rune power!"
+                    "您确定要召回所有转换的符文吗？ 这将重置你的符文力量！"
                 )
             )
                 recall_ready = true
@@ -1921,7 +1921,7 @@ function recall_runes(mode) {
         if (game.ascend_confirm) {
             if (
                 confirm(
-                    "Are you sure you want to recall all runes spent on upgrades? You will Ascend!"
+                    "您确定要召回所有用于升级的符文吗？ 你会转生！"
                 )
             )
                 recall_ready = true
@@ -1948,7 +1948,7 @@ function recall_runes(mode) {
         if (game.ascend_confirm) {
             if (
                 confirm(
-                    "Are you sure you want to recall all runes spent on arcane spice? You will Ascend!"
+                    "你确定要召回所有用在奥术香料上的符文吗？ 你会转生！"
                 )
             )
                 recall_ready = true
@@ -1986,7 +1986,7 @@ function recall_runes(mode) {
         if (game.ascend_confirm) {
             if (
                 confirm(
-                    "Are you sure you want to recall runes from ALL sources? You will Ascend!"
+                    "你确定要召回所有来源的符文吗？ 你会转生！"
                 )
             )
                 recall_ready = true

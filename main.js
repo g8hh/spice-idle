@@ -1355,7 +1355,7 @@ function export_save() {
 
 //importing a save file
 function import_save() {
-    let save_file = atob(prompt("Paste your exported save code here:"))
+    let save_file = atob(prompt("在此处粘贴您导出的保存代码:"))
     let valid_json = true
     try {
         JSON.parse(save_file)
@@ -1374,7 +1374,7 @@ function import_save() {
 function delete_save() {
     if (
         confirm(
-            "Are you sure you want to delete your save?\nThis will reset EVERYTHING!"
+            "你确定要删除你的存档吗？\n这将重置一切！"
         )
     ) {
         color_boost(true)
