@@ -554,6 +554,7 @@ function ascend(override) {
 
             game.ascend_time_played = 0
             game.real_time_played[2] = 0
+            if (game.collapse_challenge === 7) game.ascend_challenge_timer = 0
 
             if (game.ascend_challenge !== 0) {
                 game.ascend_complete[game.ascend_challenge - 1] = true
@@ -604,9 +605,16 @@ function ascend(override) {
             if (game.research_complete[13] >= 1)
                 game.free_enchantment = game.arcane_strengthener * 200
             if (game.research_complete[25] >= 1) {
-                let collapse_free = game.collapse * 25
-                if (collapse_free > game.arcane_enchantment / 4)
-                    collapse_free = Math.floor(game.arcane_enchantment / 4)
+                let collapse_free = game.collapse * 50
+                if (game.collapse >= 100000)
+                    collapse_free = Math.floor(
+                        2500000 * ((game.collapse - 87500) / 50000) ** 0.5 +
+                            3750000
+                    )
+                if (game.collapse >= 31337500)
+                    collapse_free = game.collapse + 34912500
+                if (collapse_free > game.arcane_enchantment / 2)
+                    collapse_free = Math.floor(game.arcane_enchantment / 2)
 
                 game.free_enchantment += collapse_free
             }
@@ -645,11 +653,17 @@ function ascend(override) {
             ]
             game.crystal_strengthener = 0
             game.crystal_strengthener_price = Decimal.pow(2, 76)
+
+            if (game.ascend === 1 && game.collapse === 0) {
+                confirmations("ascend", true)
+                confirmations("ascend", true)
+            }
         }
     } else {
         if (override) {
             game.ascend_time_played = 0
             game.real_time_played[2] = 0
+            if (game.collapse_challenge === 7) game.ascend_challenge_timer = 0
 
             game.autopr_goal2[0] = 0
             game.autopr_goal2[1] = new Decimal(1)
@@ -695,9 +709,16 @@ function ascend(override) {
             if (game.research_complete[13] >= 1)
                 game.free_enchantment = game.arcane_strengthener * 200
             if (game.research_complete[25] >= 1) {
-                let collapse_free = game.collapse * 25
-                if (collapse_free > game.arcane_enchantment / 4)
-                    collapse_free = Math.floor(game.arcane_enchantment / 4)
+                let collapse_free = game.collapse * 50
+                if (game.collapse >= 100000)
+                    collapse_free = Math.floor(
+                        2500000 * ((game.collapse - 87500) / 50000) ** 0.5 +
+                            3750000
+                    )
+                if (game.collapse >= 31337500)
+                    collapse_free = game.collapse + 34912500
+                if (collapse_free > game.arcane_enchantment / 2)
+                    collapse_free = Math.floor(game.arcane_enchantment / 2)
 
                 game.free_enchantment += collapse_free
             }
@@ -931,14 +952,26 @@ function collapse(override) {
 
             game.free_enchantment = 0
             if (game.research_complete[25] >= 1) {
-                let collapse_free = game.collapse * 25
-                if (collapse_free > game.arcane_enchantment / 4)
-                    collapse_free = Math.floor(game.arcane_enchantment / 4)
+                let collapse_free = game.collapse * 50
+                if (game.collapse >= 100000)
+                    collapse_free = Math.floor(
+                        2500000 * ((game.collapse - 87500) / 50000) ** 0.5 +
+                            3750000
+                    )
+                if (game.collapse >= 31337500)
+                    collapse_free = game.collapse + 34912500
+                if (collapse_free > game.arcane_enchantment / 2)
+                    collapse_free = Math.floor(game.arcane_enchantment / 2)
 
                 game.free_enchantment = collapse_free
             }
 
             game.global_spice_boost = new Decimal(1)
+
+            if (game.collapse === 1) {
+                confirmations("collapse", true)
+                confirmations("collapse", true)
+            }
         }
     } else {
         if (override) {
@@ -1010,9 +1043,16 @@ function collapse(override) {
 
             game.free_enchantment = 0
             if (game.research_complete[25] >= 1) {
-                let collapse_free = game.collapse * 25
-                if (collapse_free > game.arcane_enchantment / 4)
-                    collapse_free = Math.floor(game.arcane_enchantment / 4)
+                let collapse_free = game.collapse * 50
+                if (game.collapse >= 100000)
+                    collapse_free = Math.floor(
+                        2500000 * ((game.collapse - 87500) / 50000) ** 0.5 +
+                            3750000
+                    )
+                if (game.collapse >= 31337500)
+                    collapse_free = game.collapse + 34912500
+                if (collapse_free > game.arcane_enchantment / 2)
+                    collapse_free = Math.floor(game.arcane_enchantment / 2)
 
                 game.free_enchantment = collapse_free
             }

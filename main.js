@@ -396,8 +396,9 @@ function tick() {
     game.unstable_spice = game.unstable_spice.mul(
         0.5 ** (1 / (delta_time * game.halflife))
     )
-    game.decayed_spice = game.total_unstable_spice.sub(
-        game.unstable_spice.round()
+    game.decayed_spice = Decimal.max(
+        game.total_unstable_spice.sub(game.unstable_spice.round()),
+        0
     )
 
     let decayed_amount = game.decayed_spice
@@ -461,10 +462,13 @@ function tick() {
             .pow(game.atomic_spice.log(10) * 0.0003333 + 1)
             .floor()
     } else if (game.collapse_complete[1] >= 1) {
-        game.free_deity = game.unstable_boost
-            .pow((1 + game.collapse_complete[1]) / 60000)
-            .floor()
-            .sub(1)
+        game.free_deity = Decimal.max(
+            game.unstable_boost
+                .pow((1 + game.collapse_complete[1]) / 60000)
+                .floor()
+                .sub(1),
+            0
+        )
     } else {
         game.free_deity = new Decimal(0)
     }
@@ -974,11 +978,11 @@ function tick() {
             ].mul(
                 Decimal.pow(
                     1.08 + 0.04 * game.ascend_bought[6],
-                    game.crystal_infusion +
+                    (game.crystal_infusion +
                         game.prestige_bought[20] *
                             12 *
-                            (1 + game.ascend_bought[5]) *
-                            antispice_infusions
+                            (1 + game.ascend_bought[5])) *
+                        antispice_infusions
                 )
             )
         }
@@ -1505,6 +1509,35 @@ function tick() {
                     )
             }
         }
+
+        game.total_red_spice_boost[i] = Decimal.max(
+            game.total_red_spice_boost[i],
+            0
+        )
+        game.total_yellow_spice_boost[i] = Decimal.max(
+            game.total_yellow_spice_boost[i],
+            0
+        )
+        game.total_green_spice_boost[i] = Decimal.max(
+            game.total_green_spice_boost[i],
+            0
+        )
+        game.total_blue_spice_boost[i] = Decimal.max(
+            game.total_blue_spice_boost[i],
+            0
+        )
+        game.total_pink_spice_boost[i] = Decimal.max(
+            game.total_pink_spice_boost[i],
+            0
+        )
+        game.total_crystal_spice_boost[i] = Decimal.max(
+            game.total_crystal_spice_boost[i],
+            0
+        )
+        game.total_arcane_spice_boost[i] = Decimal.max(
+            game.total_arcane_spice_boost[i],
+            0
+        )
     }
 
     game.red_spice = game.red_spice.add(
@@ -2157,7 +2190,7 @@ function tick() {
         }
     }
 
-    if (game.ascend_bought[25]) {
+    if (game.ascend_bought[25] && game.color_boosts >= 10) {
         let amount = new Decimal(0)
         if (game.color_boosts <= 16)
             amount = new Decimal(2).pow((game.color_boosts - 10) / 3)
@@ -2429,9 +2462,9 @@ function tick() {
 
     game.atomic_portion =
         Number(document.getElementById("collider_input").value) / 100
-    if (game.atomic_portion === NaN) atomic_portion = 1
-    if (game.atomic_portion < 0.01) atomic_portion = 0.01
-    if (game.atomic_portion > 1) atomic_portion = 1
+    if (game.atomic_portion === NaN) game.atomic_portion = 1
+    if (game.atomic_portion < 0.01) game.atomic_portion = 0.01
+    if (game.atomic_portion > 1) game.atomic_portion = 1
 
     game.augment_start = 2000000 + 2000000 * game.collapse_complete[3]
 
@@ -2440,32 +2473,47 @@ function tick() {
         let completions = game.collapse_complete[game.collapse_challenge - 7]
         let exponent = completions + game.pending_completions
 
-        if (c.scaling1 !== undefined && completions >= c.scaling1) {
-            if (completions >= c.scaling1) {
-                exponent = c.scaling1 + (completions - c.scaling1) * 1.5
+        if (
+            c.scaling1 !== undefined &&
+            completions + game.pending_completions >= c.scaling1
+        ) {
+            if (completions + game.pending_completions >= c.scaling1) {
+                exponent =
+                    c.scaling1 +
+                    (completions + game.pending_completions - c.scaling1) * 1.5
             }
 
             if (c.scaling2 !== undefined) {
-                if (completions >= c.scaling2) {
+                if (completions + game.pending_completions >= c.scaling2) {
                     exponent =
-                        (completions - c.scaling2) * 2 +
+                        (completions + game.pending_completions - c.scaling2) *
+                            2 +
                         (c.scaling2 - c.scaling1) * 1.5 +
                         c.scaling1
                 }
 
                 if (c.scaling3 !== undefined) {
-                    if (completions >= c.scaling3) {
+                    if (completions + game.pending_completions >= c.scaling3) {
                         exponent =
-                            (completions - c.scaling3) * 3 +
+                            (completions +
+                                game.pending_completions -
+                                c.scaling3) *
+                                3 +
                             (c.scaling3 - c.scaling2) * 2 +
                             (c.scaling2 - c.scaling1) * 1.5 +
                             c.scaling1
                     }
 
                     if (c.scaling4 !== undefined) {
-                        if (completions >= c.scaling4) {
+                        if (
+                            completions + game.pending_completions >=
+                            c.scaling4
+                        ) {
                             exponent =
-                                (completions - c.scaling4) * 5 +
+                                (completions +
+                                    game.pending_completions -
+                                    c.scaling4) *
+                                    5 +
                                 (c.scaling4 - c.scaling3) * 3 +
                                 (c.scaling3 - c.scaling2) * 2 +
                                 (c.scaling2 - c.scaling1) * 1.5 +
@@ -2739,22 +2787,202 @@ function collider_tick() {
 
 //handling hotkeys
 document.body.addEventListener("keydown", function (event) {
-    for (let i = 0; i < 6; i++) {
-        if (event.code === "Digit" + (i + 1)) key.digit[i] = true
+    let active_element = document.activeElement
+    if (
+        active_element.tagName == "INPUT" &&
+        (active_element.type == "text" || active_element.type == "number")
+    ) {
+        event.stopPropagation()
+    } else {
+        for (let i = 0; i < 6; i++) {
+            if (event.code === "Digit" + (i + 1)) key.digit[i] = true
+        }
+
+        if (event.shiftKey) key.shift = true
+        else key.shift = false
+
+        if (event.code === "KeyS") key.s = true
+        if (event.code === "KeyM") key.m = true
+        if (event.code === "KeyB") key.b = true
+        if (event.code === "KeyP") key.p = true
+        if (event.code === "KeyI") key.i = true
+        if (event.code === "KeyA") key.a = true
+        if (event.code === "KeyN") key.n = true
+        if (event.code === "KeyC") key.c = true
+        if (event.code === "KeyX") key.x = true
+        // upcoming: fast-button to change tab/subtabs
+        // temporary variable "available_subtabs"
+        let available_subtabs = [4, 2, 3, 3, 3]
+        // ArrowButton-Action ;)
+        if (event.code === "ArrowUp") {
+            if (
+                game.tab == 0 &&
+                (game.color_boosts >= 10 || game.prestige > 0)
+            ) {
+                goto_tab(1)
+            } else if (
+                game.tab == 1 &&
+                (game.prestige_bought[25] || game.ascend > 0)
+            ) {
+                goto_tab(2)
+            } else if (
+                game.tab == 2 &&
+                (game.ascend_complete[5] || game.collapse > 0)
+            ) {
+                goto_tab(3)
+            } else if (game.tab == 3) {
+                goto_tab(5)
+            } else if (game.tab == 5) {
+                goto_tab(6)
+            } else if (game.tab == 6) {
+                goto_tab(0)
+            } else {
+                goto_tab(5)
+            } // if any pre/asc/coll aren't unlocked, it will hop into stats
+        }
+
+        if (event.code === "ArrowDown") {
+            event.preventDefault()
+
+            if (game.tab == 0) {
+                goto_tab(6)
+            } else if (game.tab == 6) {
+                goto_tab(5)
+            } else if (game.tab == 5) {
+                // look for unlocked tabs reversed, hop into highest unlocked
+                if (game.ascend_complete[5] || game.collapse > 0) {
+                    goto_tab(3)
+                } else if (game.prestige_bought[25] || game.ascend > 0) {
+                    goto_tab(2)
+                } else if (game.color_boosts >= 10 || game.prestige > 0) {
+                    goto_tab(1)
+                } else {
+                    goto_tab(0)
+                }
+            } else if (game.tab == 3) {
+                goto_tab(2)
+            } else if (game.tab == 2) {
+                goto_tab(1)
+            } else goto_tab(0) // none of above of game.tab is 1, but we can save a few chars :D
+        }
+        if (event.code === "ArrowRight") {
+            event.preventDefault()
+
+            switch (game.tab) {
+                case 0:
+                    game.color_boosts > 0 &&
+                    (game.subtab[0] == game.color_boosts ||
+                        game.subtab[0] == available_subtabs[0])
+                        ? goto_subtab(0)
+                        : goto_subtab(game.subtab[0] + 1)
+                    break
+                case 1:
+                    game.prestige_bought[12] == 1 &&
+                    game.subtab[1] == available_subtabs[1]
+                        ? goto_subtab(0)
+                        : goto_subtab(game.subtab[1] + 1)
+                    break
+                case 2:
+                    if (!game.ascend_bought[16]) {
+                        game.subtab[3] == 0 ? goto_subtab(1) : goto_subtab(0)
+                    } else if (!game.ascend_complete[0]) {
+                        game.subtab[3] == available_subtabs[3] - 1
+                            ? goto_subtab(0)
+                            : goto_subtab(game.subtab[3] + 1)
+                    } else {
+                        game.subtab[3] == available_subtabs[3]
+                            ? goto_subtab(0)
+                            : goto_subtab(game.subtab[3] + 1)
+                    }
+                    break
+                case 3:
+                    if (game.research_complete[19]) {
+                        game.subtab[4] == available_subtabs[4]
+                            ? goto_subtab(0)
+                            : goto_subtab(game.subtab[4] + 1)
+                    } else if (game.research_complete[18]) {
+                        game.subtab[4] == available_subtabs[4] - 1
+                            ? goto_subtab(0)
+                            : goto_subtab(game.subtab[4] + 1)
+                    } else if (game.collapse >= 5) {
+                        game.subtab[4] == 0 ? goto_subtab(1) : goto_subtab(0)
+                    }
+                    break
+                case 5:
+                    if (game.collapse > 0) {
+                        game.subtab[2] == 3
+                            ? goto_subtab(0)
+                            : goto_subtab(game.subtab[2] + 1)
+                    } else if (game.ascend > 0) {
+                        game.subtab[2] == 2
+                            ? goto_subtab(0)
+                            : goto_subtab(game.subtab[2] + 1)
+                    } else if (game.prestige > 0) {
+                        game.subtab[2] == 0 ? goto_subtab(1) : goto_subtab(0)
+                    }
+                    break
+            }
+        }
+        if (event.code === "ArrowLeft") {
+            switch (game.tab) {
+                case 0:
+                    if (game.color_boosts > 0) {
+                        if (game.subtab[0] == 0) {
+                            game.color_boosts >= available_subtabs[0]
+                                ? goto_subtab(4)
+                                : goto_subtab(game.color_boost)
+                        } else {
+                            goto_subtab(game.subtab[0] - 1)
+                        }
+                    }
+                    break
+                case 1:
+                    game.prestige_bought[12] == 1 && game.subtab[1] == 0
+                        ? goto_subtab(available_subtabs[1])
+                        : goto_subtab(game.subtab[1] - 1)
+                    break
+                case 2:
+                    if (!game.ascend_bought[16]) {
+                        game.subtab[3] == 0 ? goto_subtab(1) : goto_subtab(0)
+                    } else if (!game.ascend_complete[0]) {
+                        game.subtab[3] == 0
+                            ? goto_subtab(2)
+                            : goto_subtab(game.subtab[3] - 1)
+                    } else {
+                        game.subtab[3] == 0
+                            ? goto_subtab(3)
+                            : goto_subtab(game.subtab[3] - 1)
+                    }
+                    break
+                case 3:
+                    if (game.research_complete[19]) {
+                        game.subtab[4] == 0
+                            ? goto_subtab(game.available_subtabs[4])
+                            : goto_subtab(game.subtab[4] - 1)
+                    } else if (game.research_complete[18]) {
+                        game.subtab[4] == 0
+                            ? goto_subtab(game.available_subtabs[4] - 1)
+                            : goto_subtab(game.subtab[4] - 1)
+                    } else if (game.collapse >= 5) {
+                        game.subtab[4] == 0 ? goto_subtab(1) : goto_subtab(0)
+                    }
+                    break
+                case 5:
+                    if (game.collapse > 0) {
+                        game.subtab[2] == 0
+                            ? goto_subtab(3)
+                            : goto_subtab(game.subtab[2] - 1)
+                    } else if (game.ascend > 0) {
+                        game.subtab[2] == 0
+                            ? goto_subtab(2)
+                            : goto_subtab(game.subtab[2] - 1)
+                    } else if (game.prestige > 0) {
+                        game.subtab[2] == 0 ? goto_subtab(1) : goto_subtab(0)
+                    }
+                    break
+            }
+        }
     }
-
-    if (event.shiftKey) key.shift = true
-    else key.shift = false
-
-    if (event.code === "KeyS") key.s = true
-    if (event.code === "KeyM") key.m = true
-    if (event.code === "KeyB") key.b = true
-    if (event.code === "KeyP") key.p = true
-    if (event.code === "KeyI") key.i = true
-    if (event.code === "KeyA") key.a = true
-    if (event.code === "KeyN") key.n = true
-    if (event.code === "KeyC") key.c = true
-    if (event.code === "KeyX") key.x = true
 })
 
 document.body.addEventListener("keyup", function (event) {
@@ -2771,6 +2999,22 @@ document.body.addEventListener("keyup", function (event) {
     if (event.code === "KeyN") key.n = false
     if (event.code === "KeyC") key.c = false
     if (event.code === "KeyX") key.x = false
+})
+
+window.addEventListener("blur", function () {
+    for (let i = 0; i < 6; i++) {
+        key.digit[i] = false
+    }
+
+    key.s = false
+    key.m = false
+    key.b = false
+    key.p = false
+    key.i = false
+    key.a = false
+    key.n = false
+    key.c = false
+    key.x = false
 })
 
 function hotkey_tick() {
@@ -3143,6 +3387,10 @@ goto_tab(0)
 //load the game
 function load(savegame) {
     if (savegame === null) return
+    if (savegame.red_unlock !== undefined) {
+        alert("This save file is too powerful for this game")
+        return
+    }
 
     game = savegame
 
@@ -3546,6 +3794,9 @@ function tick_loop() {
     if (delta_time === undefined) {
         delta_time = game.tickspeed / game.gamespeed
     } else {
+        if (Date.now() < tick_time) tick_time = Date.now()
+        if (Date.now() > tick_time + 3600000) tick_time = Date.now() - 3600000
+
         delta_ms = Date.now() - tick_time
         delta_time = 1000 / (delta_ms * game.gamespeed)
         delta_ticks = Math.floor((delta_ms * game.tickspeed) / 1000)
@@ -3586,6 +3837,7 @@ function graphics_loop() {
         research_update()
     }
     if (game.tab === 5) stats_update()
+    if (game.tab === 6) settings_update()
 
     window.setTimeout(graphics_loop, game.refresh_rate)
 }
