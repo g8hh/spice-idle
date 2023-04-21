@@ -3185,9 +3185,9 @@ function enter_collapse_challenge(id) {
         else {
             if (
                 confirm(
-                    "Are you sure you want to enter Challenge " +
+                    "您确定要进入挑战 " +
                         format_num(id, 0) +
-                        "? You will Collapse!"
+                        "? 你好坍缩!"
                 )
             ) {
                 challenge_ready = true

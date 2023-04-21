@@ -481,7 +481,7 @@ function ascend(override) {
         else {
             if (
                 confirm(
-                    "Are you sure you want to Ascend? This will reset EVERYTHING so far!"
+                    "您确定要转生吗？ 这将重置到目前为止的一切！"
                 )
             ) {
                 ascend_ready = true
@@ -854,7 +854,7 @@ function collapse(override) {
         else {
             if (
                 confirm(
-                    "Are you sure you want to Collapse? This will reset EVERYTHING so far!"
+                    "您确定要坍缩吗？ 这将重置到目前为止的一切！"
                 )
             ) {
                 collapse_ready = true
