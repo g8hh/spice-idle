@@ -3182,9 +3182,9 @@ function pre_enter_ascension_challenge(id) {
             if (modal === "none") {
                 open_modal(
                     "confirm",
-                    "Are you sure you want to enter Challenge " +
+                    "您确定要进入挑战 " +
                         format_num(id, 0) +
-                        "? You will Ascend!",
+                        "? 你将转生!",
                     function () {
                         enter_ascension_challenge(id)
                     }
@@ -3200,7 +3200,7 @@ function pre_enter_ascension_challenge(id) {
             if (modal === "none") {
                 open_modal(
                     "alert",
-                    "You cannot enter an Ascension Challenge if you are already in one!"
+                    "如果您已经进入了转生挑战，则无法重新开始该挑战!"
                 )
             }
         }
@@ -4868,9 +4868,9 @@ function pre_enter_collapse_challenge(id) {
             if (modal === "none") {
                 open_modal(
                     "confirm",
-                    "Are you sure you want to enter Challenge " +
+                    "您确定要进入挑战 " +
                         format_num(id, 0) +
-                        "? You will Collapse!",
+                        "? 你将进行坍缩!",
                     function () {
                         enter_collapse_challenge(id)
                     }
@@ -4886,7 +4886,7 @@ function pre_enter_collapse_challenge(id) {
             if (modal === "none") {
                 open_modal(
                     "alert",
-                    "You cannot enter a Collapse Challenge if you are already in one!"
+                    "如果您已经进入了坍缩挑战，则无法重新开始该挑战!"
                 )
             }
         }
@@ -4940,7 +4940,7 @@ function pre_refund_antispice_perks() {
             if (modal === "none") {
                 open_modal(
                     "confirm",
-                    "Are you sure you want to refund all antispice perks? You will Collapse!",
+                    "您确定要退还所有反香料特权吗？ 你会进行坍缩!",
                     refund_antispice_perks
                 )
             }

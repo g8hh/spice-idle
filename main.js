@@ -4487,7 +4487,7 @@ function pre_delete_save() {
     if (modal === "none") {
         open_modal(
             "confirm",
-            "Are you sure you want to delete your save?<br>This will reset EVERYTHING!",
+            "您确定要删除您的保存吗?<br>这将重置一切!",
             delete_save
         )
     }

@@ -601,7 +601,7 @@ function pre_ascend(override, challenge) {
             if (modal === "none") {
                 open_modal(
                     "confirm",
-                    "Are you sure you want to Ascend? This will reset EVERYTHING so far!",
+                    "您确定要转生吗？ 这将重置到目前为止的一切!",
                     function () {
                         ascend(override, challenge)
                     }
@@ -1025,7 +1025,7 @@ function pre_collapse(override, challenge) {
             if (modal === "none") {
                 open_modal(
                     "confirm",
-                    "Are you sure you want to Collapse? This will reset EVERYTHING so far!",
+                    "您确定要坍缩吗？ 这将重置到目前为止的一切!",
                     function () {
                         collapse(override, challenge)
                     }

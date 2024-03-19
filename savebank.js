@@ -246,7 +246,7 @@ function copy_file(file) {
 function overwrite_file(file) {
     if (
         confirm(
-            "Are you sure? This will permanently overwrite your local save file!"
+            "你确定吗？ 这将永久覆盖您的本地保存文件！"
         )
     ) {
         localStorage.setItem("new_spice_idle_save", file_map.get(file))
