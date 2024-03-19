@@ -6,12 +6,58 @@
         <meta name="keywords" content="spice, idle, spice idle, incremental">
         <meta name="description" content="expand your spice empire">
         <title>Spice Idle</title>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Fira+Sans:wght@400;700">
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
     <body>
-        <script src="chs.js"></script>
-        <script src="core.js"></script>
+        <div id="catchup_screen" class="catchup_screen">
+            <div class="catchup_panel">
+                <div class="catchup_title">
+                    <p id="spice_idle" class="spice_idle red_spice">
+                        Spice Idle
+                    </p>
+                    <p class="catchup_version">
+                        v1.7.4
+                    </p>
+                </div>
+                <p id="catchup_header" class="catchup_header">
+                    Catching up on time since the game was last saved...
+                    <br>Please keep the game on-screen
+                </p>
+                <div id="offline_panel">
+                    <p id="catchup_info" class="catchup_text">
+                        0 / 0 ticks run
+                        <br>Currently running about 0 ticks/sec
+                        <br>Estimated time to completion: 0 seconds
+                    </p>
+                    <div class="catchup_back">
+                        <div id="catchup_progress" class="catchup_progress"></div>
+                    </div>
+                    <div class="catchup_set">
+                        <p id="catchup_input_text" class="catchup_text">
+                            Ticks to run at once:
+                        </p>
+                        <input class="input" id="catchup_input" type="number" value="30" min="1">
+                    </div>
+                    <div id="catchup_skips" class="center_button">
+                        <button id="catchup_half_skip" class="catchup_button" onclick="offline_skip('half')">
+                            Skip Half of Ticks
+                        </button>
+                        <button class="catchup_button" onclick="offline_skip('all')">
+                            Skip Offline Progress
+                        </button>
+                    </div>
+                </div>
+                <div id="startup_panel">
+                    <div class="center_button">
+                        <button class="startup_button" onclick="start_game()">
+                            Begin Your Empire
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="tabs_block" class="tabs_block">
             <div class="menu">
                 <button id="spices" class="tab selected" onclick="goto_tab(0)">
@@ -31,6 +77,9 @@
                 </button>
                 <button id="statistics" class="tab unlocked" onclick="goto_tab(5)">
                     STATISTICS
+                </button>
+                <button id="compendium" class="tab unlocked" onclick="goto_tab(7)">
+                    COMPENDIUM
                 </button>
                 <button id="settings" class="tab unlocked" onclick="goto_tab(6)">
                     SETTINGS
@@ -110,6 +159,55 @@
                 <button id="past_collapses" class="subtab locked" onclick="goto_subtab(3)">
                     LOCKED
                 </button>
+            </div>
+        </div>
+
+        <div id="modal">
+            <div class="modal_background"></div>
+            <div class="modal_center">
+                <div id="modal_alert" class="modal_panel">
+                    <p id="alert_text" class="modal_text">
+                        Alert modal text here
+                    </p>
+
+                    <div class="center_button">
+                        <button class="spice_buy modal_button_last" onclick="close_modal()">
+                            OK
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="modal_confirm" class="modal_panel">
+                    <p id="confirm_text" class="modal_text">
+                        Confirmation modal text here
+                    </p>
+
+                    <div class="center_button">
+                        <button id="confirm_yes" class="spice_buy modal_button">
+                            YES
+                        </button>
+                        <button class="spice_buy modal_button_last" onclick="close_modal()">
+                            NO
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="modal_import" class="modal_panel">
+                    <p class="modal_text">
+                        Paste your exported save code here:
+                    </p>
+
+                    <textarea class="input" id="import_input"></textarea>
+
+                    <div class="center_button">
+                        <button class="spice_buy modal_button" onclick="import_save()">
+                            IMPORT
+                        </button>
+                        <button class="spice_buy modal_button_last" onclick="close_modal()">
+                            CANCEL
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -535,14 +633,6 @@
                             +0.000 ᚫ/sec
                         </p>
                         <div id="rune_control_block">
-                            <div class="rune_control">
-                                <button class="rune_button a_unlocked" onclick="recall_runes(1)">
-                                    Recall Converted Runes
-                                </button>
-                                <button class="rune_button a_unlocked" onclick="recall_runes(4)">
-                                    Recall ALL Runes
-                                </button>
-                            </div>
                             <div id="distribute_buttons" class="rune_control2">
                                 <button class="rune_button a_unlocked" onclick="distribute_runes('all')">
                                     Distribute ALL Runes
@@ -563,7 +653,7 @@
                                     +1 ᚫ
                                 </p>
                             </div>
-                            <button id="ascend_button" class="ascend_button a_locked" onclick="ascend()">
+                            <button id="ascend_button" class="ascend_button a_locked" onclick="pre_ascend()">
                                 ASCEND!
                             </button>
                         </div>
@@ -580,13 +670,27 @@
                                 <p class="p_auto_text">
                                     Auto-Ascend Goal (Runes):
                                 </p>
-                                <input class="input" id="a_runes_input" type="number" value="1" min="1">
+                                <input class="input" id="a_runes_input" type="text" value="1">
+                            </div>
+                            <div id="ascend_runes_delta">
+                                <p class="p_auto_text">
+                                    Auto-Ascend Delta (Runes):
+                                </p>
+                                <input class="input" id="a_runes_input2" type="text" value="5">
                             </div>
                             <div id="ascend_time">
                                 <p class="p_auto_text">
                                     Auto-Ascend Goal (Real Seconds):
                                 </p>
                                 <input class="input" id="a_time_input" type="number" step="0.01" value="30" min="0.01">
+                            </div>
+                            <div id="ascend_goal">
+                                <p id="ascend_goal_text" class="p_auto_text">
+                                    Current Auto-Ascend Goal: +1 ᚫ
+                                </p>
+                                <button id="ascend_goal_reset" class="spice_buy" onclick="ascend_goal_reset()">
+                                    Reset
+                                </button>
                             </div>
                         </div>
                         <p id="ascend_efficiency" class="reset_efficiency">
@@ -600,81 +704,16 @@
                     <p id="distributor_title" class="rune_header runes">
                         The Distributor
                     </p>
+                    <button id="distribute_auto_toggle" class="spice_buy a_disabled" onclick="auto_toggle('distributor')">
+                        Auto: OFF
+                    </button>
                     <div class="distributor_block">
                         <p class="distributor_text">
-                            Automated distribution:
+                            Portion of rune gains to distribute:
                         </p>
-                        <button id="distribute_auto_toggle" class="rune_button a_unlocked" onclick="auto_toggle('ascend_upgrade')">
-                            OFF
-                        </button>
-                    </div>
-                    <div id="distributor_block1" class="distributor_block">
-                        <p class="distributor_text">
-                            Ascension upgrade quota:
-                        </p>
-                        <input class="input distributor_input" id="au_portion_input" type="number" value="50" min="0" max="100">
+                        <input class="input distributor_input" id="ds_portion_input" type="number" value="50" min="0" max="100">
                         <p class="distributor_percent">
                             %
-                        </p>
-                    </div>
-                    <div id="distributor_block2">
-                        <p class="distributor_header">
-                            When not all upgrades have been purchased:
-                        </p>
-                        <div class="distributor_block2">
-                            <p class="distributor_text">
-                                Ascension upgrade quota:
-                            </p>
-                            <input class="input distributor_input" id="au_portion_input2" type="number" value="50" min="0" max="100">
-                            <p class="distributor_percent">
-                                %
-                            </p>
-                        </div>
-                        <div class="distributor_block2">
-                            <p class="distributor_text">
-                                Rune distribution quota:
-                            </p>
-                            <input class="input distributor_input" id="ar_portion_input" type="number" value="0" min="0" max="100">
-                            <p class="distributor_percent">
-                                %
-                            </p>
-                        </div>
-                        <div class="distributor_block2">
-                            <p class="distributor_text">
-                                Arcane spice quota:
-                            </p>
-                            <input class="input distributor_input" id="aa_portion_input" type="number" value="0" min="0" max="100">
-                            <p class="distributor_percent">
-                                %
-                            </p>
-                        </div>
-                        <p id="distributor_error1" class="distributor_error">
-                            Quota must not add up to more than 100%
-                        </p>
-
-                        <p class="distributor_header">
-                            When all upgrades have been purchased:
-                        </p>
-                        <div class="distributor_block2">
-                            <p class="distributor_text">
-                                Rune distribution quota:
-                            </p>
-                            <input class="input distributor_input" id="ar_portion_input2" type="number" value="0" min="0" max="100">
-                            <p class="distributor_percent">
-                                %
-                            </p>
-                        </div>
-                        <div class="distributor_block2">
-                            <p class="distributor_text">
-                                Arcane spice quota:
-                            </p>
-                            <input class="input distributor_input" id="aa_portion_input2" type="number" value="0" min="0" max="100">
-                            <p class="distributor_percent">
-                                %
-                            </p>
-                        </div>
-                        <p id="distributor_error2" class="distributor_error">
-                            Quota must not add up to more than 100%
                         </p>
                     </div>
                 </div>
@@ -693,7 +732,7 @@
                         You have 0 ᛡ, producing 0 ᛡ power/sec
                         <br>You have 0 ᛡ power, boosting red spice production 1.00x
                     </p>
-                    <div class="rune_menu">
+                    <div id="jera_menu" class="rune_menu">
                         <button class="rune_button a_unlocked" onclick="convert_rune(0,false)">
                             Convert 1 ᚫ
                         </button>
@@ -713,7 +752,7 @@
                         You have 0 ᚱ, producing 0 ᚱ power/sec
                         <br>You have 0 ᚱ power, boosting yellow, green, & blue spice production 1.00x
                     </p>
-                    <div class="rune_menu">
+                    <div id="raido_menu" class="rune_menu">
                         <button class="rune_button a_unlocked" onclick="convert_rune(1,false)">
                             Convert 1 ᚫ
                         </button>
@@ -760,17 +799,13 @@
                             +0.000 ᚫ/sec
                         </p>
                     </div>
-
-                    <div class="rune_control">
-                        <button class="rune_button a_unlocked" onclick="recall_runes(2)">
-                            Recall Spent Runes
-                        </button>
-                        <button class="rune_button a_unlocked" onclick="recall_runes(4)">
-                            Recall ALL Runes
-                        </button>
-                    </div>
                 </div>
 
+                <div class="center_button">
+                    <button id="upgrade_auto_toggle3" class="spice_buy a_disabled" onclick="auto_toggle('ascend_upgrade')">
+                        Auto: OFF
+                    </button>
+                </div>
                 <div id="ascension_upgrade_panel">
                     <div id="ascension_upgrade_panel2">
                         <div id="ascension_upgrade_panel3">
@@ -782,8 +817,9 @@
 
             <div id="challenges_page">
                 <p class="challenge_info">
-                    Entering an Ascension Challenge will reset your current Ascension, and disable Ascension automation in the Challenge
+                    Entering an Ascension Challenge will reset your current Ascension
                     <br>You must Ascend with the required amount of rainbow spice to complete the Challenge
+                    <br><br>Ascension automation and rainbow spice multipliers are disabled in Ascension Challenges
                 </p>
 
                 <div class="center_button">
@@ -816,14 +852,6 @@
                         <p id="ansuz_up3" class="spice_up">
                             +0.000 ᚫ/sec
                         </p>
-                        <div id="arcane_rune_control" class="rune_control">
-                            <button class="rune_button a_unlocked" onclick="recall_runes(3)">
-                                Recall Spent Runes
-                            </button>
-                            <button class="rune_button a_unlocked" onclick="recall_runes(4)">
-                                Recall ALL Runes
-                            </button>
-                        </div>
                     </div>
                 </div>
 
@@ -848,8 +876,8 @@
                 <button id="arcane_max_all" class="spice_buy max_all" onclick="max_all('arcane')">
                     Max All
                 </button>
-                <button id="arcane_max_half" class="spice_buy max_all" onclick="max_all('arcane_half')">
-                    Max Half
+                <button id="arcane_auto" class="spice_buy a_disabled" onclick="auto_toggle('arcane')">
+                    Auto: OFF
                 </button>
 
                 <div class="spice_gen_page">
@@ -893,7 +921,7 @@
                                     +1 atomic spice
                                 </p>
                             </div>
-                            <button id="collapse_button" class="collapse_button co_locked" onclick="collapse()">
+                            <button id="collapse_button" class="collapse_button co_locked" onclick="pre_collapse()">
                                 COLLAPSE!
                             </button>
                         </div>
@@ -912,27 +940,21 @@
                             </div>
                             <div id="collapse_spice">
                                 <p class="p_auto_text">
-                                    Stop Ascending After (Atomic Spice):
-                                </p>
-                                <input class="input" id="co_spice_input2" type="text" value="1e25">
-                            </div>
-                            <div id="collapse_spice2">
-                                <p class="p_auto_text">
                                     Auto-Collapse Goal (Atomic Spice):
                                 </p>
                                 <input class="input" id="co_spice_input" type="text" value="1e50">
                             </div>
                             <div id="collapse_time">
                                 <p class="p_auto_text">
-                                    Stop Ascending After (Real Seconds):
-                                </p>
-                                <input class="input" id="co_time_input2" type="number" step="0.01" value="60" min="0.01">
-                            </div>
-                            <div id="collapse_time2">
-                                <p class="p_auto_text">
                                     Auto-Collapse Goal (Real Seconds):
                                 </p>
                                 <input class="input" id="co_time_input" type="number" step="0.01" value="120" min="0.01">
+                            </div>
+                            <div id="collapse_decay">
+                                <p class="p_auto_text">
+                                    Auto-Collapse Goal (Real Seconds after Full Decay):
+                                </p>
+                                <input class="input" id="co_decay_input" type="number" step="0.01" value="10" min="0">
                             </div>
                         </div>
                         <p id="collapse_efficiency" class="reset_efficiency">
@@ -993,6 +1015,15 @@
                         <input class="input distributor_input" id="collider_input" type="number" value="100" min="1" max="100">
                         <p class="distributor_percent">
                             %
+                        </p>
+                    </div>
+                    <div id="collider_timing" class="distributor_block2">
+                        <p class="distributor_text">
+                            Minimum time between activations:
+                        </p>
+                        <input class="input distributor_input" id="collider_input2" type="number" step="0.01" value="1" min="0.5">
+                        <p class="distributor_percent">
+                            s real time
                         </p>
                     </div>
                     <button id="activate_collider" class="atomic_button co_unlocked" onclick="activate_collider()">
@@ -1084,9 +1115,10 @@
 
             <div id="challenges_page2">
                 <p id="collapse_challenge_info" class="challenge_info">
-                    Entering a Collapse Challenge will reset your current Collapse, and disable Collapse automation in the Challenge
+                    Entering a Collapse Challenge will reset your current Collapse
                     <br>You must Collapse for the required amount of atomic spice to complete the Challenge
-                    <br><br>Collapse Challenge rewards do not apply in the Challenge they're from
+                    <br><br>Collapse automation and atomic spice multipliers are disabled in Collapse Challenges,
+                    <br>and Collapse Challenge rewards do not apply in the Challenge they're from
                 </p>
 
                 <div class="center_button">
@@ -1197,7 +1229,7 @@
                             Antispice Perks
                         </p>
                         <div class="center_button">
-                            <button id="refund_perks" class="atomic_button ap_unlocked2" onclick="refund_antispice_perks()">
+                            <button id="refund_perks" class="atomic_button ap_unlocked2" onclick="pre_refund_antispice_perks()">
                                 Refund Antispice Perks
                             </button>
                         </div>
@@ -1213,6 +1245,15 @@
                     <br><br>
                     You have played for a total of 0.000 seconds
                 </p>
+            </div>
+
+            <div id="statistics_buttons" class="center_button">
+                <button id="statistics_unit" class="spice_buy statistics_button" onclick="statistics_unit()">
+                    Unit: RAINBOW SPICE
+                </button>
+                <button id="statistics_time" class="spice_buy statistics_button" onclick="statistics_time()">
+                    Time: GAME TIME
+                </button>
             </div>
 
             <div id="prestige_statistics_page">
@@ -1269,15 +1310,17 @@
                 </p>
             </div>
 
+            <div id="compendium_page"></div>
+
             <div id="settings_page">
                 <div id="save_block" class="settings_block">
-                    <button id="save" class="settings_button can_modify s_big" onclick="save()">
+                    <button id="save" class="settings_button can_modify s_big" onclick="manual_save()">
                         SAVE
                     </button>
                     <button id="export" class="settings_button can_modify s_big" onclick="export_save()">
                         EXPORT
                     </button>
-                    <button id="import" class="settings_button can_modify s_big" onclick="import_save()">
+                    <button id="import" class="settings_button can_modify s_big" onclick="pre_import_save()">
                         IMPORT
                     </button>
                 </div>
@@ -1311,36 +1354,39 @@
                     </button>
                 </div>
                 <div id="settings_block3" class="settings_block">
+                    <button id="offline" class="settings_button can_modify" onclick="offline()">
+                        Offline Progress
+                        <br>ENABLED
+                    </button>
                     <button id="resource_efficiency" class="settings_button" onclick="resource_efficiency()">
-                        Reset Layer Resource/min
-                        <br>HIDE
+                        ?????
                     </button>
                     <button id="reduce_flashing" class="settings_button" onclick="reduce_flashing()">
-                        Reduce Flashing
-                        <br>DISABLED
-                    </button>
-                    <button id="ascend_confirm" class="settings_button" onclick="confirmations('ascend')">
-                        Ascension Confirmations
-                        <br>ENABLED
+                        ?????
                     </button>
                 </div>
                 <div id="settings_block4" class="settings_block">
+                    <button id="ascend_confirm" class="settings_button" onclick="confirmations('ascend')">
+                        ?????
+                    </button>
                     <button id="challenge_confirm" class="settings_button" onclick="confirmations('challenge')">
-                        Challenge Confirmations
-                        <br>ENABLED
+                        ?????
                     </button>
                     <button id="collapse_confirm" class="settings_button" onclick="confirmations('collapse')">
-                        Collapse Confirmations
-                        <br>ENABLED
+                        ?????
                     </button>
+                </div>
+                <div id="settings_block5" class="settings_block">
                     <button id="collider_animation" class="settings_button" onclick="animations()">
-                        Collider Animations
-                        <br>ENABLED
+                        ?????
+                    </button>
+                    <button id="antispice_confirm" class="settings_button" onclick="confirmations('antispice')">
+                        ?????
                     </button>
                 </div>
 
                 <div id="wipe_block" class="settings_block">
-                    <button id="wipe_save" class="settings_button can_modify s_big" onclick="delete_save()">
+                    <button id="wipe_save" class="settings_button can_modify s_big" onclick="pre_delete_save()">
                         DELETE SAVE
                     </button>
                 </div>
@@ -1360,16 +1406,25 @@
                     <br>P: Prestige
                     <br>I: Buy crystal infusion
                     <br>A: Ascend
+                    <br>X: Exit challenge
                     <br>N: Buy arcane enchantment
                     <br>C: Collapse
-                    <br>X: Exit challenge
                 </p>
             </div>
 
             <p id="version" class="info">
-                Spice Idle v1.6.5<br>Made by Zakuro<br><br>Last updated August 17, 2023
+                Spice Idle v1.7.4<br>Made by Zakuro<br><br>Last updated January 30, 2024
             </p>
+
+            <p id="classic_info" class="info">
+                Confused? After the v1.7.0 update of Spice Idle, the game is no longer compatible with older versions.
+                <br>You can find v1.6.5 (and your old save) on <a href="https://zakuro98.github.io/Spice-Idle-Classic/" target="_blank" class="link">Spice Idle Classic</a>.
+                <br>If you'd like to continue in the new game from about where you were, you should check out the <a href="savebank.html" target="_blank" class="link">Savebank</a>.
+            </p>
+
             <a href="changelog.html" target="_blank" class="info link">Changelog</a>
+            <a href="savebank.html" target="_blank" class="info link">Savebank</a>
+            <a href="https://zakuro98.github.io/Spice-Idle-Classic/" target="_blank" class="info link">Spice Idle Classic</a>
             <a href="https://zakuro98.github.io/EXP-Simulator/" target="_blank" class="info link">EXP Simulator</a>
             <a href="https://discord.gg/fuQSBkYYqH" target="_blank" class="info link">Discord</a>
         </main>
@@ -1383,22 +1438,5 @@
         <script src="event.js" charset="utf-8" type="text/javascript"></script>
         <script src="graphics.js" charset="utf-8" type="text/javascript"></script>
         <script src="main.js" charset="utf-8" type="text/javascript"></script>
-<!--客服 开始-->
-<script src="//g8hh.github.io/static/js/jquery.min.js"></script>
-<link rel="stylesheet" href="//g8hh.github.io/static/css/kf.css" type="text/css" media="screen" charset="utf-8">
-<script src="//g8hh.github.io/static/js/kf.js"></script>
-<!-- 客服 结束 -->
-<!--站长统计-->
-   <div style="display: none"><script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?f237591d5976f87ca2e06b38c3658d9c";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
-
-    </div>
     </body>
 </html>

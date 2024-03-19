@@ -1,5 +1,5 @@
 //purchasing spice generators
-function buy_gen(color, id, budget) {
+function buy_gen(color, id) {
     switch (color) {
         case "red":
             if (game.red_spice.cmp(game.red_spice_price[id]) >= 0) {
@@ -16,9 +16,7 @@ function buy_gen(color, id, budget) {
                     red_bought.toString()
                 ).pow(game.prestige_bought[3] + 1)
                 if (
-                    game.ascend_challenge === 1 ||
                     game.ascend_challenge === 6 ||
-                    game.collapse_challenge === 7 ||
                     game.collapse_challenge === 12
                 )
                     game.red_spice_boost[id] = new Decimal(
@@ -44,9 +42,7 @@ function buy_gen(color, id, budget) {
                     yellow_bought.toString()
                 ).pow(game.prestige_bought[3] + 1)
                 if (
-                    game.ascend_challenge === 1 ||
                     game.ascend_challenge === 6 ||
-                    game.collapse_challenge === 7 ||
                     game.collapse_challenge === 12
                 )
                     game.yellow_spice_boost[id] = new Decimal(
@@ -72,9 +68,7 @@ function buy_gen(color, id, budget) {
                     green_bought.toString()
                 ).pow(game.prestige_bought[3] + 1)
                 if (
-                    game.ascend_challenge === 1 ||
                     game.ascend_challenge === 6 ||
-                    game.collapse_challenge === 7 ||
                     game.collapse_challenge === 12
                 )
                     game.green_spice_boost[id] = new Decimal(
@@ -100,9 +94,7 @@ function buy_gen(color, id, budget) {
                     blue_bought.toString()
                 ).pow(game.prestige_bought[3] + 1)
                 if (
-                    game.ascend_challenge === 1 ||
                     game.ascend_challenge === 6 ||
-                    game.collapse_challenge === 7 ||
                     game.collapse_challenge === 12
                 )
                     game.blue_spice_boost[id] = new Decimal(
@@ -127,9 +119,7 @@ function buy_gen(color, id, budget) {
                     pink_bought.toString()
                 ).pow(game.prestige_bought[3] + 1)
                 if (
-                    game.ascend_challenge === 1 ||
                     game.ascend_challenge === 6 ||
-                    game.collapse_challenge === 7 ||
                     game.collapse_challenge === 12
                 )
                     game.pink_spice_boost[id] = new Decimal(
@@ -158,44 +148,26 @@ function buy_gen(color, id, budget) {
             }
             break
         case "arcane":
-            if (budget !== undefined) {
-                if (budget >= Math.round(game.arcane_spice_price[id])) {
-                    game.ansuz = Math.max(
-                        game.ansuz - Math.round(game.arcane_spice_price[id]),
-                        0
-                    )
-                    budget = Math.max(
-                        budget - Math.round(game.arcane_spice_price[id]),
-                        0
-                    )
-                    game.arcane_spice_price[id] *= 1.1
-                    game.arcane_spice_gen[id] = game.arcane_spice_gen[id].add(1)
-                    game.arcane_spice_bought[id] += 1n
+            if (game.ansuz.cmp(game.arcane_spice_price[id]) >= 0) {
+                game.ansuz = Decimal.max(
+                    game.ansuz.sub(game.arcane_spice_price[id]),
+                    0
+                )
+                game.arcane_spice_price[id] = game.arcane_spice_price[id].mul(3)
+                game.arcane_spice_gen[id] = game.arcane_spice_gen[id].add(1)
+                game.arcane_spice_bought[id] += 1n
 
-                    let arcane_bought = game.arcane_spice_bought[id] / 3n
-                    game.arcane_spice_boost[id] = Decimal.pow(
-                        3,
-                        arcane_bought.toString()
-                    )
+                let arcane_bought = game.arcane_spice_bought[id] / 3n
+                game.arcane_spice_boost[id] = Decimal.pow(
+                    3,
+                    arcane_bought.toString()
+                )
+
+                if (id === 5) {
+                    if (!entry_unlocked[12]) entry_unlock(12)
                 }
 
-                return budget
-            } else {
-                if (game.ansuz >= Math.round(game.arcane_spice_price[id])) {
-                    game.ansuz = Math.max(
-                        game.ansuz - Math.round(game.arcane_spice_price[id]),
-                        0
-                    )
-                    game.arcane_spice_price[id] *= 1.1
-                    game.arcane_spice_gen[id] = game.arcane_spice_gen[id].add(1)
-                    game.arcane_spice_bought[id] += 1n
-
-                    let arcane_bought = game.arcane_spice_bought[id] / 3n
-                    game.arcane_spice_boost[id] = Decimal.pow(
-                        3,
-                        arcane_bought.toString()
-                    )
-                }
+                game.autods_budget = new Decimal(0)
             }
             break
     }
@@ -227,9 +199,7 @@ function buy_until10(color, id, budget) {
                     red_bought.toString()
                 ).pow(game.prestige_bought[3] + 1)
                 if (
-                    game.ascend_challenge === 1 ||
                     game.ascend_challenge === 6 ||
-                    game.collapse_challenge === 7 ||
                     game.collapse_challenge === 12
                 )
                     game.red_spice_boost[id] = new Decimal(
@@ -261,9 +231,7 @@ function buy_until10(color, id, budget) {
                     yellow_bought.toString()
                 ).pow(game.prestige_bought[3] + 1)
                 if (
-                    game.ascend_challenge === 1 ||
                     game.ascend_challenge === 6 ||
-                    game.collapse_challenge === 7 ||
                     game.collapse_challenge === 12
                 )
                     game.yellow_spice_boost[id] = new Decimal(
@@ -296,9 +264,7 @@ function buy_until10(color, id, budget) {
                     green_bought.toString()
                 ).pow(game.prestige_bought[3] + 1)
                 if (
-                    game.ascend_challenge === 1 ||
                     game.ascend_challenge === 6 ||
-                    game.collapse_challenge === 7 ||
                     game.collapse_challenge === 12
                 )
                     game.green_spice_boost[id] = new Decimal(
@@ -331,9 +297,7 @@ function buy_until10(color, id, budget) {
                     blue_bought.toString()
                 ).pow(game.prestige_bought[3] + 1)
                 if (
-                    game.ascend_challenge === 1 ||
                     game.ascend_challenge === 6 ||
-                    game.collapse_challenge === 7 ||
                     game.collapse_challenge === 12
                 )
                     game.blue_spice_boost[id] = new Decimal(
@@ -365,9 +329,7 @@ function buy_until10(color, id, budget) {
                     pink_bought.toString()
                 ).pow(game.prestige_bought[3] + 1)
                 if (
-                    game.ascend_challenge === 1 ||
                     game.ascend_challenge === 6 ||
-                    game.collapse_challenge === 7 ||
                     game.collapse_challenge === 12
                 )
                     game.pink_spice_boost[id] = new Decimal(
@@ -405,53 +367,34 @@ function buy_until10(color, id, budget) {
             }
             break
         case "arcane":
-            if (budget !== undefined) {
-                n = 3n - (game.arcane_spice_bought[id] % 3n)
+            n = 3n - (game.arcane_spice_bought[id] % 3n)
 
-                price = Math.round(
-                    (game.arcane_spice_price[id] * (1 - 1.1 ** n.toString())) /
-                        -0.1
+            price = game.arcane_spice_price[id]
+                .mul(1 - 3 ** n.toString())
+                .div(-2)
+                .round()
+
+            if (game.ansuz.cmp(price) >= 0) {
+                game.ansuz = Decimal.max(game.ansuz.sub(price), 0)
+                game.arcane_spice_price[id] = game.arcane_spice_price[id].mul(
+                    3 ** n.toString()
+                )
+                game.arcane_spice_gen[id] = game.arcane_spice_gen[id].add(
+                    n.toString()
+                )
+                game.arcane_spice_bought[id] += n
+
+                let arcane_bought = game.arcane_spice_bought[id] / 3n
+                game.arcane_spice_boost[id] = Decimal.pow(
+                    3,
+                    arcane_bought.toString()
                 )
 
-                if (budget >= price) {
-                    game.ansuz = Math.max(game.ansuz - price, 0)
-                    budget = Math.max(budget - price, 0)
-                    game.arcane_spice_price[id] *= 1.1 ** n.toString()
-                    game.arcane_spice_gen[id] = game.arcane_spice_gen[id].add(
-                        n.toString()
-                    )
-                    game.arcane_spice_bought[id] += n
-
-                    let arcane_bought = game.arcane_spice_bought[id] / 3n
-                    game.arcane_spice_boost[id] = Decimal.pow(
-                        3,
-                        arcane_bought.toString()
-                    )
-
-                    return budget
+                if (id === 5) {
+                    if (!entry_unlocked[12]) entry_unlock(12)
                 }
-            } else {
-                n = 3n - (game.arcane_spice_bought[id] % 3n)
 
-                price = Math.round(
-                    (game.arcane_spice_price[id] * (1 - 1.1 ** n.toString())) /
-                        -0.1
-                )
-
-                if (game.ansuz >= price) {
-                    game.ansuz = Math.max(game.ansuz - price, 0)
-                    game.arcane_spice_price[id] *= 1.1 ** n.toString()
-                    game.arcane_spice_gen[id] = game.arcane_spice_gen[id].add(
-                        n.toString()
-                    )
-                    game.arcane_spice_bought[id] += n
-
-                    let arcane_bought = game.arcane_spice_bought[id] / 3n
-                    game.arcane_spice_boost[id] = Decimal.pow(
-                        3,
-                        arcane_bought.toString()
-                    )
-                }
+                game.autods_budget = new Decimal(0)
             }
             break
     }
@@ -581,23 +524,26 @@ function buy_strengthener(color) {
             }
             break
         case "arcane":
-            if (game.ansuz >= Math.round(game.arcane_strengthener_price)) {
-                game.ansuz = Math.max(
-                    game.ansuz - Math.round(game.arcane_strengthener_price),
+            if (game.ansuz.cmp(game.arcane_strengthener_price) >= 0) {
+                game.ansuz = Decimal.max(
+                    game.ansuz.sub(Math.round(game.arcane_strengthener_price)),
                     0
                 )
-                game.arcane_strengthener_price *= 8
+                game.arcane_strengthener_price =
+                    game.arcane_strengthener_price.mul(19683)
                 game.arcane_strengthener += 1
 
+                game.autods_budget = new Decimal(0)
+
                 if (
-                    game.research_complete[13] >= 1 &&
+                    game.research_complete[15] >= 1 &&
                     game.collapse_challenge !== 12
                 ) {
                     game.free_enchantment =
                         game.arcane_enchantment / 10n +
-                        BigInt(game.arcane_strengthener) * 250n
+                        BigInt(game.arcane_strengthener) * 10n
                     if (
-                        game.research_complete[25] >= 1 &&
+                        game.research_complete[27] >= 1 &&
                         game.collapse_challenge !== 12
                     ) {
                         let collapse_free = BigInt(game.collapse) * 50n
@@ -610,8 +556,9 @@ function buy_strengthener(color) {
                                         3750000
                                 )
                             )
-                        if (game.collapse >= 31337500)
-                            collapse_free = BigInt(game.collapse) + 34912500n
+                        if (game.collapse >= 1337500)
+                            collapse_free =
+                                BigInt(game.collapse) * 5n + 9562500n
                         if (collapse_free > game.arcane_enchantment / 2n)
                             collapse_free = game.arcane_enchantment / 2n
 
@@ -826,9 +773,7 @@ function max_all(color) {
                         red_bought.toString()
                     ).pow(game.prestige_bought[3] + 1)
                     if (
-                        game.ascend_challenge === 1 ||
                         game.ascend_challenge === 6 ||
-                        game.collapse_challenge === 7 ||
                         game.collapse_challenge === 12
                     )
                         game.red_spice_boost[i] = new Decimal(
@@ -886,9 +831,7 @@ function max_all(color) {
                         red_bought.toString()
                     ).pow(game.prestige_bought[3] + 1)
                     if (
-                        game.ascend_challenge === 1 ||
                         game.ascend_challenge === 6 ||
-                        game.collapse_challenge === 7 ||
                         game.collapse_challenge === 12
                     )
                         game.red_spice_boost[i] = new Decimal(
@@ -938,7 +881,7 @@ function max_all(color) {
                                     2
                             )
                         )
-                        .mul(2 * 10 ** 7)
+                        .mul(2e7)
                 )
                 let price2 = price1.add(
                     Decimal.pow(10000, game.yellow_strengthener + 2)
@@ -950,7 +893,7 @@ function max_all(color) {
                                     2
                             )
                         )
-                        .mul(2 * 10 ** 7)
+                        .mul(2e7)
                 )
                 let price3 = price2.add(
                     Decimal.pow(10000, game.yellow_strengthener + 3)
@@ -962,7 +905,7 @@ function max_all(color) {
                                     2
                             )
                         )
-                        .mul(2 * 10 ** 7)
+                        .mul(2e7)
                 )
 
                 if (
@@ -973,28 +916,28 @@ function max_all(color) {
                             b +
                                 (8 *
                                     Math.log(a) *
-                                    game.yellow_spice.div(2 * 10 ** 7).ln() +
+                                    game.yellow_spice.div(2e7).ln() +
                                     c) **
                                     0.5 /
                                     (2 * Math.log(a))
                         )
                         let price = Decimal.pow(10000, n)
                             .mul(Decimal.pow(a, ((n - 25) * (n - 24)) / 2))
-                            .mul(2 * 10 ** 7)
+                            .mul(2e7)
                         price = price.add(
                             Decimal.pow(10000, n - 1)
                                 .mul(Decimal.pow(a, ((n - 26) * (n - 25)) / 2))
-                                .mul(2 * 10 ** 7)
+                                .mul(2e7)
                         )
                         price = price.add(
                             Decimal.pow(10000, n - 2)
                                 .mul(Decimal.pow(a, ((n - 27) * (n - 26)) / 2))
-                                .mul(2 * 10 ** 7)
+                                .mul(2e7)
                         )
                         price = price.add(
                             Decimal.pow(10000, n - 3)
                                 .mul(Decimal.pow(a, ((n - 28) * (n - 27)) / 2))
-                                .mul(2 * 10 ** 7)
+                                .mul(2e7)
                         )
                         game.yellow_spice = Decimal.max(
                             game.yellow_spice.sub(price),
@@ -1006,7 +949,7 @@ function max_all(color) {
                             n + 1
                         )
                             .mul(Decimal.pow(a, ((n - 24) * (n - 23)) / 2))
-                            .mul(2 * 10 ** 7)
+                            .mul(2e7)
                     } else if (game.yellow_spice.cmp(price2) >= 0) {
                         buy_strengthener("yellow")
                         buy_strengthener("yellow")
@@ -1084,9 +1027,7 @@ function max_all(color) {
                         yellow_bought.toString()
                     ).pow(game.prestige_bought[3] + 1)
                     if (
-                        game.ascend_challenge === 1 ||
                         game.ascend_challenge === 6 ||
-                        game.collapse_challenge === 7 ||
                         game.collapse_challenge === 12
                     )
                         game.yellow_spice_boost[i] = new Decimal(
@@ -1148,9 +1089,7 @@ function max_all(color) {
                         yellow_bought.toString()
                     ).pow(game.prestige_bought[3] + 1)
                     if (
-                        game.ascend_challenge === 1 ||
                         game.ascend_challenge === 6 ||
-                        game.collapse_challenge === 7 ||
                         game.collapse_challenge === 12
                     )
                         game.yellow_spice_boost[i] = new Decimal(
@@ -1200,7 +1139,7 @@ function max_all(color) {
                                     2
                             )
                         )
-                        .mul(4 * 10 ** 8)
+                        .mul(4e8)
                 )
                 let price2 = price1.add(
                     Decimal.pow(10000, game.green_strengthener + 2)
@@ -1212,7 +1151,7 @@ function max_all(color) {
                                     2
                             )
                         )
-                        .mul(4 * 10 ** 8)
+                        .mul(4e8)
                 )
                 let price3 = price2.add(
                     Decimal.pow(10000, game.green_strengthener + 3)
@@ -1224,7 +1163,7 @@ function max_all(color) {
                                     2
                             )
                         )
-                        .mul(4 * 10 ** 8)
+                        .mul(4e8)
                 )
 
                 if (game.green_spice.cmp(game.green_strengthener_price) >= 0) {
@@ -1233,28 +1172,28 @@ function max_all(color) {
                             b +
                                 (8 *
                                     Math.log(a) *
-                                    game.green_spice.div(4 * 10 ** 8).ln() +
+                                    game.green_spice.div(4e8).ln() +
                                     c) **
                                     0.5 /
                                     (2 * Math.log(a))
                         )
                         let price = Decimal.pow(10000, n)
                             .mul(Decimal.pow(a, ((n - 25) * (n - 24)) / 2))
-                            .mul(4 * 10 ** 8)
+                            .mul(4e8)
                         price = price.add(
                             Decimal.pow(10000, n - 1)
                                 .mul(Decimal.pow(a, ((n - 26) * (n - 25)) / 2))
-                                .mul(4 * 10 ** 8)
+                                .mul(4e8)
                         )
                         price = price.add(
                             Decimal.pow(10000, n - 2)
                                 .mul(Decimal.pow(a, ((n - 27) * (n - 26)) / 2))
-                                .mul(4 * 10 ** 8)
+                                .mul(4e8)
                         )
                         price = price.add(
                             Decimal.pow(10000, n - 3)
                                 .mul(Decimal.pow(a, ((n - 28) * (n - 27)) / 2))
-                                .mul(4 * 10 ** 8)
+                                .mul(4e8)
                         )
                         game.green_spice = Decimal.max(
                             game.green_spice.sub(price),
@@ -1266,7 +1205,7 @@ function max_all(color) {
                             n + 1
                         )
                             .mul(Decimal.pow(a, ((n - 24) * (n - 23)) / 2))
-                            .mul(4 * 10 ** 8)
+                            .mul(4e8)
                     } else if (game.green_spice.cmp(price2) >= 0) {
                         buy_strengthener("green")
                         buy_strengthener("green")
@@ -1344,9 +1283,7 @@ function max_all(color) {
                         green_bought.toString()
                     ).pow(game.prestige_bought[3] + 1)
                     if (
-                        game.ascend_challenge === 1 ||
                         game.ascend_challenge === 6 ||
-                        game.collapse_challenge === 7 ||
                         game.collapse_challenge === 12
                     )
                         game.green_spice_boost[i] = new Decimal(
@@ -1408,9 +1345,7 @@ function max_all(color) {
                         green_bought.toString()
                     ).pow(game.prestige_bought[3] + 1)
                     if (
-                        game.ascend_challenge === 1 ||
                         game.ascend_challenge === 6 ||
-                        game.collapse_challenge === 7 ||
                         game.collapse_challenge === 12
                     )
                         game.green_spice_boost[i] = new Decimal(
@@ -1457,7 +1392,7 @@ function max_all(color) {
                                     2
                             )
                         )
-                        .mul(8 * 10 ** 9)
+                        .mul(8e9)
                 )
                 let price2 = price1.add(
                     Decimal.pow(10000, game.blue_strengthener + 2)
@@ -1469,7 +1404,7 @@ function max_all(color) {
                                     2
                             )
                         )
-                        .mul(8 * 10 ** 9)
+                        .mul(8e9)
                 )
                 let price3 = price2.add(
                     Decimal.pow(10000, game.blue_strengthener + 3)
@@ -1481,7 +1416,7 @@ function max_all(color) {
                                     2
                             )
                         )
-                        .mul(8 * 10 ** 9)
+                        .mul(8e9)
                 )
 
                 if (game.blue_spice.cmp(game.blue_strengthener_price) >= 0) {
@@ -1490,28 +1425,28 @@ function max_all(color) {
                             b +
                                 (8 *
                                     Math.log(a) *
-                                    game.blue_spice.div(8 * 10 ** 9).ln() +
+                                    game.blue_spice.div(8e9).ln() +
                                     c) **
                                     0.5 /
                                     (2 * Math.log(a))
                         )
                         let price = Decimal.pow(10000, n)
                             .mul(Decimal.pow(a, ((n - 25) * (n - 24)) / 2))
-                            .mul(8 * 10 ** 9)
+                            .mul(8e9)
                         price = price.add(
                             Decimal.pow(10000, n - 1)
                                 .mul(Decimal.pow(a, ((n - 26) * (n - 25)) / 2))
-                                .mul(8 * 10 ** 9)
+                                .mul(8e9)
                         )
                         price = price.add(
                             Decimal.pow(10000, n - 2)
                                 .mul(Decimal.pow(a, ((n - 27) * (n - 26)) / 2))
-                                .mul(8 * 10 ** 9)
+                                .mul(8e9)
                         )
                         price = price.add(
                             Decimal.pow(10000, n - 3)
                                 .mul(Decimal.pow(a, ((n - 28) * (n - 27)) / 2))
-                                .mul(8 * 10 ** 9)
+                                .mul(8e9)
                         )
                         game.blue_spice = Decimal.max(
                             game.blue_spice.sub(price),
@@ -1520,7 +1455,7 @@ function max_all(color) {
                         game.blue_strengthener = n + 1
                         game.blue_strengthener_price = Decimal.pow(10000, n + 1)
                             .mul(Decimal.pow(a, ((n - 24) * (n - 23)) / 2))
-                            .mul(8 * 10 ** 9)
+                            .mul(8e9)
                     } else if (game.blue_spice.cmp(price2) >= 0) {
                         buy_strengthener("blue")
                         buy_strengthener("blue")
@@ -1594,9 +1529,7 @@ function max_all(color) {
                         blue_bought.toString()
                     ).pow(game.prestige_bought[3] + 1)
                     if (
-                        game.ascend_challenge === 1 ||
                         game.ascend_challenge === 6 ||
-                        game.collapse_challenge === 7 ||
                         game.collapse_challenge === 12
                     )
                         game.blue_spice_boost[i] = new Decimal(
@@ -1654,9 +1587,7 @@ function max_all(color) {
                         blue_bought.toString()
                     ).pow(game.prestige_bought[3] + 1)
                     if (
-                        game.ascend_challenge === 1 ||
                         game.ascend_challenge === 6 ||
-                        game.collapse_challenge === 7 ||
                         game.collapse_challenge === 12
                     )
                         game.blue_spice_boost[i] = new Decimal(
@@ -1703,7 +1634,7 @@ function max_all(color) {
                                     2
                             )
                         )
-                        .mul(1.6 * 10 ** 11)
+                        .mul(1.6e11)
                 )
                 let price2 = price1.add(
                     Decimal.pow(10000, game.pink_strengthener + 2)
@@ -1715,7 +1646,7 @@ function max_all(color) {
                                     2
                             )
                         )
-                        .mul(1.6 * 10 ** 11)
+                        .mul(1.6e11)
                 )
                 let price3 = price2.add(
                     Decimal.pow(10000, game.pink_strengthener + 3)
@@ -1727,7 +1658,7 @@ function max_all(color) {
                                     2
                             )
                         )
-                        .mul(1.6 * 10 ** 11)
+                        .mul(1.6e11)
                 )
 
                 if (game.pink_spice.cmp(game.pink_strengthener_price) >= 0) {
@@ -1736,28 +1667,28 @@ function max_all(color) {
                             b +
                                 (8 *
                                     Math.log(a) *
-                                    game.pink_spice.div(1.6 * 10 ** 11).ln() +
+                                    game.pink_spice.div(1.6e11).ln() +
                                     c) **
                                     0.5 /
                                     (2 * Math.log(a))
                         )
                         let price = Decimal.pow(10000, n)
                             .mul(Decimal.pow(a, ((n - 25) * (n - 24)) / 2))
-                            .mul(1.6 * 10 ** 11)
+                            .mul(1.6e11)
                         price = price.add(
                             Decimal.pow(10000, n - 1)
                                 .mul(Decimal.pow(a, ((n - 26) * (n - 25)) / 2))
-                                .mul(1.6 * 10 ** 11)
+                                .mul(1.6e11)
                         )
                         price = price.add(
                             Decimal.pow(10000, n - 2)
                                 .mul(Decimal.pow(a, ((n - 27) * (n - 26)) / 2))
-                                .mul(1.6 * 10 ** 11)
+                                .mul(1.6e11)
                         )
                         price = price.add(
                             Decimal.pow(10000, n - 3)
                                 .mul(Decimal.pow(a, ((n - 28) * (n - 27)) / 2))
-                                .mul(1.6 * 10 ** 11)
+                                .mul(1.6e11)
                         )
                         game.pink_spice = Decimal.max(
                             game.pink_spice.sub(price),
@@ -1766,7 +1697,7 @@ function max_all(color) {
                         game.pink_strengthener = n + 1
                         game.pink_strengthener_price = Decimal.pow(10000, n + 1)
                             .mul(Decimal.pow(a, ((n - 24) * (n - 23)) / 2))
-                            .mul(1.6 * 10 ** 11)
+                            .mul(1.6e11)
                     } else if (game.pink_spice.cmp(price2) >= 0) {
                         buy_strengthener("pink")
                         buy_strengthener("pink")
@@ -1840,9 +1771,7 @@ function max_all(color) {
                         pink_bought.toString()
                     ).pow(game.prestige_bought[3] + 1)
                     if (
-                        game.ascend_challenge === 1 ||
                         game.ascend_challenge === 6 ||
-                        game.collapse_challenge === 7 ||
                         game.collapse_challenge === 12
                     )
                         game.pink_spice_boost[i] = new Decimal(
@@ -1900,9 +1829,7 @@ function max_all(color) {
                         pink_bought.toString()
                     ).pow(game.prestige_bought[3] + 1)
                     if (
-                        game.ascend_challenge === 1 ||
                         game.ascend_challenge === 6 ||
-                        game.collapse_challenge === 7 ||
                         game.collapse_challenge === 12
                     )
                         game.pink_spice_boost[i] = new Decimal(
@@ -2057,27 +1984,36 @@ function max_all(color) {
             break
         case "arcane":
             n = Math.floor(
-                Math.log10(
-                    1 - (game.ansuz * -7) / game.arcane_strengthener_price
-                ) / Math.log10(8)
+                new Decimal(1)
+                    .sub(
+                        game.ansuz
+                            .mul(-19682)
+                            .div(game.arcane_strengthener_price)
+                    )
+                    .log(10) / Math.log10(19683)
             )
+
             if (n > 0) {
-                let price = Math.round(
-                    (game.arcane_strengthener_price * (1 - 8 ** n)) / -7
-                )
-                game.ansuz = Math.max(game.ansuz - price, 0)
-                game.arcane_strengthener_price *= 8 ** n
+                let price = game.arcane_strengthener_price
+                    .mul(1 - 19683 ** n)
+                    .div(-19682)
+                    .round()
+                game.ansuz = Decimal.max(game.ansuz.sub(price), 0)
+                game.arcane_strengthener_price =
+                    game.arcane_strengthener_price.mul(Decimal.pow(19683, n))
                 game.arcane_strengthener += n
 
+                game.autods_budget = new Decimal(0)
+
                 if (
-                    game.research_complete[13] >= 1 &&
+                    game.research_complete[15] >= 1 &&
                     game.collapse_challenge !== 12
                 ) {
                     game.free_enchantment =
                         game.arcane_enchantment / 10n +
-                        BigInt(game.arcane_strengthener) * 200n
+                        BigInt(game.arcane_strengthener) * 10n
                     if (
-                        game.research_complete[25] >= 1 &&
+                        game.research_complete[27] >= 1 &&
                         game.collapse_challenge !== 12
                     ) {
                         let collapse_free = BigInt(game.collapse) * 50n
@@ -2090,53 +2026,52 @@ function max_all(color) {
                                         3750000
                                 )
                             )
-                        if (game.collapse >= 31337500)
-                            collapse_free = BigInt(game.collapse) + 34912500n
+                        if (game.collapse >= 1337500)
+                            collapse_free =
+                                BigInt(game.collapse) * 5n + 9562500n
                         if (collapse_free > game.arcane_enchantment / 2n)
                             collapse_free = game.arcane_enchantment / 2n
 
                         game.free_enchantment += collapse_free
                     }
                 }
-
-                for (let i = 0; i < 3; i++) {
-                    game.autods_budget[i] = Math.max(
-                        game.autods_budget[i] - price,
-                        0
-                    )
-                    if (game.autods_budget[i] < 0) game.autods_budget[i] = 0
-                }
             }
             generators = 1
             for (let i = 1; i < 6; i++) {
-                if (game.ansuz >= game.arcane_spice_price[i]) generators++
+                if (game.ansuz.cmp(game.arcane_spice_price[i]) >= 0)
+                    generators++
             }
-            budget = Math.floor(game.ansuz / generators)
+            budget = game.ansuz.div(generators).floor()
             for (let i = 5; i >= 0; i--) {
                 let ansuz_budget = budget
                 if (
                     game.arcane_spice_bought[i] === 0n &&
-                    ansuz_budget >= game.arcane_spice_price[i]
+                    ansuz_budget.cmp(game.arcane_spice_price[i]) >= 0
                 ) {
-                    game.ansuz = Math.max(
-                        game.ansuz - game.arcane_spice_price[i],
+                    game.ansuz = Decimal.max(
+                        game.ansuz.sub(game.arcane_spice_price[i]),
                         0
                     )
-                    ansuz_budget = Math.max(
-                        ansuz_budget - game.arcane_spice_price[i],
+                    ansuz_budget = Decimal.max(
+                        ansuz_budget.sub(game.arcane_spice_price[i]),
                         0
                     )
-                    game.arcane_spice_price[i] *= 1.1
+                    game.arcane_spice_price[i] =
+                        game.arcane_spice_price[i].mul(3)
                     game.arcane_spice_gen[i] = game.arcane_spice_gen[i].add(1)
                     game.arcane_spice_bought[i] += 1n
+
+                    game.autods_budget = new Decimal(0)
                 }
                 let m = BigInt(
                     Math.floor(
-                        Math.log10(
-                            1 -
-                                (ansuz_budget * -0.1) /
-                                    game.arcane_spice_price[i]
-                        ) / Math.log10(1.1)
+                        new Decimal(1)
+                            .sub(
+                                ansuz_budget
+                                    .mul(-2)
+                                    .div(game.arcane_spice_price[i])
+                            )
+                            .log(10) / Math.log10(3)
                     )
                 )
                 if (game.arcane_spice_bought[i] + m >= 3n)
@@ -2144,13 +2079,13 @@ function max_all(color) {
                         ((game.arcane_spice_bought[i] + m) / 3n) * 3n -
                         game.arcane_spice_bought[i]
                 if (m > 0n) {
-                    let price = Math.round(
-                        (game.arcane_spice_price[i] *
-                            (1 - 1.1 ** m.toString())) /
-                            -0.1
+                    let price = game.arcane_spice_price[i]
+                        .mul(new Decimal(1).sub(Decimal.pow(3, m.toString())))
+                        .div(-2)
+                    game.ansuz = Decimal.max(game.ansuz.sub(price), 0)
+                    game.arcane_spice_price[i] = game.arcane_spice_price[i].mul(
+                        Decimal.pow(3, m.toString())
                     )
-                    game.ansuz = Math.max(game.ansuz - price, 0)
-                    game.arcane_spice_price[i] *= 1.1 ** m.toString()
                     game.arcane_spice_gen[i] = game.arcane_spice_gen[i].add(
                         m.toString()
                     )
@@ -2162,138 +2097,34 @@ function max_all(color) {
                         arcane_bought.toString()
                     )
 
-                    for (let i = 0; i < 3; i++) {
-                        game.autods_budget[i] = Math.max(
-                            game.autods_budget[i] - price,
-                            0
-                        )
-                        if (game.autods_budget[i] < 0) game.autods_budget[i] = 0
-                    }
+                    game.autods_budget = new Decimal(0)
                 }
             }
             for (let i = 5; i >= 0; i--) {
                 if (
                     game.arcane_spice_bought[i] === 0n &&
-                    game.ansuz >= game.arcane_spice_price[i]
+                    game.ansuz.cmp(game.arcane_spice_price[i]) >= 0
                 ) {
-                    game.ansuz = Math.max(
-                        game.ansuz - game.arcane_spice_price[i],
+                    game.ansuz = Decimal.max(
+                        game.ansuz.sub(game.arcane_spice_price[i]),
                         0
                     )
-                    game.arcane_spice_price[i] *= 1.1
+                    game.arcane_spice_price[i] =
+                        game.arcane_spice_price[i].mul(3)
                     game.arcane_spice_gen[i] = game.arcane_spice_gen[i].add(1)
                     game.arcane_spice_bought[i] += 1n
+
+                    game.autods_budget = new Decimal(0)
                 }
                 let m = BigInt(
                     Math.floor(
-                        Math.log10(
-                            1 - (game.ansuz * -0.1) / game.arcane_spice_price[i]
-                        ) / Math.log10(1.1)
-                    )
-                )
-                if (game.arcane_spice_bought[i] + m >= 3n)
-                    m =
-                        ((game.arcane_spice_bought[i] + m) / 3n) * 3n -
-                        game.arcane_spice_bought[i]
-                if (m > 0n) {
-                    let price = Math.round(
-                        (game.arcane_spice_price[i] *
-                            (1 - 1.1 ** m.toString())) /
-                            -0.1
-                    )
-                    game.ansuz = Math.max(game.ansuz - price, 0)
-                    game.arcane_spice_price[i] *= 1.1 ** m.toString()
-                    game.arcane_spice_gen[i] = game.arcane_spice_gen[i].add(
-                        m.toString()
-                    )
-                    game.arcane_spice_bought[i] += m
-
-                    let arcane_bought = game.arcane_spice_bought[i] / 3n
-                    game.arcane_spice_boost[i] = Decimal.pow(
-                        3,
-                        arcane_bought.toString()
-                    )
-
-                    for (let i = 0; i < 3; i++) {
-                        game.autods_budget[i] = Math.max(
-                            game.autods_budget[i] - price,
-                            0
-                        )
-                        if (game.autods_budget[i] < 0) game.autods_budget[i] = 0
-                    }
-                }
-            }
-            break
-        case "arcane_half":
-            let budget2 = game.ansuz / 2
-            n = Math.floor(
-                Math.log10(
-                    1 - (budget2 * -7) / game.arcane_strengthener_price
-                ) / Math.log10(8)
-            )
-            if (n > 0) {
-                let price = Math.round(
-                    (game.arcane_strengthener_price * (1 - 8 ** n)) / -7
-                )
-                game.ansuz = Math.max(game.ansuz - price, 0)
-                budget2 = Math.max(budget2 - price, 0)
-                game.arcane_strengthener_price *= 8 ** n
-                game.arcane_strengthener += n
-
-                if (
-                    game.research_complete[13] >= 1 &&
-                    game.collapse_challenge !== 12
-                ) {
-                    game.free_enchantment =
-                        game.arcane_enchantment / 10n +
-                        BigInt(game.arcane_strengthener) * 200n
-                    if (
-                        game.research_complete[25] >= 1 &&
-                        game.collapse_challenge !== 12
-                    ) {
-                        let collapse_free = BigInt(game.collapse) * 50n
-                        if (game.collapse >= 100000)
-                            collapse_free = BigInt(
-                                Math.floor(
-                                    2500000 *
-                                        ((game.collapse - 87500) / 50000) **
-                                            0.5 +
-                                        3750000
-                                )
+                        new Decimal(1)
+                            .sub(
+                                game.ansuz
+                                    .mul(-2)
+                                    .div(game.arcane_spice_price[i])
                             )
-                        if (game.collapse >= 31337500)
-                            collapse_free = BigInt(game.collapse) + 34912500n
-                        if (collapse_free > game.arcane_enchantment / 2n)
-                            collapse_free = game.arcane_enchantment / 2n
-
-                        game.free_enchantment += collapse_free
-                    }
-                }
-
-                for (let i = 0; i < 3; i++) {
-                    game.autods_budget[i] = Math.max(
-                        game.autods_budget[i] - price,
-                        0
-                    )
-                    if (game.autods_budget[i] < 0) game.autods_budget[i] = 0
-                }
-            }
-            generators = 1
-            for (let i = 1; i < 6; i++) {
-                if (budget2 >= game.arcane_spice_price[i]) generators++
-            }
-            budget = Math.floor(budget2 / generators)
-            for (let i = 5; i >= 0; i--) {
-                let temp_budget = budget
-                if (game.arcane_spice_bought[i] === 0n)
-                    temp_budget = buy_gen("arcane", i, temp_budget)
-                let m = BigInt(
-                    Math.floor(
-                        Math.log10(
-                            1 -
-                                (temp_budget * -0.1) /
-                                    game.arcane_spice_price[i]
-                        ) / Math.log10(1.1)
+                            .log(10) / Math.log10(3)
                     )
                 )
                 if (game.arcane_spice_bought[i] + m >= 3n)
@@ -2301,14 +2132,14 @@ function max_all(color) {
                         ((game.arcane_spice_bought[i] + m) / 3n) * 3n -
                         game.arcane_spice_bought[i]
                 if (m > 0n) {
-                    let price = Math.round(
-                        (game.arcane_spice_price[i] *
-                            (1 - 1.1 ** m.toString())) /
-                            -0.1
+                    let price = game.arcane_spice_price[i]
+                        .mul(new Decimal(1).sub(Decimal.pow(3, m.toString())))
+                        .div(-2)
+                        .round()
+                    game.ansuz = Decimal.max(game.ansuz.sub(price), 0)
+                    game.arcane_spice_price[i] = game.arcane_spice_price[i].mul(
+                        Decimal.pow(3, m.toString())
                     )
-                    game.ansuz = Math.max(game.ansuz - price, 0)
-                    temp_budget = Math.max(temp_budget - price, 0)
-                    game.arcane_spice_price[i] *= 1.1 ** m.toString()
                     game.arcane_spice_gen[i] = game.arcane_spice_gen[i].add(
                         m.toString()
                     )
@@ -2320,203 +2151,11 @@ function max_all(color) {
                         arcane_bought.toString()
                     )
 
-                    for (let i = 0; i < 3; i++) {
-                        game.autods_budget[i] = Math.max(
-                            game.autods_budget[i] - price,
-                            0
-                        )
-                        if (game.autods_budget[i] < 0) game.autods_budget[i] = 0
+                    if (i === 5) {
+                        if (!entry_unlocked[12]) entry_unlock(12)
                     }
-                }
-            }
-            for (let i = 5; i >= 0; i--) {
-                if (game.arcane_spice_bought[i] === 0n)
-                    budget2 = buy_gen("arcane", i, budget2)
-                let m = BigInt(
-                    Math.floor(
-                        Math.log10(
-                            1 - (budget2 * -0.1) / game.arcane_spice_price[i]
-                        ) / Math.log10(1.1)
-                    )
-                )
-                if (game.arcane_spice_bought[i] + m >= 3n)
-                    m =
-                        ((game.arcane_spice_bought[i] + m) / 3n) * 3n -
-                        game.arcane_spice_bought[i]
-                if (m > 0n) {
-                    let price = Math.round(
-                        (game.arcane_spice_price[i] *
-                            (1 - 1.1 ** m.toString())) /
-                            -0.1
-                    )
-                    game.ansuz = Math.max(game.ansuz - price, 0)
-                    temp_budget = Math.max(temp_budget - price, 0)
-                    game.arcane_spice_price[i] *= 1.1 ** m.toString()
-                    game.arcane_spice_gen[i] = game.arcane_spice_gen[i].add(
-                        m.toString()
-                    )
-                    game.arcane_spice_bought[i] += m
 
-                    let arcane_bought = game.arcane_spice_bought[i] / 3n
-                    game.arcane_spice_boost[i] = Decimal.pow(
-                        3,
-                        arcane_bought.toString()
-                    )
-
-                    for (let i = 0; i < 3; i++) {
-                        game.autods_budget[i] = Math.max(
-                            game.autods_budget[i] - price,
-                            0
-                        )
-                        if (game.autods_budget[i] < 0) game.autods_budget[i] = 0
-                    }
-                }
-            }
-            break
-        case "arcane_budget":
-            n = Math.floor(
-                Math.log10(
-                    1 -
-                        (game.autods_budget[2] * -7) /
-                            game.arcane_strengthener_price
-                ) / Math.log10(8)
-            )
-            if (n > 0) {
-                let price = Math.round(
-                    (game.arcane_strengthener_price * (1 - 8 ** n)) / -7
-                )
-                game.ansuz = Math.max(game.ansuz - price, 0)
-                game.autods_budget[2] = Math.max(
-                    game.autods_budget[2] - price,
-                    0
-                )
-                game.arcane_strengthener_price *= 8 ** n
-                game.arcane_strengthener += n
-
-                if (
-                    game.research_complete[13] >= 1 &&
-                    game.collapse_challenge !== 12
-                ) {
-                    game.free_enchantment =
-                        game.arcane_enchantment / 10n +
-                        BigInt(game.arcane_strengthener) * 200n
-                    if (
-                        game.research_complete[25] >= 1 &&
-                        game.collapse_challenge !== 12
-                    ) {
-                        let collapse_free = BigInt(game.collapse) * 50n
-                        if (game.collapse >= 100000)
-                            collapse_free = BigInt(
-                                Math.floor(
-                                    2500000 *
-                                        ((game.collapse - 87500) / 50000) **
-                                            0.5 +
-                                        3750000
-                                )
-                            )
-                        if (game.collapse >= 31337500)
-                            collapse_free = BigInt(game.collapse) + 34912500n
-                        if (collapse_free > game.arcane_enchantment / 2n)
-                            collapse_free = game.arcane_enchantment / 2n
-
-                        game.free_enchantment += collapse_free
-                    }
-                }
-            }
-            generators = 1
-            for (let i = 1; i < 6; i++) {
-                if (game.autods_budget[2] >= game.arcane_spice_price[i])
-                    generators++
-            }
-            budget = Math.floor(game.autods_budget[2] / generators)
-            for (let i = 5; i >= 0; i--) {
-                let temp_budget = budget
-                if (game.arcane_spice_bought[i] === 0n) {
-                    let old_budget = temp_budget
-                    temp_budget = buy_gen("arcane", i, temp_budget)
-                    game.autods_budget[2] -= old_budget - temp_budget
-                }
-                let m = BigInt(
-                    Math.floor(
-                        Math.log10(
-                            1 -
-                                (temp_budget * -0.1) /
-                                    game.arcane_spice_price[i]
-                        ) / Math.log10(1.1)
-                    )
-                )
-                if (game.arcane_spice_bought[i] >= 3n)
-                    m =
-                        ((game.arcane_spice_bought[i] + m) / 3n) * 3n -
-                        game.arcane_spice_bought[i]
-                if (m > 0n) {
-                    let price = Math.round(
-                        (game.arcane_spice_price[i] *
-                            (1 - 1.1 ** m.toString())) /
-                            -0.1
-                    )
-                    game.ansuz = Math.max(game.ansuz - price, 0)
-                    temp_budget = Math.max(temp_budget - price, 0)
-                    game.autods_budget[2] = Math.max(
-                        game.autods_budget[2] - price,
-                        0
-                    )
-                    game.arcane_spice_price[i] *= 1.1 ** m.toString()
-                    game.arcane_spice_gen[i] = game.arcane_spice_gen[i].add(
-                        m.toString()
-                    )
-                    game.arcane_spice_bought[i] += m
-
-                    let arcane_bought = game.arcane_spice_bought[i] / 3n
-                    game.arcane_spice_boost[i] = Decimal.pow(
-                        3,
-                        arcane_bought.toString()
-                    )
-                }
-            }
-            for (let i = 5; i >= 0; i--) {
-                if (game.arcane_spice_bought[i] === 0n) {
-                    game.autods_budget[2] = buy_gen(
-                        "arcane",
-                        i,
-                        game.autods_budget[2]
-                    )
-                }
-                let m = BigInt(
-                    Math.floor(
-                        Math.log10(
-                            1 -
-                                (game.autods_budget[2] * -0.1) /
-                                    game.arcane_spice_price[i]
-                        ) / Math.log10(1.1)
-                    )
-                )
-                if (game.arcane_spice_bought[i] >= 3n)
-                    m =
-                        ((game.arcane_spice_bought[i] + m) / 3n) * 3n -
-                        game.arcane_spice_bought[i]
-                if (m > 0n) {
-                    let price = Math.round(
-                        (game.arcane_spice_price[i] *
-                            (1 - 1.1 ** m.toString())) /
-                            -0.1
-                    )
-                    game.ansuz = Math.max(game.ansuz - price, 0)
-                    game.autods_budget[2] = Math.max(
-                        game.autods_budget[2] - price,
-                        0
-                    )
-                    game.arcane_spice_price[i] *= 1.1 ** m.toString()
-                    game.arcane_spice_gen[i] = game.arcane_spice_gen[i].add(
-                        m.toString()
-                    )
-                    game.arcane_spice_bought[i] += m
-
-                    let arcane_bought = game.arcane_spice_bought[i] / 3n
-                    game.arcane_spice_boost[i] = Decimal.pow(
-                        3,
-                        arcane_bought.toString()
-                    )
+                    game.autods_budget = new Decimal(0)
                 }
             }
             break
@@ -2648,8 +2287,8 @@ function auto_toggle(color, unless) {
             }
             break
         case "prestige_upgrade":
-            if (game.autoup_toggle) {
-                game.autoup_toggle = false
+            if (game.autoup_toggle[0]) {
+                game.autoup_toggle[0] = false
                 document.getElementById("upgrade_auto_toggle").innerHTML =
                     "Auto: OFF"
                 document.getElementById("upgrade_auto_toggle2").innerHTML =
@@ -2659,7 +2298,7 @@ function auto_toggle(color, unless) {
                 document.getElementById("upgrade_auto_toggle2").className =
                     "spice_buy a_disabled"
             } else {
-                game.autoup_toggle = true
+                game.autoup_toggle[0] = true
                 document.getElementById("upgrade_auto_toggle").innerHTML =
                     "Auto: ON"
                 document.getElementById("upgrade_auto_toggle2").innerHTML =
@@ -2698,9 +2337,12 @@ function auto_toggle(color, unless) {
                     document.getElementById("ascend_auto_toggle").className =
                         "spice_buy a_enabled"
                 } else {
-                    alert(
-                        "转生确认必须关闭才能开启转生自动化！"
-                    )
+                    if (modal === "none") {
+                        open_modal(
+                            "alert",
+                            "Ascension confirmations must be off to turn on Ascension automation!"
+                        )
+                    }
                 }
             }
             break
@@ -2731,18 +2373,46 @@ function auto_toggle(color, unless) {
             }
             break
         case "ascend_upgrade":
+            if (game.autoup_toggle[1]) {
+                game.autoup_toggle[1] = false
+                document.getElementById("upgrade_auto_toggle3").innerHTML =
+                    "Auto: OFF"
+                document.getElementById("upgrade_auto_toggle3").className =
+                    "spice_buy a_disabled"
+            } else {
+                game.autoup_toggle[1] = true
+                document.getElementById("upgrade_auto_toggle3").innerHTML =
+                    "Auto: ON"
+                document.getElementById("upgrade_auto_toggle3").className =
+                    "spice_buy a_enabled"
+            }
+            break
+        case "distributor":
             if (game.autods_toggle) {
                 game.autods_toggle = false
                 document.getElementById("distribute_auto_toggle").innerHTML =
-                    "OFF"
+                    "Auto: OFF"
                 document.getElementById("distribute_auto_toggle").className =
-                    "rune_button a_unlocked"
+                    "spice_buy a_disabled"
             } else {
                 game.autods_toggle = true
                 document.getElementById("distribute_auto_toggle").innerHTML =
-                    "ON"
+                    "Auto: ON"
                 document.getElementById("distribute_auto_toggle").className =
-                    "rune_button a_active"
+                    "spice_buy a_enabled"
+            }
+            break
+        case "arcane":
+            if (game.autoar_toggle) {
+                game.autoar_toggle = false
+                document.getElementById("arcane_auto").innerHTML = "Auto: OFF"
+                document.getElementById("arcane_auto").className =
+                    "spice_buy a_disabled"
+            } else {
+                game.autoar_toggle = true
+                document.getElementById("arcane_auto").innerHTML = "Auto: ON"
+                document.getElementById("arcane_auto").className =
+                    "spice_buy a_enabled"
             }
             break
         case "collapse":
@@ -2760,9 +2430,12 @@ function auto_toggle(color, unless) {
                     document.getElementById("collapse_auto_toggle").className =
                         "spice_buy a_enabled"
                 } else {
-                    alert(
-                        "Collapse confirmations must be off to turn on Collapse automation!"
-                    )
+                    if (modal === "none") {
+                        open_modal(
+                            "alert",
+                            "Collapse confirmations must be off to turn on Collapse automation!"
+                        )
+                    }
                 }
             }
             break
@@ -2772,6 +2445,10 @@ function auto_toggle(color, unless) {
                 document.getElementById("collapse_auto_mode").innerHTML =
                     "Mode: TIME"
             } else if (game.autoco_mode === 1) {
+                game.autoco_mode = 2
+                document.getElementById("collapse_auto_mode").innerHTML =
+                    "Mode: DECAY"
+            } else if (game.autoco_mode === 2) {
                 game.autoco_mode = 0
                 document.getElementById("collapse_auto_mode").innerHTML =
                     "Mode: SPICE"
@@ -2796,195 +2473,408 @@ function auto_toggle(color, unless) {
 //buying prestige upgrades
 function buy_prestige_upgrade(id, max) {
     if (max) {
-        while (
-            game.rainbow_spice.cmp(prestige_upgrade.upgrades[id].price) >= 0 &&
-            game.prestige_bought[id] < prestige_upgrade.upgrades[id].max
-        ) {
-            game.rainbow_spice = Decimal.max(
-                game.rainbow_spice.sub(prestige_upgrade.upgrades[id].price),
-                0
-            )
-            game.prestige_bought[id]++
+        if (id === 20) {
+            if (game.ascend_bought[5]) {
+                if (
+                    game.rainbow_spice.cmp(
+                        prestige_upgrade.upgrades[id].price
+                    ) >= 0
+                ) {
+                    if (
+                        game.prestige_bought[id] <
+                        prestige_upgrade.upgrades[id].max
+                    ) {
+                        while (
+                            game.rainbow_spice.cmp(
+                                prestige_upgrade.upgrades[id].price
+                            ) >= 0
+                        ) {
+                            game.rainbow_spice = Decimal.max(
+                                game.rainbow_spice.sub(
+                                    prestige_upgrade.upgrades[id].price
+                                ),
+                                0
+                            )
+                            game.prestige_bought[id]++
 
-            if (game.prestige_bought[id] < prestige_upgrade.upgrades[id].max)
-                switch (id) {
-                    case 0:
-                        switch (game.prestige_bought[id]) {
-                            case 1:
-                                prestige_upgrade.upgrades[id].price =
-                                    new Decimal(4)
-                                break
-                            case 2:
-                                prestige_upgrade.upgrades[id].price =
-                                    new Decimal(16)
-                                break
-                            case 3:
-                                prestige_upgrade.upgrades[id].price =
-                                    new Decimal(256)
-                                break
-                            case 4:
-                                prestige_upgrade.upgrades[id].price =
-                                    new Decimal(65536)
-                                break
-                            default:
-                                prestige_upgrade.upgrades[id].price =
-                                    new Decimal(1)
-                                break
-                        }
-                        break
-                    case 2:
-                        if (game.prestige_bought[id] > 9) {
                             prestige_upgrade.upgrades[id].price =
                                 prestige_upgrade.upgrades[id].price.mul(
-                                    Decimal.pow(2, game.prestige_bought[id] - 6)
+                                    Decimal.pow(
+                                        2,
+                                        8 + game.prestige_bought[id] * 8
+                                    )
                                 )
-                        } else if (game.prestige_bought[id] > 5) {
-                            prestige_upgrade.upgrades[id].price =
-                                prestige_upgrade.upgrades[id].price.mul(8)
-                        } else {
-                            prestige_upgrade.upgrades[id].price =
-                                prestige_upgrade.upgrades[id].price.mul(4)
                         }
-                        break
-                    case 3:
-                        prestige_upgrade.upgrades[id].price =
-                            prestige_upgrade.upgrades[id].price.mul(256)
-                        break
-                    case 4:
-                        prestige_upgrade.upgrades[id].price =
-                            prestige_upgrade.upgrades[id].price.mul(8)
-                        break
-                    case 5:
-                        prestige_upgrade.upgrades[id].price =
-                            prestige_upgrade.upgrades[id].price.mul(
-                                2 ** (game.prestige_bought[id] + 3)
-                            )
-                        break
-                    case 9:
-                        prestige_upgrade.upgrades[id].price =
-                            prestige_upgrade.upgrades[id].price.mul(1024)
-                        break
-                    case 20:
+                    } else {
+                        let n = Math.floor(
+                            5.5 +
+                                (game.rainbow_spice.ln() - 492 * Math.log(2)) **
+                                    0.5 /
+                                    (2 * (2 * Math.log(2)) ** 0.5)
+                        )
+                        let price = Decimal.pow(2, 8 * n ** 2 - 88 * n + 734)
+
+                        game.rainbow_spice = Decimal.max(
+                            game.rainbow_spice.sub(price),
+                            0
+                        )
+                        game.prestige_bought[id] = n
+
+                        prestige_upgrade.upgrades[id].price = price.mul(
+                            Decimal.pow(2, 16 * game.prestige_bought[id] - 80)
+                        )
+                    }
+                }
+            } else {
+                while (
+                    game.rainbow_spice.cmp(
+                        prestige_upgrade.upgrades[id].price
+                    ) >= 0 &&
+                    game.prestige_bought[id] < prestige_upgrade.upgrades[id].max
+                ) {
+                    game.rainbow_spice = Decimal.max(
+                        game.rainbow_spice.sub(
+                            prestige_upgrade.upgrades[id].price
+                        ),
+                        0
+                    )
+                    game.prestige_bought[id]++
+
+                    if (
+                        game.prestige_bought[id] <
+                        prestige_upgrade.upgrades[id].max
+                    )
                         prestige_upgrade.upgrades[id].price =
                             prestige_upgrade.upgrades[id].price.mul(
                                 Decimal.pow(2, 8 + game.prestige_bought[id] * 8)
                             )
-                        break
                 }
+            }
+        } else {
+            while (
+                game.rainbow_spice.cmp(prestige_upgrade.upgrades[id].price) >=
+                    0 &&
+                game.prestige_bought[id] < prestige_upgrade.upgrades[id].max
+            ) {
+                game.rainbow_spice = Decimal.max(
+                    game.rainbow_spice.sub(prestige_upgrade.upgrades[id].price),
+                    0
+                )
+                game.prestige_bought[id]++
+
+                if (
+                    game.prestige_bought[id] < prestige_upgrade.upgrades[id].max
+                )
+                    switch (id) {
+                        case 0:
+                            switch (game.prestige_bought[id]) {
+                                case 1:
+                                    prestige_upgrade.upgrades[id].price =
+                                        new Decimal(4)
+                                    break
+                                case 2:
+                                    prestige_upgrade.upgrades[id].price =
+                                        new Decimal(16)
+                                    break
+                                case 3:
+                                    prestige_upgrade.upgrades[id].price =
+                                        new Decimal(256)
+                                    break
+                                case 4:
+                                    prestige_upgrade.upgrades[id].price =
+                                        new Decimal(65536)
+                                    break
+                                default:
+                                    prestige_upgrade.upgrades[id].price =
+                                        new Decimal(1)
+                                    break
+                            }
+                            break
+                        case 2:
+                            if (game.prestige_bought[id] > 9) {
+                                prestige_upgrade.upgrades[id].price =
+                                    prestige_upgrade.upgrades[id].price.mul(
+                                        Decimal.pow(
+                                            2,
+                                            game.prestige_bought[id] - 6
+                                        )
+                                    )
+                            } else if (game.prestige_bought[id] > 5) {
+                                prestige_upgrade.upgrades[id].price =
+                                    prestige_upgrade.upgrades[id].price.mul(8)
+                            } else {
+                                prestige_upgrade.upgrades[id].price =
+                                    prestige_upgrade.upgrades[id].price.mul(4)
+                            }
+                            break
+                        case 3:
+                            prestige_upgrade.upgrades[id].price =
+                                prestige_upgrade.upgrades[id].price.mul(256)
+                            break
+                        case 4:
+                            prestige_upgrade.upgrades[id].price =
+                                prestige_upgrade.upgrades[id].price.mul(8)
+                            break
+                        case 5:
+                            prestige_upgrade.upgrades[id].price =
+                                prestige_upgrade.upgrades[id].price.mul(
+                                    2 ** (game.prestige_bought[id] + 3)
+                                )
+                            break
+                        case 9:
+                            prestige_upgrade.upgrades[id].price =
+                                prestige_upgrade.upgrades[id].price.mul(1024)
+                            break
+                    }
+            }
         }
     } else {
-        if (
-            game.rainbow_spice.cmp(prestige_upgrade.upgrades[id].price) >= 0 &&
-            game.prestige_bought[id] < prestige_upgrade.upgrades[id].max
-        ) {
-            game.rainbow_spice = Decimal.max(
-                game.rainbow_spice.sub(prestige_upgrade.upgrades[id].price),
-                0
-            )
-            game.prestige_bought[id]++
+        if (id === 20) {
+            if (game.ascend_bought[5]) {
+                if (
+                    game.rainbow_spice.cmp(
+                        prestige_upgrade.upgrades[id].price
+                    ) >= 0
+                ) {
+                    game.rainbow_spice = Decimal.max(
+                        game.rainbow_spice.sub(
+                            prestige_upgrade.upgrades[id].price
+                        ),
+                        0
+                    )
+                    game.prestige_bought[id]++
 
-            if (game.prestige_bought[id] < prestige_upgrade.upgrades[id].max)
-                switch (id) {
-                    case 0:
-                        switch (game.prestige_bought[id]) {
-                            case 1:
-                                prestige_upgrade.upgrades[id].price =
-                                    new Decimal(4)
-                                break
-                            case 2:
-                                prestige_upgrade.upgrades[id].price =
-                                    new Decimal(16)
-                                break
-                            case 3:
-                                prestige_upgrade.upgrades[id].price =
-                                    new Decimal(256)
-                                break
-                            case 4:
-                                prestige_upgrade.upgrades[id].price =
-                                    new Decimal(65536)
-                                break
-                            default:
-                                prestige_upgrade.upgrades[id].price =
-                                    new Decimal(1)
-                                break
-                        }
-                        break
-                    case 2:
-                        if (game.prestige_bought[id] > 9) {
-                            prestige_upgrade.upgrades[id].price =
-                                prestige_upgrade.upgrades[id].price.mul(
-                                    Decimal.pow(2, game.prestige_bought[id] - 6)
-                                )
-                        } else if (game.prestige_bought[id] > 5) {
-                            prestige_upgrade.upgrades[id].price =
-                                prestige_upgrade.upgrades[id].price.mul(8)
-                        } else {
-                            prestige_upgrade.upgrades[id].price =
-                                prestige_upgrade.upgrades[id].price.mul(4)
-                        }
-                        break
-                    case 3:
-                        prestige_upgrade.upgrades[id].price =
-                            prestige_upgrade.upgrades[id].price.mul(256)
-                        break
-                    case 4:
-                        prestige_upgrade.upgrades[id].price =
-                            prestige_upgrade.upgrades[id].price.mul(8)
-                        break
-                    case 5:
-                        prestige_upgrade.upgrades[id].price =
-                            prestige_upgrade.upgrades[id].price.mul(
-                                2 ** (game.prestige_bought[id] + 3)
-                            )
-                        break
-                    case 9:
-                        prestige_upgrade.upgrades[id].price =
-                            prestige_upgrade.upgrades[id].price.mul(1024)
-                        break
-                    case 20:
+                    if (
+                        game.prestige_bought[id] <
+                        prestige_upgrade.upgrades[id].max
+                    )
                         prestige_upgrade.upgrades[id].price =
                             prestige_upgrade.upgrades[id].price.mul(
                                 Decimal.pow(2, 8 + game.prestige_bought[id] * 8)
                             )
-                        break
+                    else
+                        prestige_upgrade.upgrades[id].price =
+                            prestige_upgrade.upgrades[id].price.mul(
+                                Decimal.pow(
+                                    2,
+                                    16 * game.prestige_bought[id] - 80
+                                )
+                            )
                 }
+            } else {
+                if (
+                    game.rainbow_spice.cmp(
+                        prestige_upgrade.upgrades[id].price
+                    ) >= 0 &&
+                    game.prestige_bought[id] < prestige_upgrade.upgrades[id].max
+                ) {
+                    game.rainbow_spice = Decimal.max(
+                        game.rainbow_spice.sub(
+                            prestige_upgrade.upgrades[id].price
+                        ),
+                        0
+                    )
+                    game.prestige_bought[id]++
+
+                    if (
+                        game.prestige_bought[id] <
+                        prestige_upgrade.upgrades[id].max
+                    )
+                        prestige_upgrade.upgrades[id].price =
+                            prestige_upgrade.upgrades[id].price.mul(
+                                Decimal.pow(2, 8 + game.prestige_bought[id] * 8)
+                            )
+                }
+            }
+        } else {
+            if (
+                game.rainbow_spice.cmp(prestige_upgrade.upgrades[id].price) >=
+                    0 &&
+                game.prestige_bought[id] < prestige_upgrade.upgrades[id].max
+            ) {
+                game.rainbow_spice = Decimal.max(
+                    game.rainbow_spice.sub(prestige_upgrade.upgrades[id].price),
+                    0
+                )
+                game.prestige_bought[id]++
+
+                if (
+                    game.prestige_bought[id] < prestige_upgrade.upgrades[id].max
+                )
+                    switch (id) {
+                        case 0:
+                            switch (game.prestige_bought[id]) {
+                                case 1:
+                                    prestige_upgrade.upgrades[id].price =
+                                        new Decimal(4)
+                                    break
+                                case 2:
+                                    prestige_upgrade.upgrades[id].price =
+                                        new Decimal(16)
+                                    break
+                                case 3:
+                                    prestige_upgrade.upgrades[id].price =
+                                        new Decimal(256)
+                                    break
+                                case 4:
+                                    prestige_upgrade.upgrades[id].price =
+                                        new Decimal(65536)
+                                    break
+                                default:
+                                    prestige_upgrade.upgrades[id].price =
+                                        new Decimal(1)
+                                    break
+                            }
+                            break
+                        case 2:
+                            if (game.prestige_bought[id] > 9) {
+                                prestige_upgrade.upgrades[id].price =
+                                    prestige_upgrade.upgrades[id].price.mul(
+                                        Decimal.pow(
+                                            2,
+                                            game.prestige_bought[id] - 6
+                                        )
+                                    )
+                            } else if (game.prestige_bought[id] > 5) {
+                                prestige_upgrade.upgrades[id].price =
+                                    prestige_upgrade.upgrades[id].price.mul(8)
+                            } else {
+                                prestige_upgrade.upgrades[id].price =
+                                    prestige_upgrade.upgrades[id].price.mul(4)
+                            }
+                            break
+                        case 3:
+                            prestige_upgrade.upgrades[id].price =
+                                prestige_upgrade.upgrades[id].price.mul(256)
+                            break
+                        case 4:
+                            prestige_upgrade.upgrades[id].price =
+                                prestige_upgrade.upgrades[id].price.mul(8)
+                            break
+                        case 5:
+                            prestige_upgrade.upgrades[id].price =
+                                prestige_upgrade.upgrades[id].price.mul(
+                                    2 ** (game.prestige_bought[id] + 3)
+                                )
+                            break
+                        case 9:
+                            prestige_upgrade.upgrades[id].price =
+                                prestige_upgrade.upgrades[id].price.mul(1024)
+                            break
+                        case 12:
+                            if (!entry_unlocked[7]) entry_unlock(7)
+                            break
+                    }
+            }
         }
     }
 }
 
 //buying crystal infusions
 function buy_infusion() {
-    if (game.crystal_spice.cmp(game.crystal_infusion_price) >= 0) {
+    if (
+        game.crystal_spice.cmp(game.crystal_infusion_price) >= 0 &&
+        game.ascend_challenge !== 1 &&
+        game.collapse_challenge !== 7
+    ) {
         game.crystal_spice = Decimal.max(
             game.crystal_spice.sub(game.crystal_infusion_price),
             0
         )
-        game.crystal_infusion_price = game.crystal_infusion_price.mul(4)
-        if (game.crystal_infusion >= 20) {
+        if (game.crystal_infusion <= 3n)
+            game.crystal_infusion_price = game.crystal_infusion_price.mul(
+                2 ** 0.5
+            )
+        else if (game.crystal_infusion <= 7n)
+            game.crystal_infusion_price = game.crystal_infusion_price.mul(2)
+        else game.crystal_infusion_price = game.crystal_infusion_price.mul(4)
+        if (game.crystal_infusion >= 25n) {
             game.crystal_infusion_price = game.crystal_infusion_price.mul(6)
         }
-        if (game.crystal_infusion >= 50) {
+        if (game.crystal_infusion >= 55n) {
             game.crystal_infusion_price = game.crystal_infusion_price.mul(8)
         }
-        if (game.crystal_infusion >= 160) {
+        if (game.crystal_infusion >= 165n) {
             game.crystal_infusion_price = game.crystal_infusion_price.mul(10)
         }
-        if (game.crystal_infusion >= 22500) {
-            game.crystal_infusion_price = game.crystal_infusion_price.mul(
-                1.2 * 10 ** 9
-            )
+        if (game.crystal_infusion >= 23500n) {
+            game.crystal_infusion_price = game.crystal_infusion_price.mul(1.2e9)
         }
         game.crystal_infusion += 1n
 
         if (game.crystal_spice.cmp(0) < 0) game.crystal_spice = new Decimal(0)
+
+        if (!entry_unlocked[8] && game.crystal_infusion >= 100n) entry_unlock(8)
     }
 }
 
 //maxing crystal infusions
 function max_infusion() {
     let n = 0n
-    if (game.crystal_spice.cmp(game.crystal_infusion_price) >= 0) {
-        if (game.crystal_infusion < 20n) {
+    if (
+        game.crystal_spice.cmp(game.crystal_infusion_price) >= 0 &&
+        game.ascend_challenge !== 1 &&
+        game.collapse_challenge !== 7
+    ) {
+        if (game.crystal_infusion < 4n) {
+            n = BigInt(
+                Math.floor(
+                    new Decimal(1)
+                        .sub(
+                            game.crystal_spice
+                                .mul(1 - 2 ** 0.5)
+                                .div(game.crystal_infusion_price)
+                        )
+                        .log(10) / Math.log10(2 ** 0.5)
+                )
+            )
+            if (game.crystal_infusion + n >= 4n) n = 4n - game.crystal_infusion
+            if (n > 0n) {
+                let price = game.crystal_infusion_price
+                    .mul(
+                        new Decimal(1).sub(
+                            new Decimal(2 ** 0.5).pow(n.toString())
+                        )
+                    )
+                    .div(1 - 2 ** 0.5)
+                game.crystal_spice = Decimal.max(
+                    game.crystal_spice.sub(price),
+                    0
+                )
+                game.crystal_infusion_price = game.crystal_infusion_price.mul(
+                    new Decimal(2 ** 0.5).pow(n.toString())
+                )
+                game.crystal_infusion += n
+            }
+        }
+        if (game.crystal_infusion < 8n) {
+            n = BigInt(
+                Math.floor(
+                    new Decimal(1)
+                        .sub(
+                            game.crystal_spice
+                                .mul(-1)
+                                .div(game.crystal_infusion_price)
+                        )
+                        .log(10) / Math.log10(2)
+                )
+            )
+            if (game.crystal_infusion + n >= 8n) n = 8n - game.crystal_infusion
+            if (n > 0n) {
+                let price = game.crystal_infusion_price
+                    .mul(new Decimal(1).sub(new Decimal(2).pow(n.toString())))
+                    .div(-1)
+                game.crystal_spice = Decimal.max(
+                    game.crystal_spice.sub(price),
+                    0
+                )
+                game.crystal_infusion_price = game.crystal_infusion_price.mul(
+                    new Decimal(2).pow(n.toString())
+                )
+                game.crystal_infusion += n
+            }
+        }
+        if (game.crystal_infusion < 25n) {
             n = BigInt(
                 Math.floor(
                     new Decimal(1)
@@ -2996,8 +2886,8 @@ function max_infusion() {
                         .log(10) / Math.log10(4)
                 )
             )
-            if (game.crystal_infusion + n >= 20n)
-                n = 20n - game.crystal_infusion
+            if (game.crystal_infusion + n >= 25n)
+                n = 25n - game.crystal_infusion
             if (n > 0n) {
                 let price = game.crystal_infusion_price
                     .mul(new Decimal(1).sub(new Decimal(4).pow(n.toString())))
@@ -3012,7 +2902,7 @@ function max_infusion() {
                 game.crystal_infusion += n
             }
         }
-        if (game.crystal_infusion < 50n) {
+        if (game.crystal_infusion < 55n) {
             n = BigInt(
                 Math.floor(
                     new Decimal(1)
@@ -3024,8 +2914,8 @@ function max_infusion() {
                         .log(10) / Math.log10(24)
                 )
             )
-            if (game.crystal_infusion + n >= 50n)
-                n = 50n - game.crystal_infusion
+            if (game.crystal_infusion + n >= 55n)
+                n = 55n - game.crystal_infusion
             if (n > 0n) {
                 let price = game.crystal_infusion_price
                     .mul(new Decimal(1).sub(new Decimal(24).pow(n.toString())))
@@ -3040,7 +2930,7 @@ function max_infusion() {
                 game.crystal_infusion += n
             }
         }
-        if (game.crystal_infusion < 160n) {
+        if (game.crystal_infusion < 165n) {
             n = BigInt(
                 Math.floor(
                     new Decimal(1)
@@ -3052,8 +2942,8 @@ function max_infusion() {
                         .log(10) / Math.log10(192)
                 )
             )
-            if (game.crystal_infusion + n >= 160n)
-                n = 160n - game.crystal_infusion
+            if (game.crystal_infusion + n >= 165n)
+                n = 165n - game.crystal_infusion
             if (n > 0n) {
                 let price = game.crystal_infusion_price
                     .mul(new Decimal(1).sub(new Decimal(192).pow(n.toString())))
@@ -3068,7 +2958,7 @@ function max_infusion() {
                 game.crystal_infusion += n
             }
         }
-        if (game.crystal_infusion < 22500n) {
+        if (game.crystal_infusion < 23500n) {
             n = BigInt(
                 Math.floor(
                     new Decimal(1)
@@ -3080,8 +2970,8 @@ function max_infusion() {
                         .log(10) / Math.log10(1920)
                 )
             )
-            if (game.crystal_infusion + n >= 22500n)
-                n = 22500n - game.crystal_infusion
+            if (game.crystal_infusion + n >= 23500n)
+                n = 23500n - game.crystal_infusion
             if (n > 0n) {
                 let price = game.crystal_infusion_price
                     .mul(
@@ -3103,23 +2993,21 @@ function max_infusion() {
                 new Decimal(1)
                     .sub(
                         game.crystal_spice
-                            .mul(-2.304 * 10 ** 12 + 1)
+                            .mul(-2.304e12 + 1)
                             .div(game.crystal_infusion_price)
                     )
-                    .log(10) / Math.log10(2.304 * 10 ** 12)
+                    .log(10) / Math.log10(2.304e12)
             )
         )
         if (n > 0n) {
             let price = game.crystal_infusion_price
                 .mul(
-                    new Decimal(1).sub(
-                        new Decimal(2.304 * 10 ** 12).pow(n.toString())
-                    )
+                    new Decimal(1).sub(new Decimal(2.304e12).pow(n.toString()))
                 )
-                .div(-2.304 * 10 ** 12 + 1)
+                .div(-2.304e12 + 1)
             game.crystal_spice = Decimal.max(game.crystal_spice.sub(price), 0)
             game.crystal_infusion_price = game.crystal_infusion_price.mul(
-                new Decimal(2.304 * 10 ** 12).pow(n.toString())
+                new Decimal(2.304e12).pow(n.toString())
             )
             game.crystal_infusion += n
         }
@@ -3136,230 +3024,61 @@ function prestige_goal_reset() {
 
 //convert runes
 function convert_rune(id, max, half) {
-    if (game.ansuz >= 1) {
+    if (game.ansuz.cmp(1) >= 0) {
         if (max) {
             if (half) {
-                game.rune[id] += Math.floor(game.ansuz / 2)
-                game.ansuz = Math.max(
-                    game.ansuz - Math.floor(game.ansuz / 2),
+                game.rune[id] = game.rune[id].add(game.ansuz.div(2).floor())
+                game.ansuz = Decimal.max(
+                    game.ansuz.sub(game.ansuz.div(2).floor()),
                     0
                 )
 
-                for (let i = 0; i < 3; i++) {
-                    game.autods_budget[i] = Math.max(
-                        game.autods_budget[i] - Math.floor(game.ansuz / 2),
-                        0
-                    )
-                }
+                game.autods_budget = new Decimal(0)
             } else {
-                game.rune[id] += game.ansuz
-                game.ansuz = 0
+                game.rune[id] = game.rune[id].add(game.ansuz)
+                game.ansuz = new Decimal(0)
 
-                game.autods_budget = [0, 0, 0]
+                game.autods_budget = new Decimal(0)
             }
         } else {
-            game.rune[id]++
-            game.ansuz = Math.max(game.ansuz - 1, 0)
+            game.rune[id] = game.rune[id].add(1)
+            game.ansuz = Decimal.max(game.ansuz.sub(1), 0)
 
-            for (let i = 0; i < 3; i++) {
-                game.autods_budget[i] = Math.max(game.autods_budget[i] - 1, 0)
-            }
+            game.autods_budget = new Decimal(0)
         }
     }
 }
 
 //distribute runes
 function distribute_runes(mode) {
-    let amount = 0
+    let amount = new Decimal(0)
     if (mode === "all") {
-        if (game.ansuz >= 3) {
-            amount = Math.floor(game.ansuz / 3)
+        if (game.ansuz.cmp(3) >= 0) {
+            amount = game.ansuz.div(3).floor()
+            game.autods_budget = new Decimal(0)
         }
     }
     if (mode === "half") {
-        if (game.ansuz >= 6) {
-            amount = Math.floor(game.ansuz / 6)
+        if (game.ansuz.cmp(6) >= 0) {
+            amount = game.ansuz.div(6).floor()
+            game.autods_budget = new Decimal(0)
         }
     }
     if (mode === "budget") {
-        if (game.autods_budget[1] >= 3) {
-            amount = Math.floor(game.autods_budget[1] / 3)
+        if (game.autods_budget.cmp(3) >= 0) {
+            amount = game.autods_budget.div(3).floor()
+            game.autods_budget = new Decimal(0)
         }
     }
 
-    game.ansuz = Math.max(game.ansuz - amount * 3, 0)
+    game.ansuz = Decimal.max(game.ansuz.sub(amount.mul(3)), 0)
     for (let i = 0; i < 3; i++) {
-        game.rune[i] += amount
-    }
-
-    if (mode !== "budget") {
-        for (let i = 0; i < 3; i++) {
-            game.autods_budget[i] = Math.max(
-                game.autods_budget[i] - amount * 3,
-                0
-            )
-            if (game.autods_budget[i] < 0) game.autods_budget[i] = 0
-        }
-    } else {
-        game.autods_budget[1] = Math.max(game.autods_budget[1] - amount * 3, 0)
-    }
-}
-
-//recall runes
-function recall_runes(mode) {
-    if (mode === 1) {
-        let recall_ready = false
-        if (game.ascend_confirm) {
-            if (
-                confirm(
-                    "您确定要召回所有转换的符文吗？ 这将重置你的符文力量！"
-                )
-            )
-                recall_ready = true
-        } else {
-            recall_ready = true
-        }
-
-        if (recall_ready) {
-            for (let i = 0; i < 3; i++) {
-                game.ansuz += game.rune[i]
-                game.rune[i] = 0
-                game.rune_power[i] = 0
-                game.rune_boost[i] = new Decimal(1)
-            }
-        }
-    } else if (mode === 2) {
-        let recall_ready = false
-        if (game.ascend_confirm) {
-            if (
-                confirm(
-                    "您确定要召回所有用于升级的符文吗？ 你会转生！"
-                )
-            )
-                recall_ready = true
-        } else {
-            recall_ready = true
-        }
-
-        if (recall_ready) {
-            for (const u of ascension_upgrade.upgrades) {
-                if (game.collapse_challenge === 10) {
-                    if (game.ascend_bought[u.id]) {
-                        game.ascend_bought[u.id] = false
-                        game.ansuz += Math.ceil(u.price ** 0.5)
-                    }
-                } else {
-                    if (game.ascend_bought[u.id]) {
-                        game.ascend_bought[u.id] = false
-                        game.ansuz += u.price
-                    }
-                }
-            }
-
-            ascend(true)
-        }
-    } else if (mode === 3) {
-        let recall_ready = false
-        if (game.ascend_confirm) {
-            if (
-                confirm(
-                    "你确定要召回所有用在奥术香料上的符文吗？ 你会转生！"
-                )
-            )
-                recall_ready = true
-        } else {
-            recall_ready = true
-        }
-
-        if (recall_ready) {
-            for (let i = 0; i < 6; i++) {
-                if (game.arcane_spice_bought[i] > 0n) {
-                    game.ansuz += Math.floor(
-                        (spice_gen.generators[36 + i].base_price *
-                            (1 -
-                                1.1 **
-                                    game.arcane_spice_bought[i].toString())) /
-                            -0.1
-                    )
-                    game.arcane_spice_bought[i] = 0n
-                    game.arcane_spice_price[i] =
-                        spice_gen.generators[36 + i].base_price
-                    game.arcane_spice_boost[i] = new Decimal(1)
-                }
-            }
-
-            if (game.arcane_strengthener > 0) {
-                game.ansuz +=
-                    (5000000 * (1 - 8 ** game.arcane_strengthener)) / -7
-                game.arcane_strengthener = 0
-                game.arcane_strengthener_price = 5000000
-            }
-
-            ascend(true)
-        }
-    } else if (mode === 4) {
-        let recall_ready = false
-        if (game.ascend_confirm) {
-            if (
-                confirm(
-                    "你确定要召回所有来源的符文吗？ 你会转生！"
-                )
-            )
-                recall_ready = true
-        } else {
-            recall_ready = true
-        }
-
-        if (recall_ready) {
-            for (let i = 0; i < 3; i++) {
-                game.ansuz += game.rune[i]
-                game.rune[i] = 0
-            }
-
-            for (const u of ascension_upgrade.upgrades) {
-                if (game.collapse_challenge === 10) {
-                    if (game.ascend_bought[u.id]) {
-                        game.ascend_bought[u.id] = false
-                        game.ansuz += Math.ceil(u.price ** 0.5)
-                    }
-                } else {
-                    if (game.ascend_bought[u.id]) {
-                        game.ascend_bought[u.id] = false
-                        game.ansuz += u.price
-                    }
-                }
-            }
-
-            for (let i = 0; i < 6; i++) {
-                if (game.arcane_spice_bought[i] > 0n) {
-                    game.ansuz += Math.floor(
-                        (spice_gen.generators[36 + i].base_price *
-                            (1 -
-                                1.1 **
-                                    game.arcane_spice_bought[i].toString())) /
-                            -0.1
-                    )
-                    game.arcane_spice_bought[i] = 0n
-                    game.arcane_spice_price[i] =
-                        spice_gen.generators[36 + i].base_price
-                    game.arcane_spice_boost[i] = new Decimal(1)
-                }
-            }
-
-            if (game.arcane_strengthener > 0) {
-                game.ansuz +=
-                    (5000000 * (1 - 8 ** game.arcane_strengthener)) / -7
-                game.arcane_strengthener = 0
-                game.arcane_strengthener_price = 5000000
-            }
-
-            ascend(true)
-        }
+        game.rune[i] = game.rune[i].add(amount)
     }
 }
 
 //buying ascension upgrades
-function buy_ascension_upgrade(id, budget) {
+function buy_ascension_upgrade(id) {
     let condition1 = false
     let condition2 = false
     let upgrade1 = ascension_upgrade.upgrades[id].req
@@ -3399,97 +3118,52 @@ function buy_ascension_upgrade(id, budget) {
         condition2 = true
     }
 
-    if (!game.ascend_bought[id] && condition1 && condition2) {
+    if (
+        !game.ascend_bought[id] &&
+        condition1 &&
+        condition2 &&
+        (game.rune[2].cmp(1) >= 0 || game.collapse >= 1)
+    ) {
         if (game.collapse_challenge === 10) {
-            if (budget) {
-                if (
-                    game.autods_budget[0] >=
-                    Math.ceil(ascension_upgrade.upgrades[id].price ** 0.5)
-                ) {
-                    game.ansuz = Math.max(
-                        game.ansuz -
-                            Math.ceil(
-                                ascension_upgrade.upgrades[id].price ** 0.5
-                            ),
-                        0
-                    )
-                    game.autods_budget[0] = Math.max(
-                        game.autods_budget[0] -
-                            Math.ceil(
-                                ascension_upgrade.upgrades[id].price ** 0.5
-                            ),
-                        0
-                    )
-                    game.ascend_bought[id] = true
-                }
-            } else {
-                if (
-                    game.ansuz >=
-                    Math.ceil(ascension_upgrade.upgrades[id].price ** 0.5)
-                ) {
-                    game.ansuz = Math.max(
-                        game.ansuz -
-                            Math.ceil(
-                                ascension_upgrade.upgrades[id].price ** 0.5
-                            ),
-                        0
-                    )
-                    game.ascend_bought[id] = true
+            if (
+                game.ansuz.cmp(
+                    ascension_upgrade.upgrades[id].price.pow(0.5897).ceil()
+                ) >= 0
+            ) {
+                game.ansuz = Decimal.max(
+                    game.ansuz.sub(
+                        ascension_upgrade.upgrades[id].price.pow(0.5897).ceil()
+                    ),
+                    0
+                )
+                game.ascend_bought[id] = true
 
-                    for (let i = 0; i < 3; i++) {
-                        game.autods_budget[i] = Math.max(
-                            game.autods_budget[i] -
-                                Math.ceil(
-                                    ascension_upgrade.upgrades[id].price ** 0.5
-                                ),
-                            0
-                        )
-                        if (game.autods_budget[i] < 0) game.autods_budget[i] = 0
-                    }
-                }
+                game.autods_budget = new Decimal(0)
             }
         } else {
-            if (budget) {
-                if (
-                    game.autods_budget[0] >=
-                    ascension_upgrade.upgrades[id].price
-                ) {
-                    game.ansuz = Math.max(
-                        game.ansuz - ascension_upgrade.upgrades[id].price,
-                        0
-                    )
-                    game.autods_budget[0] = Math.max(
-                        game.autods_budget[0] -
-                            ascension_upgrade.upgrades[id].price,
-                        0
-                    )
-                    game.ascend_bought[id] = true
-                }
-            } else {
-                if (game.ansuz >= ascension_upgrade.upgrades[id].price) {
-                    game.ansuz = Math.max(
-                        game.ansuz - ascension_upgrade.upgrades[id].price,
-                        0
-                    )
-                    game.ascend_bought[id] = true
-                    if (id === 16 && game.collapse === 0) {
-                        confirmations("challenge")
-                        confirmations("challenge")
-                    }
+            if (game.ansuz.cmp(ascension_upgrade.upgrades[id].price) >= 0) {
+                game.ansuz = Decimal.max(
+                    game.ansuz.sub(ascension_upgrade.upgrades[id].price),
+                    0
+                )
+                game.ascend_bought[id] = true
 
-                    for (let i = 0; i < 3; i++) {
-                        game.autods_budget[i] = Math.max(
-                            game.autods_budget[i] -
-                                ascension_upgrade.upgrades[id].price,
-                            0
-                        )
-                        if (game.autods_budget[i] < 0) game.autods_budget[i] = 0
+                if (id === 12) {
+                    if (!entry_unlocked[10]) entry_unlock(10)
+                }
+
+                if (id === 16) {
+                    if (game.collapse === 0) {
+                        confirmations("challenge")
+                        confirmations("challenge")
                     }
                 }
+
+                game.autods_budget = new Decimal(0)
             }
         }
 
-        if (game.research_complete[8] >= 1) {
+        if (game.research_complete[9] >= 1) {
             for (let i = 0; i < 6; i++) {
                 if (
                     game.ascend_bought[ascension_challenge.challenges[i].unlock]
@@ -3502,37 +3176,42 @@ function buy_ascension_upgrade(id, budget) {
 }
 
 //entering an ascension challenge
-function enter_ascension_challenge(id) {
+function pre_enter_ascension_challenge(id) {
     if (game.ascend_challenge === 0 && !game.ascend_complete[id - 1]) {
-        let challenge_ready = false
-        if (!game.challenge_confirm) challenge_ready = true
-        else {
-            if (
-                confirm(
-                    "你确定要进入挑战 " +
+        if (game.challenge_confirm) {
+            if (modal === "none") {
+                open_modal(
+                    "confirm",
+                    "Are you sure you want to enter Challenge " +
                         format_num(id, 0) +
-                        "? 你将会进行转生!"
+                        "? You will Ascend!",
+                    function () {
+                        enter_ascension_challenge(id)
+                    }
                 )
-            ) {
-                challenge_ready = true
             }
-        }
-
-        if (challenge_ready) {
-            ascend(true)
-            game.ascend_challenge = id
-
-            if (game.ascend_challenge === 5) game.ascend_challenge_timer = 0
+        } else {
+            enter_ascension_challenge(id)
         }
     } else {
         if (game.ascend_challenge === id) {
-            ascend()
+            pre_ascend()
         } else {
-            alert(
-                "如果您已经参加了转生挑战赛，您将无法参加！"
-            )
+            if (modal === "none") {
+                open_modal(
+                    "alert",
+                    "You cannot enter an Ascension Challenge if you are already in one!"
+                )
+            }
         }
     }
+}
+
+function enter_ascension_challenge(id) {
+    ascend(true)
+    game.ascend_challenge = id
+
+    if (game.ascend_challenge === 5) game.ascend_challenge_timer = 0
 }
 
 //exiting an ascension challenge
@@ -3540,7 +3219,7 @@ function exit_ascension_challenge() {
     if (game.ascend_challenge !== 0) {
         let challenge = game.ascend_challenge
         game.ascend_challenge = 0
-        ascend(true, challenge)
+        pre_ascend(true, challenge)
     }
 }
 
@@ -3551,39 +3230,48 @@ function buy_enchantment() {
             game.arcane_spice.sub(game.arcane_enchantment_price),
             0
         )
-        game.arcane_enchantment_price = game.arcane_enchantment_price.mul(4)
+        game.arcane_enchantment_price = game.arcane_enchantment_price.mul(2)
+        if (game.arcane_enchantment >= 4)
+            game.arcane_enchantment_price = game.arcane_enchantment_price.mul(2)
         if (
-            game.arcane_enchantment >= 25 &&
+            game.arcane_enchantment >= 24 &&
             game.ascend_challenge !== 5 &&
             game.collapse_challenge !== 7
         )
             game.arcane_enchantment_price = game.arcane_enchantment_price.mul(5)
         if (
-            game.arcane_enchantment >= 125 &&
+            game.arcane_enchantment >= 108 &&
             game.ascend_challenge !== 5 &&
             game.collapse_challenge !== 7
         )
             game.arcane_enchantment_price = game.arcane_enchantment_price.mul(6)
         if (
-            game.arcane_enchantment >= 5000 &&
+            game.arcane_enchantment >= 3750 &&
             game.ascend_challenge !== 5 &&
             game.collapse_challenge !== 7
         )
             game.arcane_enchantment_price =
-                game.arcane_enchantment_price.mul(665280)
+                game.arcane_enchantment_price.mul(4.8)
+        if (
+            game.arcane_enchantment >= 10000 &&
+            game.ascend_challenge !== 5 &&
+            game.collapse_challenge !== 7
+        )
+            game.arcane_enchantment_price =
+                game.arcane_enchantment_price.mul(6300)
 
         game.arcane_enchantment += 1n
         game.ascend_challenge_timer = 0
 
-        if (game.research_complete[11] >= 1 && game.collapse_challenge !== 12) {
+        if (game.research_complete[13] >= 1 && game.collapse_challenge !== 12) {
             game.free_enchantment = game.arcane_enchantment / 10n
             if (
-                game.research_complete[13] >= 1 &&
+                game.research_complete[15] >= 1 &&
                 game.collapse_challenge !== 12
             )
-                game.free_enchantment += BigInt(game.arcane_strengthener) * 200n
+                game.free_enchantment += BigInt(game.arcane_strengthener) * 10n
             if (
-                game.research_complete[25] >= 1 &&
+                game.research_complete[27] >= 1 &&
                 game.collapse_challenge !== 12
             ) {
                 let collapse_free = BigInt(game.collapse) * 50n
@@ -3594,8 +3282,8 @@ function buy_enchantment() {
                                 3750000
                         )
                     )
-                if (game.collapse >= 31337500)
-                    collapse_free = BigInt(game.collapse) + 34912500n
+                if (game.collapse >= 1337500)
+                    collapse_free = BigInt(game.collapse) * 5n + 9562500n
                 if (collapse_free > game.arcane_enchantment / 2n)
                     collapse_free = game.arcane_enchantment / 2n
 
@@ -3612,6 +3300,38 @@ function max_enchantment() {
     if (game.arcane_spice.cmp(game.arcane_enchantment_price) >= 0) {
         let n = 0n
         if (game.ascend_challenge === 5 || game.collapse_challenge === 7) {
+            if (game.arcane_enchantment < 4n) {
+                n = BigInt(
+                    Math.floor(
+                        new Decimal(1)
+                            .sub(
+                                game.arcane_spice
+                                    .mul(-1)
+                                    .div(game.arcane_enchantment_price)
+                            )
+                            .log(10) / Math.log10(2)
+                    )
+                )
+                if (game.arcane_enchantment + n >= 4n)
+                    n = 4n - game.arcane_enchantment
+                if (n > 0n) {
+                    let price = game.arcane_enchantment_price
+                        .mul(
+                            new Decimal(1).sub(new Decimal(2).pow(n.toString()))
+                        )
+                        .div(-1)
+                    game.arcane_spice = Decimal.max(
+                        game.arcane_spice.sub(price),
+                        0
+                    )
+                    game.arcane_enchantment_price =
+                        game.arcane_enchantment_price.mul(
+                            new Decimal(2).pow(n.toString())
+                        )
+                    game.arcane_enchantment += n
+                    game.ascend_challenge_timer = 0
+                }
+            }
             n = BigInt(
                 Math.floor(
                     new Decimal(1)
@@ -3636,7 +3356,39 @@ function max_enchantment() {
                 game.ascend_challenge_timer = 0
             }
         } else {
-            if (game.arcane_enchantment < 25n) {
+            if (game.arcane_enchantment < 4n) {
+                n = BigInt(
+                    Math.floor(
+                        new Decimal(1)
+                            .sub(
+                                game.arcane_spice
+                                    .mul(-1)
+                                    .div(game.arcane_enchantment_price)
+                            )
+                            .log(10) / Math.log10(2)
+                    )
+                )
+                if (game.arcane_enchantment + n >= 4n)
+                    n = 4n - game.arcane_enchantment
+                if (n > 0n) {
+                    let price = game.arcane_enchantment_price
+                        .mul(
+                            new Decimal(1).sub(new Decimal(2).pow(n.toString()))
+                        )
+                        .div(-1)
+                    game.arcane_spice = Decimal.max(
+                        game.arcane_spice.sub(price),
+                        0
+                    )
+                    game.arcane_enchantment_price =
+                        game.arcane_enchantment_price.mul(
+                            new Decimal(2).pow(n.toString())
+                        )
+                    game.arcane_enchantment += n
+                    game.ascend_challenge_timer = 0
+                }
+            }
+            if (game.arcane_enchantment < 24n) {
                 n = BigInt(
                     Math.floor(
                         new Decimal(1)
@@ -3648,8 +3400,8 @@ function max_enchantment() {
                             .log(10) / Math.log10(4)
                     )
                 )
-                if (game.arcane_enchantment + n >= 25n)
-                    n = 25n - game.arcane_enchantment
+                if (game.arcane_enchantment + n >= 24n)
+                    n = 24n - game.arcane_enchantment
                 if (n > 0n) {
                     let price = game.arcane_enchantment_price
                         .mul(
@@ -3668,7 +3420,7 @@ function max_enchantment() {
                     game.ascend_challenge_timer = 0
                 }
             }
-            if (game.arcane_enchantment < 125n) {
+            if (game.arcane_enchantment < 108n) {
                 n = BigInt(
                     Math.floor(
                         new Decimal(1)
@@ -3680,8 +3432,8 @@ function max_enchantment() {
                             .log(10) / Math.log10(20)
                     )
                 )
-                if (game.arcane_enchantment + n >= 125n)
-                    n = 125n - game.arcane_enchantment
+                if (game.arcane_enchantment + n >= 108n)
+                    n = 108n - game.arcane_enchantment
                 if (n > 0n) {
                     let price = game.arcane_enchantment_price
                         .mul(
@@ -3702,7 +3454,7 @@ function max_enchantment() {
                     game.ascend_challenge_timer = 0
                 }
             }
-            if (game.arcane_enchantment < 5000n) {
+            if (game.arcane_enchantment < 3750n) {
                 n = BigInt(
                     Math.floor(
                         new Decimal(1)
@@ -3714,8 +3466,8 @@ function max_enchantment() {
                             .log(10) / Math.log10(120)
                     )
                 )
-                if (game.arcane_enchantment + n >= 5000n)
-                    n = 5000n - game.arcane_enchantment
+                if (game.arcane_enchantment + n >= 3750n)
+                    n = 3750n - game.arcane_enchantment
                 if (n > 0n) {
                     let price = game.arcane_enchantment_price
                         .mul(
@@ -3736,44 +3488,78 @@ function max_enchantment() {
                     game.ascend_challenge_timer = 0
                 }
             }
+            if (game.arcane_enchantment < 10000n) {
+                n = BigInt(
+                    Math.floor(
+                        new Decimal(1)
+                            .sub(
+                                game.arcane_spice
+                                    .mul(-575)
+                                    .div(game.arcane_enchantment_price)
+                            )
+                            .log(10) / Math.log10(576)
+                    )
+                )
+                if (game.arcane_enchantment + n >= 10000n)
+                    n = 10000n - game.arcane_enchantment
+                if (n > 0n) {
+                    let price = game.arcane_enchantment_price
+                        .mul(
+                            new Decimal(1).sub(
+                                new Decimal(576).pow(n.toString())
+                            )
+                        )
+                        .div(-575)
+                    game.arcane_spice = Decimal.max(
+                        game.arcane_spice.sub(price),
+                        0
+                    )
+                    game.arcane_enchantment_price =
+                        game.arcane_enchantment_price.mul(
+                            new Decimal(576).pow(n.toString())
+                        )
+                    game.arcane_enchantment += n
+                    game.ascend_challenge_timer = 0
+                }
+            }
             n = BigInt(
                 Math.floor(
                     new Decimal(1)
                         .sub(
                             game.arcane_spice
-                                .mul(-79833599)
+                                .mul(-3628799)
                                 .div(game.arcane_enchantment_price)
                         )
-                        .log(10) / Math.log10(79833600)
+                        .log(10) / Math.log10(3628800)
                 )
             )
             if (n > 0n) {
                 let price = game.arcane_enchantment_price
                     .mul(
                         new Decimal(1).sub(
-                            new Decimal(79833600).pow(n.toString())
+                            new Decimal(3628800).pow(n.toString())
                         )
                     )
-                    .div(-779833599)
+                    .div(-3628799)
                 game.arcane_spice = Decimal.max(game.arcane_spice.sub(price), 0)
                 game.arcane_enchantment_price =
                     game.arcane_enchantment_price.mul(
-                        new Decimal(79833600).pow(n.toString())
+                        new Decimal(3628800).pow(n.toString())
                     )
                 game.arcane_enchantment += n
                 game.ascend_challenge_timer = 0
             }
         }
 
-        if (game.research_complete[11] >= 1 && game.collapse_challenge !== 12) {
+        if (game.research_complete[13] >= 1 && game.collapse_challenge !== 12) {
             game.free_enchantment = game.arcane_enchantment / 10n
             if (
-                game.research_complete[13] >= 1 &&
+                game.research_complete[15] >= 1 &&
                 game.collapse_challenge !== 12
             )
-                game.free_enchantment += BigInt(game.arcane_strengthener) * 200n
+                game.free_enchantment += BigInt(game.arcane_strengthener) * 10n
             if (
-                game.research_complete[25] >= 1 &&
+                game.research_complete[27] >= 1 &&
                 game.collapse_challenge !== 12
             ) {
                 let collapse_free = BigInt(game.collapse) * 50n
@@ -3784,8 +3570,8 @@ function max_enchantment() {
                                 3750000
                         )
                     )
-                if (game.collapse >= 31337500)
-                    collapse_free = BigInt(game.collapse) + 34912500n
+                if (game.collapse >= 1337500)
+                    collapse_free = BigInt(game.collapse) * 5n + 9562500n
                 if (collapse_free > game.arcane_enchantment / 2n)
                     collapse_free = game.arcane_enchantment / 2n
 
@@ -3797,31 +3583,52 @@ function max_enchantment() {
     }
 }
 
+//reset dynamic auto-ascend goal
+function ascend_goal_reset() {
+    game.autoas_goal2 = new Decimal(1)
+}
+
 //activating the spice collider
 function activate_collider() {
     let can_collide = false
 
     let red_amount = Decimal.pow(
         10,
-        (game.antitotal_spice[1].log(10) / (4.2 * 10 ** 11)) ** 0.5
-    )
+        (game.antitotal_spice[1].log(10) / 1e11) ** 0.5
+    ).div(17)
+    if (red_amount.cmp(Decimal.pow(10, 2319)) >= 0)
+        red_amount = Decimal.pow(10, (red_amount.log(10) / 2319) ** 0.5 * 2319)
     let yellow_amount = Decimal.pow(
         10,
-        (game.antitotal_spice[2].log(10) / (1.75 * 10 ** 12)) ** 0.5
-    )
+        (game.antitotal_spice[2].log(10) / 2e11) ** 0.5
+    ).div(38.5)
+    if (yellow_amount.cmp(Decimal.pow(10, 1019)) >= 0)
+        yellow_amount = Decimal.pow(
+            10,
+            (yellow_amount.log(10) / 1019) ** 0.4 * 1019
+        )
     let green_amount = Decimal.pow(
         10,
-        (game.antitotal_spice[3].log(10) / (4.5 * 10 ** 12)) ** 0.5
-    )
+        (game.antitotal_spice[3].log(10) / 3e11) ** 0.5
+    ).div(2340)
+    if (green_amount.cmp(Decimal.pow(10, 504)) >= 0)
+        green_amount = Decimal.pow(
+            10,
+            (green_amount.log(10) / 504) ** 0.75 * 504
+        )
     let blue_amount = Decimal.pow(
         10,
-        (game.antitotal_spice[4].log(10) / (3.5 * 10 ** 13)) ** 0.5
-    )
+        (game.antitotal_spice[4].log(10) / 5e11) ** 0.5
+    ).div(8.667e9)
+    if (blue_amount.cmp(Decimal.pow(10, 216)) >= 0)
+        blue_amount = Decimal.pow(10, (blue_amount.log(10) / 216) ** 0.8 * 216)
     let pink_amount = Decimal.pow(
         10,
-        (game.antitotal_spice[5].log(10) / (3.75 * 10 ** 13)) ** 0.5
-    )
-    let rainbow_amount = (game.antitotal_spice[6].log(10) - 11300000) / 900000
+        (game.antitotal_spice[5].log(10) / 8e11) ** 0.5
+    ).div(2.255e9)
+    if (pink_amount.cmp(Decimal.pow(10, 70)) >= 0)
+        pink_amount = Decimal.pow(10, (pink_amount.log(10) / 70) ** 0.6 * 70)
+    let rainbow_amount = (game.antitotal_spice[6].log(10) - 28550000) / 5400000
     if (rainbow_amount > 0.5)
         rainbow_amount = ((rainbow_amount - 0.5) / 23.5) ** 1.5 * 23.5 + 0.5
     else rainbow_amount = 0.5
@@ -3830,8 +3637,8 @@ function activate_collider() {
         (game.spent_atomic_spice[6]
             .add(game.atomic_spice.mul(game.atomic_portion))
             .log(10) -
-            30976) /
-        2048
+            32768) /
+        1984
     if (atomic_amount > 0.5)
         atomic_amount = ((atomic_amount - 0.5) / 23.5) ** 1.5 * 23.5 + 0.5
     else atomic_amount = 0.5
@@ -3852,11 +3659,16 @@ function activate_collider() {
         case 1:
             pending_amount = game.spent_atomic_spice[0]
                 .add(game.atomic_spice.mul(game.atomic_portion))
-                .pow(game.atomic_efficiency / 132)
-            if (pending_amount.cmp(Decimal.pow(10, 420)) >= 0)
+                .pow(game.atomic_efficiency / 76)
+            if (pending_amount.cmp(Decimal.pow(10, 170)) >= 0)
+                pending_amount = pending_amount
+                    .div(Decimal.pow(10, 170))
+                    .pow(0.6)
+                    .mul(Decimal.pow(10, 170))
+            if (pending_amount.cmp(Decimal.pow(10, 515)) >= 0)
                 pending_amount = Decimal.pow(
                     10,
-                    (pending_amount.log(10) / 420) ** 0.8 * 420
+                    (pending_amount.log(10) / 515) ** 0.67 * 515
                 )
             if (pending_amount.sub(game.antispice[0]).floor().cmp(1) >= 0)
                 can_collide = true
@@ -3864,12 +3676,23 @@ function activate_collider() {
         case 2:
             pending_amount = game.spent_atomic_spice[1]
                 .add(game.atomic_spice.mul(game.atomic_portion))
-                .pow(game.atomic_efficiency / 320)
+                .pow(game.atomic_efficiency / 228)
+                .div(3.2)
                 .mul(red_amount)
-            if (pending_amount.cmp(Decimal.pow(10, 336)) >= 0)
+            if (pending_amount.cmp(Decimal.pow(10, 128)) >= 0)
+                pending_amount = pending_amount
+                    .div(Decimal.pow(10, 128))
+                    .pow(0.5)
+                    .mul(Decimal.pow(10, 128))
+            if (pending_amount.cmp(Decimal.pow(10, 269)) >= 0)
+                pending_amount = pending_amount
+                    .div(Decimal.pow(10, 269))
+                    .pow(0.5)
+                    .mul(Decimal.pow(10, 269))
+            if (pending_amount.cmp(Decimal.pow(10, 450)) >= 0)
                 pending_amount = Decimal.pow(
                     10,
-                    (pending_amount.log(10) / 336) ** 0.8 * 336
+                    (pending_amount.log(10) / 450) ** 0.5 * 450
                 )
             if (pending_amount.sub(game.antispice[1]).floor().cmp(1) >= 0)
                 can_collide = true
@@ -3877,12 +3700,18 @@ function activate_collider() {
         case 3:
             pending_amount = game.spent_atomic_spice[2]
                 .add(game.atomic_spice.mul(game.atomic_portion))
-                .pow(game.atomic_efficiency / 1000)
+                .pow(game.atomic_efficiency / 304)
+                .div(54)
                 .mul(yellow_amount)
-            if (pending_amount.cmp(Decimal.pow(10, 116)) >= 0)
+            if (pending_amount.cmp(Decimal.pow(10, 87)) >= 0)
+                pending_amount = pending_amount
+                    .div(Decimal.pow(10, 87))
+                    .pow(0.55)
+                    .mul(Decimal.pow(10, 87))
+            if (pending_amount.cmp(Decimal.pow(10, 372)) >= 0)
                 pending_amount = Decimal.pow(
                     10,
-                    (pending_amount.log(10) / 116) ** 0.8 * 116
+                    (pending_amount.log(10) / 372) ** 0.5 * 372
                 )
             if (pending_amount.sub(game.antispice[2]).floor().cmp(1) >= 0)
                 can_collide = true
@@ -3890,12 +3719,18 @@ function activate_collider() {
         case 4:
             pending_amount = game.spent_atomic_spice[3]
                 .add(game.atomic_spice.mul(game.atomic_portion))
-                .pow(game.atomic_efficiency / 2575)
+                .pow(game.atomic_efficiency / 380)
+                .div(108000)
                 .mul(green_amount)
-            if (pending_amount.cmp(Decimal.pow(10, 48)) >= 0)
+            if (pending_amount.cmp(Decimal.pow(10, 56)) >= 0)
+                pending_amount = pending_amount
+                    .div(Decimal.pow(10, 56))
+                    .pow(0.55)
+                    .mul(Decimal.pow(10, 56))
+            if (pending_amount.cmp(Decimal.pow(10, 225)) >= 0)
                 pending_amount = Decimal.pow(
                     10,
-                    (pending_amount.log(10) / 48) ** 0.8 * 48
+                    (pending_amount.log(10) / 225) ** 0.5 * 225
                 )
             if (pending_amount.sub(game.antispice[3]).floor().cmp(1) >= 0)
                 can_collide = true
@@ -3903,12 +3738,18 @@ function activate_collider() {
         case 5:
             pending_amount = game.spent_atomic_spice[4]
                 .add(game.atomic_spice.mul(game.atomic_portion))
-                .pow(game.atomic_efficiency / 4850)
+                .pow(game.atomic_efficiency / 494)
+                .div(5.587e15)
                 .mul(blue_amount)
-            if (pending_amount.cmp(Decimal.pow(10, 19)) >= 0)
+            if (pending_amount.cmp(Decimal.pow(10, 40)) >= 0)
+                pending_amount = pending_amount
+                    .div(Decimal.pow(10, 40))
+                    .pow(0.55)
+                    .mul(Decimal.pow(10, 40))
+            if (pending_amount.cmp(Decimal.pow(10, 125)) >= 0)
                 pending_amount = Decimal.pow(
                     10,
-                    (pending_amount.log(10) / 19) ** 0.8 * 19
+                    (pending_amount.log(10) / 125) ** 0.5 * 125
                 )
             if (pending_amount.sub(game.antispice[4]).floor().cmp(1) >= 0)
                 can_collide = true
@@ -3916,12 +3757,13 @@ function activate_collider() {
         case 6:
             pending_amount = game.spent_atomic_spice[5]
                 .add(game.atomic_spice.mul(game.atomic_portion))
-                .pow(game.atomic_efficiency / 16500)
+                .pow(game.atomic_efficiency / 608)
+                .div(8.098e34)
                 .mul(pink_amount)
-            if (pending_amount.cmp(Decimal.pow(10, 7.5)) >= 0)
+            if (pending_amount.cmp(Decimal.pow(10, 88)) >= 0)
                 pending_amount = Decimal.pow(
                     10,
-                    (pending_amount.log(10) / 7.5) ** 0.8 * 7.5
+                    (pending_amount.log(10) / 88) ** 0.5 * 88
                 )
             if (pending_amount.sub(game.antispice[5]).floor().cmp(1) >= 0)
                 can_collide = true
@@ -3952,11 +3794,16 @@ function activate_collider() {
                 case 1:
                     pending_amount = game.spent_atomic_spice[0]
                         .add(game.atomic_spice.mul(game.atomic_portion))
-                        .pow(game.atomic_efficiency / 132)
-                    if (pending_amount.cmp(Decimal.pow(10, 420)) >= 0)
+                        .pow(game.atomic_efficiency / 76)
+                    if (pending_amount.cmp(Decimal.pow(10, 170)) >= 0)
+                        pending_amount = pending_amount
+                            .div(Decimal.pow(10, 170))
+                            .pow(0.6)
+                            .mul(Decimal.pow(10, 170))
+                    if (pending_amount.cmp(Decimal.pow(10, 515)) >= 0)
                         pending_amount = Decimal.pow(
                             10,
-                            (pending_amount.log(10) / 420) ** 0.8 * 420
+                            (pending_amount.log(10) / 515) ** 0.67 * 515
                         )
                     p += Math.floor(pending_amount.floor().log(100))
                     if (p > 30) p = 30
@@ -3964,12 +3811,23 @@ function activate_collider() {
                 case 2:
                     pending_amount = game.spent_atomic_spice[1]
                         .add(game.atomic_spice.mul(game.atomic_portion))
-                        .pow(game.atomic_efficiency / 320)
+                        .pow(game.atomic_efficiency / 228)
+                        .div(3.2)
                         .mul(red_amount)
-                    if (pending_amount.cmp(Decimal.pow(10, 336)) >= 0)
+                    if (pending_amount.cmp(Decimal.pow(10, 128)) >= 0)
+                        pending_amount = pending_amount
+                            .div(Decimal.pow(10, 128))
+                            .pow(0.5)
+                            .mul(Decimal.pow(10, 128))
+                    if (pending_amount.cmp(Decimal.pow(10, 269)) >= 0)
+                        pending_amount = pending_amount
+                            .div(Decimal.pow(10, 269))
+                            .pow(0.5)
+                            .mul(Decimal.pow(10, 269))
+                    if (pending_amount.cmp(Decimal.pow(10, 450)) >= 0)
                         pending_amount = Decimal.pow(
                             10,
-                            (pending_amount.log(10) / 336) ** 0.8 * 336
+                            (pending_amount.log(10) / 450) ** 0.5 * 450
                         )
                     p += Math.floor(pending_amount.floor().log(100))
                     if (p > 30) p = 30
@@ -3977,12 +3835,18 @@ function activate_collider() {
                 case 3:
                     pending_amount = game.spent_atomic_spice[2]
                         .add(game.atomic_spice.mul(game.atomic_portion))
-                        .pow(game.atomic_efficiency / 1000)
+                        .pow(game.atomic_efficiency / 304)
+                        .div(54)
                         .mul(yellow_amount)
-                    if (pending_amount.cmp(Decimal.pow(10, 116)) >= 0)
+                    if (pending_amount.cmp(Decimal.pow(10, 87)) >= 0)
+                        pending_amount = pending_amount
+                            .div(Decimal.pow(10, 87))
+                            .pow(0.55)
+                            .mul(Decimal.pow(10, 87))
+                    if (pending_amount.cmp(Decimal.pow(10, 372)) >= 0)
                         pending_amount = Decimal.pow(
                             10,
-                            (pending_amount.log(10) / 116) ** 0.8 * 116
+                            (pending_amount.log(10) / 372) ** 0.5 * 372
                         )
                     p += Math.floor(pending_amount.floor().log(100))
                     if (p > 30) p = 30
@@ -3990,12 +3854,18 @@ function activate_collider() {
                 case 4:
                     pending_amount = game.spent_atomic_spice[3]
                         .add(game.atomic_spice.mul(game.atomic_portion))
-                        .pow(game.atomic_efficiency / 2575)
+                        .pow(game.atomic_efficiency / 380)
+                        .div(108000)
                         .mul(green_amount)
-                    if (pending_amount.cmp(Decimal.pow(10, 48)) >= 0)
+                    if (pending_amount.cmp(Decimal.pow(10, 56)) >= 0)
+                        pending_amount = pending_amount
+                            .div(Decimal.pow(10, 56))
+                            .pow(0.55)
+                            .mul(Decimal.pow(10, 56))
+                    if (pending_amount.cmp(Decimal.pow(10, 225)) >= 0)
                         pending_amount = Decimal.pow(
                             10,
-                            (pending_amount.log(10) / 48) ** 0.8 * 48
+                            (pending_amount.log(10) / 225) ** 0.5 * 225
                         )
                     p += Math.floor(pending_amount.floor().log(100))
                     if (p > 30) p = 30
@@ -4003,12 +3873,18 @@ function activate_collider() {
                 case 5:
                     pending_amount = game.spent_atomic_spice[4]
                         .add(game.atomic_spice.mul(game.atomic_portion))
-                        .pow(game.atomic_efficiency / 4850)
+                        .pow(game.atomic_efficiency / 494)
+                        .div(5.587e15)
                         .mul(blue_amount)
-                    if (pending_amount.cmp(Decimal.pow(10, 19)) >= 0)
+                    if (pending_amount.cmp(Decimal.pow(10, 40)) >= 0)
+                        pending_amount = pending_amount
+                            .div(Decimal.pow(10, 40))
+                            .pow(0.55)
+                            .mul(Decimal.pow(10, 40))
+                    if (pending_amount.cmp(Decimal.pow(10, 125)) >= 0)
                         pending_amount = Decimal.pow(
                             10,
-                            (pending_amount.log(10) / 19) ** 0.8 * 19
+                            (pending_amount.log(10) / 125) ** 0.5 * 125
                         )
                     p += Math.floor(pending_amount.floor().log(100))
                     if (p > 30) p = 30
@@ -4016,12 +3892,13 @@ function activate_collider() {
                 case 6:
                     pending_amount = game.spent_atomic_spice[5]
                         .add(game.atomic_spice.mul(game.atomic_portion))
-                        .pow(game.atomic_efficiency / 16500)
+                        .pow(game.atomic_efficiency / 608)
+                        .div(8.098e34)
                         .mul(pink_amount)
-                    if (pending_amount.cmp(Decimal.pow(10, 7.5)) >= 0)
+                    if (pending_amount.cmp(Decimal.pow(10, 88)) >= 0)
                         pending_amount = Decimal.pow(
                             10,
-                            (pending_amount.log(10) / 7.5) ** 0.8 * 7.5
+                            (pending_amount.log(10) / 88) ** 0.5 * 88
                         )
                     p += Math.floor(pending_amount.floor().log(100))
                     if (p > 30) p = 30
@@ -4125,12 +4002,17 @@ function activate_collider() {
                     game.atomic_spice.mul(game.atomic_portion)
                 )
                 let amount = game.spent_atomic_spice[0].pow(
-                    game.atomic_efficiency / 132
+                    game.atomic_efficiency / 76
                 )
-                if (amount.cmp(Decimal.pow(10, 420)) >= 0)
+                if (amount.cmp(Decimal.pow(10, 170)) >= 0)
+                    amount = amount
+                        .div(Decimal.pow(10, 170))
+                        .pow(0.6)
+                        .mul(Decimal.pow(10, 170))
+                if (amount.cmp(Decimal.pow(10, 515)) >= 0)
                     amount = Decimal.pow(
                         10,
-                        (amount.log(10) / 420) ** 0.8 * 420
+                        (amount.log(10) / 515) ** 0.67 * 515
                     )
                 if (amount.floor().cmp(game.antispice[0]) >= 0)
                     game.antispice[0] = amount.floor()
@@ -4144,12 +4026,23 @@ function activate_collider() {
                 )
 
                 let amount = game.spent_atomic_spice[1]
-                    .pow(game.atomic_efficiency / 320)
+                    .pow(game.atomic_efficiency / 228)
+                    .div(3.2)
                     .mul(red_amount)
-                if (amount.cmp(Decimal.pow(10, 336)) >= 0)
+                if (amount.cmp(Decimal.pow(10, 128)) >= 0)
+                    amount = amount
+                        .div(Decimal.pow(10, 128))
+                        .pow(0.5)
+                        .mul(Decimal.pow(10, 128))
+                if (amount.cmp(Decimal.pow(10, 269)) >= 0)
+                    amount = amount
+                        .div(Decimal.pow(10, 269))
+                        .pow(0.5)
+                        .mul(Decimal.pow(10, 269))
+                if (amount.cmp(Decimal.pow(10, 450)) >= 0)
                     amount = Decimal.pow(
                         10,
-                        (amount.log(10) / 336) ** 0.8 * 336
+                        (amount.log(10) / 450) ** 0.5 * 450
                     )
                 if (amount.floor().cmp(game.antispice[1]) >= 0)
                     game.antispice[1] = amount.floor()
@@ -4163,12 +4056,18 @@ function activate_collider() {
                 )
 
                 let amount = game.spent_atomic_spice[2]
-                    .pow(game.atomic_efficiency / 1000)
+                    .pow(game.atomic_efficiency / 304)
+                    .div(54)
                     .mul(yellow_amount)
-                if (amount.cmp(Decimal.pow(10, 116)) >= 0)
+                if (amount.cmp(Decimal.pow(10, 87)) >= 0)
+                    amount = amount
+                        .div(Decimal.pow(10, 87))
+                        .pow(0.55)
+                        .mul(Decimal.pow(10, 87))
+                if (amount.cmp(Decimal.pow(10, 372)) >= 0)
                     amount = Decimal.pow(
                         10,
-                        (amount.log(10) / 116) ** 0.8 * 116
+                        (amount.log(10) / 372) ** 0.5 * 372
                     )
                 if (amount.floor().cmp(game.antispice[2]) >= 0)
                     game.antispice[2] = amount.floor()
@@ -4182,10 +4081,19 @@ function activate_collider() {
                 )
 
                 let amount = game.spent_atomic_spice[3]
-                    .pow(game.atomic_efficiency / 2575)
+                    .pow(game.atomic_efficiency / 380)
+                    .div(108000)
                     .mul(green_amount)
-                if (amount.cmp(Decimal.pow(10, 48)) >= 0)
-                    amount = Decimal.pow(10, (amount.log(10) / 48) ** 0.8 * 48)
+                if (amount.cmp(Decimal.pow(10, 56)) >= 0)
+                    amount = amount
+                        .div(Decimal.pow(10, 56))
+                        .pow(0.55)
+                        .mul(Decimal.pow(10, 56))
+                if (amount.cmp(Decimal.pow(10, 225)) >= 0)
+                    amount = Decimal.pow(
+                        10,
+                        (amount.log(10) / 225) ** 0.5 * 225
+                    )
                 if (amount.floor().cmp(game.antispice[3]) >= 0)
                     game.antispice[3] = amount.floor()
 
@@ -4198,10 +4106,19 @@ function activate_collider() {
                 )
 
                 let amount = game.spent_atomic_spice[4]
-                    .pow(game.atomic_efficiency / 4850)
+                    .pow(game.atomic_efficiency / 494)
+                    .div(5.587e15)
                     .mul(blue_amount)
-                if (amount.cmp(Decimal.pow(10, 19)) >= 0)
-                    amount = Decimal.pow(10, (amount.log(10) / 19) ** 0.8 * 19)
+                if (amount.cmp(Decimal.pow(10, 40)) >= 0)
+                    amount = amount
+                        .div(Decimal.pow(10, 40))
+                        .pow(0.55)
+                        .mul(Decimal.pow(10, 40))
+                if (amount.cmp(Decimal.pow(10, 125)) >= 0)
+                    amount = Decimal.pow(
+                        10,
+                        (amount.log(10) / 125) ** 0.5 * 125
+                    )
                 if (amount.floor().cmp(game.antispice[4]) >= 0)
                     game.antispice[4] = amount.floor()
 
@@ -4214,13 +4131,11 @@ function activate_collider() {
                 )
 
                 let amount = game.spent_atomic_spice[5]
-                    .pow(game.atomic_efficiency / 16500)
+                    .pow(game.atomic_efficiency / 608)
+                    .div(8.098e34)
                     .mul(pink_amount)
-                if (amount.cmp(Decimal.pow(10, 7.5)) >= 0)
-                    amount = Decimal.pow(
-                        10,
-                        (amount.log(10) / 7.5) ** 0.8 * 7.5
-                    )
+                if (amount.cmp(Decimal.pow(10, 88)) >= 0)
+                    amount = Decimal.pow(10, (amount.log(10) / 88) ** 0.5 * 88)
                 if (amount.floor().cmp(game.antispice[5]) >= 0)
                     game.antispice[5] = amount.floor()
 
@@ -4233,7 +4148,7 @@ function activate_collider() {
                 )
 
                 atomic_amount =
-                    (game.spent_atomic_spice[6].log(10) - 30976) / 2048
+                    (game.spent_atomic_spice[6].log(10) - 32768) / 1984
                 if (atomic_amount > 0.5)
                     atomic_amount =
                         ((atomic_amount - 0.5) / 23.5) ** 1.5 * 23.5 + 0.5
@@ -4261,25 +4176,41 @@ function auto_collider() {
 
     let red_amount = Decimal.pow(
         10,
-        (game.antitotal_spice[1].log(10) / (4.2 * 10 ** 11)) ** 0.5
-    )
+        (game.antitotal_spice[1].log(10) / 1e11) ** 0.5
+    ).div(17)
+    if (red_amount.cmp(Decimal.pow(10, 2319)) >= 0)
+        red_amount = Decimal.pow(10, (red_amount.log(10) / 2319) ** 0.5 * 2319)
     let yellow_amount = Decimal.pow(
         10,
-        (game.antitotal_spice[2].log(10) / (1.75 * 10 ** 12)) ** 0.5
-    )
+        (game.antitotal_spice[2].log(10) / 2e11) ** 0.5
+    ).div(38.5)
+    if (yellow_amount.cmp(Decimal.pow(10, 1019)) >= 0)
+        yellow_amount = Decimal.pow(
+            10,
+            (yellow_amount.log(10) / 1019) ** 0.4 * 1019
+        )
     let green_amount = Decimal.pow(
         10,
-        (game.antitotal_spice[3].log(10) / (4.5 * 10 ** 12)) ** 0.5
-    )
+        (game.antitotal_spice[3].log(10) / 3e11) ** 0.5
+    ).div(2340)
+    if (green_amount.cmp(Decimal.pow(10, 504)) >= 0)
+        green_amount = Decimal.pow(
+            10,
+            (green_amount.log(10) / 504) ** 0.75 * 504
+        )
     let blue_amount = Decimal.pow(
         10,
-        (game.antitotal_spice[4].log(10) / (3.5 * 10 ** 13)) ** 0.5
-    )
+        (game.antitotal_spice[4].log(10) / 5e11) ** 0.5
+    ).div(8.667e9)
+    if (blue_amount.cmp(Decimal.pow(10, 216)) >= 0)
+        blue_amount = Decimal.pow(10, (blue_amount.log(10) / 216) ** 0.8 * 216)
     let pink_amount = Decimal.pow(
         10,
-        (game.antitotal_spice[5].log(10) / (3.75 * 10 ** 13)) ** 0.5
-    )
-    let rainbow_amount = (game.antitotal_spice[6].log(10) - 11300000) / 900000
+        (game.antitotal_spice[5].log(10) / 8e11) ** 0.5
+    ).div(2.255e9)
+    if (pink_amount.cmp(Decimal.pow(10, 70)) >= 0)
+        pink_amount = Decimal.pow(10, (pink_amount.log(10) / 70) ** 0.6 * 70)
+    let rainbow_amount = (game.antitotal_spice[6].log(10) - 28550000) / 5400000
     if (rainbow_amount > 0.5)
         rainbow_amount = ((rainbow_amount - 0.5) / 23.5) ** 1.5 * 23.5 + 0.5
     else rainbow_amount = 0.5
@@ -4288,8 +4219,8 @@ function auto_collider() {
         (game.spent_atomic_spice[6]
             .add(game.atomic_spice.mul(game.atomic_portion))
             .log(10) -
-            30976) /
-        2048
+            32768) /
+        1984
     if (atomic_amount2 > 0.5)
         atomic_amount2 = ((atomic_amount2 - 0.5) / 23.5) ** 1.5 * 23.5 + 0.5
     else atomic_amount2 = 0.5
@@ -4305,14 +4236,19 @@ function auto_collider() {
     )
         can_collide = true
 
-    if (game.research_complete[19] >= 1) {
+    if (game.research_complete[21] >= 1) {
         pending_amount = game.spent_atomic_spice[0]
             .add(game.atomic_spice.mul(game.atomic_portion))
-            .pow(game.atomic_efficiency / 132)
-        if (pending_amount.cmp(Decimal.pow(10, 420)) >= 0)
+            .pow(game.atomic_efficiency / 76)
+        if (pending_amount.cmp(Decimal.pow(10, 170)) >= 0)
+            pending_amount = pending_amount
+                .div(Decimal.pow(10, 170))
+                .pow(0.6)
+                .mul(Decimal.pow(10, 170))
+        if (pending_amount.cmp(Decimal.pow(10, 515)) >= 0)
             pending_amount = Decimal.pow(
                 10,
-                (pending_amount.log(10) / 420) ** 0.8 * 420
+                (pending_amount.log(10) / 515) ** 0.67 * 515
             )
         if (pending_amount.sub(game.antispice[0]).floor().cmp(1) >= 0) {
             can_collide = true
@@ -4320,15 +4256,26 @@ function auto_collider() {
         }
     }
 
-    if (game.research_complete[21] >= 1) {
+    if (game.research_complete[23] >= 1) {
         pending_amount = game.spent_atomic_spice[1]
             .add(game.atomic_spice.mul(game.atomic_portion))
-            .pow(game.atomic_efficiency / 320)
+            .pow(game.atomic_efficiency / 228)
+            .div(3.2)
             .mul(red_amount)
-        if (pending_amount.cmp(Decimal.pow(10, 336)) >= 0)
+        if (pending_amount.cmp(Decimal.pow(10, 128)) >= 0)
+            pending_amount = pending_amount
+                .div(Decimal.pow(10, 128))
+                .pow(0.5)
+                .mul(Decimal.pow(10, 128))
+        if (pending_amount.cmp(Decimal.pow(10, 269)) >= 0)
+            pending_amount = pending_amount
+                .div(Decimal.pow(10, 269))
+                .pow(0.5)
+                .mul(Decimal.pow(10, 269))
+        if (pending_amount.cmp(Decimal.pow(10, 450)) >= 0)
             pending_amount = Decimal.pow(
                 10,
-                (pending_amount.log(10) / 336) ** 0.8 * 336
+                (pending_amount.log(10) / 450) ** 0.5 * 450
             )
         if (pending_amount.sub(game.antispice[1]).floor().cmp(1) >= 0) {
             can_collide = true
@@ -4336,15 +4283,21 @@ function auto_collider() {
         }
     }
 
-    if (game.research_complete[24] >= 1) {
+    if (game.research_complete[26] >= 1) {
         pending_amount = game.spent_atomic_spice[2]
             .add(game.atomic_spice.mul(game.atomic_portion))
-            .pow(game.atomic_efficiency / 1000)
+            .pow(game.atomic_efficiency / 304)
+            .div(54)
             .mul(yellow_amount)
-        if (pending_amount.cmp(Decimal.pow(10, 116)) >= 0)
+        if (pending_amount.cmp(Decimal.pow(10, 87)) >= 0)
+            pending_amount = pending_amount
+                .div(Decimal.pow(10, 87))
+                .pow(0.55)
+                .mul(Decimal.pow(10, 87))
+        if (pending_amount.cmp(Decimal.pow(10, 372)) >= 0)
             pending_amount = Decimal.pow(
                 10,
-                (pending_amount.log(10) / 116) ** 0.8 * 116
+                (pending_amount.log(10) / 372) ** 0.5 * 372
             )
         if (pending_amount.sub(game.antispice[2]).floor().cmp(1) >= 0) {
             can_collide = true
@@ -4352,15 +4305,21 @@ function auto_collider() {
         }
     }
 
-    if (game.research_complete[27] >= 1) {
+    if (game.research_complete[29] >= 1) {
         pending_amount = game.spent_atomic_spice[3]
             .add(game.atomic_spice.mul(game.atomic_portion))
-            .pow(game.atomic_efficiency / 2575)
+            .pow(game.atomic_efficiency / 380)
+            .div(108000)
             .mul(green_amount)
-        if (pending_amount.cmp(Decimal.pow(10, 48)) >= 0)
+        if (pending_amount.cmp(Decimal.pow(10, 56)) >= 0)
+            pending_amount = pending_amount
+                .div(Decimal.pow(10, 56))
+                .pow(0.55)
+                .mul(Decimal.pow(10, 56))
+        if (pending_amount.cmp(Decimal.pow(10, 225)) >= 0)
             pending_amount = Decimal.pow(
                 10,
-                (pending_amount.log(10) / 48) ** 0.8 * 48
+                (pending_amount.log(10) / 225) ** 0.5 * 225
             )
         if (pending_amount.sub(game.antispice[3]).floor().cmp(1) >= 0) {
             can_collide = true
@@ -4368,15 +4327,21 @@ function auto_collider() {
         }
     }
 
-    if (game.research_complete[30] >= 1) {
+    if (game.research_complete[33] >= 1) {
         pending_amount = game.spent_atomic_spice[4]
             .add(game.atomic_spice.mul(game.atomic_portion))
-            .pow(game.atomic_efficiency / 4850)
+            .pow(game.atomic_efficiency / 494)
+            .div(5.587e15)
             .mul(blue_amount)
-        if (pending_amount.cmp(Decimal.pow(10, 19)) >= 0)
+        if (pending_amount.cmp(Decimal.pow(10, 40)) >= 0)
+            pending_amount = pending_amount
+                .div(Decimal.pow(10, 40))
+                .pow(0.55)
+                .mul(Decimal.pow(10, 40))
+        if (pending_amount.cmp(Decimal.pow(10, 125)) >= 0)
             pending_amount = Decimal.pow(
                 10,
-                (pending_amount.log(10) / 19) ** 0.8 * 19
+                (pending_amount.log(10) / 125) ** 0.5 * 125
             )
         if (pending_amount.sub(game.antispice[4]).floor().cmp(1) >= 0) {
             can_collide = true
@@ -4384,15 +4349,16 @@ function auto_collider() {
         }
     }
 
-    if (game.research_complete[33] >= 1) {
+    if (game.research_complete[36] >= 1) {
         pending_amount = game.spent_atomic_spice[5]
             .add(game.atomic_spice.mul(game.atomic_portion))
-            .pow(game.atomic_efficiency / 16500)
+            .pow(game.atomic_efficiency / 608)
+            .div(8.098e34)
             .mul(pink_amount)
-        if (pending_amount.cmp(Decimal.pow(10, 7.5)) >= 0)
+        if (pending_amount.cmp(Decimal.pow(10, 88)) >= 0)
             pending_amount = Decimal.pow(
                 10,
-                (pending_amount.log(10) / 7.5) ** 0.8 * 7.5
+                (pending_amount.log(10) / 88) ** 0.5 * 88
             )
         if (pending_amount.sub(game.antispice[5]).floor().cmp(1) >= 0) {
             can_collide = true
@@ -4400,7 +4366,7 @@ function auto_collider() {
         }
     }
 
-    if (game.research_complete[37] >= 1) {
+    if (game.research_complete[39] >= 1) {
         if (
             Math.floor(atomic_amount2 + rainbow_amount) >
             game.total_rainbow_antispice
@@ -4438,97 +4404,132 @@ function auto_collider() {
             let unstable_gain = atomic_amount.pow(game.atomic_efficiency)
             let basic_gain = game.spent_atomic_spice[0]
                 .add(atomic_amount)
-                .pow(game.atomic_efficiency / 132)
+                .pow(game.atomic_efficiency / 76)
                 .floor()
-            if (basic_gain.cmp(Decimal.pow(10, 420)) >= 0)
+            if (basic_gain.cmp(Decimal.pow(10, 170)) >= 0)
+                basic_gain = basic_gain
+                    .div(Decimal.pow(10, 170))
+                    .pow(0.6)
+                    .mul(Decimal.pow(10, 170))
+            if (basic_gain.cmp(Decimal.pow(10, 515)) >= 0)
                 basic_gain = Decimal.pow(
                     10,
-                    (basic_gain.log(10) / 420) ** 0.8 * 420
+                    (basic_gain.log(10) / 515) ** 0.67 * 515
                 )
             if (
                 basic_gain.cmp(game.antispice[0]) === 1 &&
-                game.research_complete[19] >= 1
+                game.research_complete[21] >= 1
             )
                 highest_spice = 1
             let red_gain = game.spent_atomic_spice[1]
                 .add(atomic_amount)
-                .pow(game.atomic_efficiency / 320)
+                .pow(game.atomic_efficiency / 228)
+                .div(3.2)
                 .mul(red_amount)
                 .floor()
-            if (red_gain.cmp(Decimal.pow(10, 336)) >= 0)
+            if (red_gain.cmp(Decimal.pow(10, 128)) >= 0)
+                red_gain = red_gain
+                    .div(Decimal.pow(10, 128))
+                    .pow(0.5)
+                    .mul(Decimal.pow(10, 128))
+            if (red_gain.cmp(Decimal.pow(10, 269)) >= 0)
+                red_gain = red_gain
+                    .div(Decimal.pow(10, 269))
+                    .pow(0.5)
+                    .mul(Decimal.pow(10, 269))
+            if (red_gain.cmp(Decimal.pow(10, 450)) >= 0)
                 red_gain = Decimal.pow(
                     10,
-                    (red_gain.log(10) / 336) ** 0.8 * 336
+                    (red_gain.log(10) / 450) ** 0.5 * 450
                 )
             if (
                 red_gain.cmp(game.antispice[1]) === 1 &&
-                game.research_complete[21] >= 1
+                game.research_complete[23] >= 1
             )
                 highest_spice = 2
             let yellow_gain = game.spent_atomic_spice[2]
                 .add(atomic_amount)
-                .pow(game.atomic_efficiency / 1000)
+                .pow(game.atomic_efficiency / 304)
+                .div(54)
                 .mul(yellow_amount)
                 .floor()
-            if (yellow_gain.cmp(Decimal.pow(10, 116)) >= 0)
+            if (yellow_gain.cmp(Decimal.pow(10, 87)) >= 0)
+                yellow_gain = yellow_gain
+                    .div(Decimal.pow(10, 87))
+                    .pow(0.55)
+                    .mul(Decimal.pow(10, 87))
+            if (yellow_gain.cmp(Decimal.pow(10, 372)) >= 0)
                 yellow_gain = Decimal.pow(
                     10,
-                    (yellow_gain.log(10) / 116) ** 0.8 * 116
+                    (yellow_gain.log(10) / 372) ** 0.5 * 372
                 )
             if (
                 yellow_gain.cmp(game.antispice[2]) === 1 &&
-                game.research_complete[24] >= 1
+                game.research_complete[26] >= 1
             )
                 highest_spice = 3
             let green_gain = game.spent_atomic_spice[3]
                 .add(atomic_amount)
-                .pow(game.atomic_efficiency / 2575)
+                .pow(game.atomic_efficiency / 380)
+                .div(108000)
                 .mul(green_amount)
                 .floor()
-            if (green_gain.cmp(Decimal.pow(10, 48)) >= 0)
+            if (green_gain.cmp(Decimal.pow(10, 56)) >= 0)
+                green_gain = green_gain
+                    .div(Decimal.pow(10, 56))
+                    .pow(0.55)
+                    .mul(Decimal.pow(10, 56))
+            if (green_gain.cmp(Decimal.pow(10, 225)) >= 0)
                 green_gain = Decimal.pow(
                     10,
-                    (green_gain.log(10) / 48) ** 0.8 * 48
+                    (green_gain.log(10) / 225) ** 0.5 * 225
                 )
             if (
                 green_gain.cmp(game.antispice[3]) === 1 &&
-                game.research_complete[27] >= 1
+                game.research_complete[29] >= 1
             )
                 highest_spice = 4
             let blue_gain = game.spent_atomic_spice[4]
                 .add(atomic_amount)
-                .pow(game.atomic_efficiency / 4850)
+                .pow(game.atomic_efficiency / 494)
+                .div(5.587e15)
                 .mul(blue_amount)
                 .floor()
-            if (blue_gain.cmp(Decimal.pow(10, 19)) >= 0)
+            if (blue_gain.cmp(Decimal.pow(10, 40)) >= 0)
+                blue_gain = blue_gain
+                    .div(Decimal.pow(10, 40))
+                    .pow(0.55)
+                    .mul(Decimal.pow(10, 40))
+            if (blue_gain.cmp(Decimal.pow(10, 125)) >= 0)
                 blue_gain = Decimal.pow(
                     10,
-                    (blue_gain.log(10) / 19) ** 0.8 * 19
+                    (blue_gain.log(10) / 125) ** 0.5 * 125
                 )
             if (
                 blue_gain.cmp(game.antispice[4]) === 1 &&
-                game.research_complete[30] >= 1
+                game.research_complete[33] >= 1
             )
                 highest_spice = 5
             let pink_gain = game.spent_atomic_spice[5]
                 .add(atomic_amount)
-                .pow(game.atomic_efficiency / 16500)
+                .pow(game.atomic_efficiency / 608)
+                .div(8.098e34)
                 .mul(pink_amount)
                 .floor()
-            if (pink_gain.cmp(Decimal.pow(10, 7.5)) >= 0)
+            if (pink_gain.cmp(Decimal.pow(10, 88)) >= 0)
                 pink_gain = Decimal.pow(
                     10,
-                    (pink_gain.log(10) / 7.5) ** 0.8 * 7.5
+                    (pink_gain.log(10) / 88) ** 0.5 * 88
                 )
             if (
                 pink_gain.cmp(game.antispice[5]) === 1 &&
-                game.research_complete[33] >= 1
+                game.research_complete[36] >= 1
             )
                 highest_spice = 6
             let rainbow_gain = Math.floor(rainbow_amount + atomic_amount2)
             if (
                 rainbow_gain > game.total_rainbow_antispice &&
-                game.research_complete[37] >= 1
+                game.research_complete[39] >= 1
             )
                 highest_spice = 7
 
@@ -4664,96 +4665,134 @@ function auto_collider() {
                 )
             }
 
-            if (game.research_complete[19] >= 1 && available_spice[1]) {
+            if (game.research_complete[21] >= 1 && available_spice[1]) {
                 game.spent_atomic_spice[0] =
                     game.spent_atomic_spice[0].add(atomic_amount)
                 let amount = game.spent_atomic_spice[0].pow(
-                    game.atomic_efficiency / 132
+                    game.atomic_efficiency / 76
                 )
-                if (amount.cmp(Decimal.pow(10, 420)) >= 0)
+                if (amount.cmp(Decimal.pow(10, 170)) >= 0)
+                    amount = amount
+                        .div(Decimal.pow(10, 170))
+                        .pow(0.6)
+                        .mul(Decimal.pow(10, 170))
+                if (amount.cmp(Decimal.pow(10, 515)) >= 0)
                     amount = Decimal.pow(
                         10,
-                        (amount.log(10) / 420) ** 0.8 * 420
+                        (amount.log(10) / 515) ** 0.67 * 515
                     )
                 if (amount.floor().cmp(game.antispice[0]) >= 0)
                     game.antispice[0] = amount.floor()
             }
 
-            if (game.research_complete[21] >= 1 && available_spice[2]) {
+            if (game.research_complete[23] >= 1 && available_spice[2]) {
                 game.spent_atomic_spice[1] =
                     game.spent_atomic_spice[1].add(atomic_amount)
                 let amount = game.spent_atomic_spice[1]
-                    .pow(game.atomic_efficiency / 320)
+                    .pow(game.atomic_efficiency / 228)
+                    .div(3.2)
                     .mul(red_amount)
-                if (amount.cmp(Decimal.pow(10, 336)) >= 0)
+                if (amount.cmp(Decimal.pow(10, 128)) >= 0)
+                    amount = amount
+                        .div(Decimal.pow(10, 128))
+                        .pow(0.5)
+                        .mul(Decimal.pow(10, 128))
+                if (amount.cmp(Decimal.pow(10, 269)) >= 0)
+                    amount = amount
+                        .div(Decimal.pow(10, 269))
+                        .pow(0.5)
+                        .mul(Decimal.pow(10, 269))
+                if (amount.cmp(Decimal.pow(10, 450)) >= 0)
                     amount = Decimal.pow(
                         10,
-                        (amount.log(10) / 336) ** 0.8 * 336
+                        (amount.log(10) / 450) ** 0.5 * 450
                     )
                 if (amount.floor().cmp(game.antispice[1]) >= 0)
                     game.antispice[1] = amount.floor()
             }
 
-            if (game.research_complete[24] >= 1 && available_spice[3]) {
+            if (game.research_complete[26] >= 1 && available_spice[3]) {
                 game.spent_atomic_spice[2] =
                     game.spent_atomic_spice[2].add(atomic_amount)
                 let amount = game.spent_atomic_spice[2]
-                    .pow(game.atomic_efficiency / 1000)
+                    .pow(game.atomic_efficiency / 304)
+                    .div(54)
                     .mul(yellow_amount)
-                if (amount.cmp(Decimal.pow(10, 116)) >= 0)
+                if (amount.cmp(Decimal.pow(10, 87)) >= 0)
+                    amount = amount
+                        .div(Decimal.pow(10, 87))
+                        .pow(0.55)
+                        .mul(Decimal.pow(10, 87))
+                if (amount.cmp(Decimal.pow(10, 372)) >= 0)
                     amount = Decimal.pow(
                         10,
-                        (amount.log(10) / 116) ** 0.8 * 116
+                        (amount.log(10) / 372) ** 0.5 * 372
                     )
                 if (amount.floor().cmp(game.antispice[2]) >= 0)
                     game.antispice[2] = amount.floor()
             }
 
-            if (game.research_complete[27] >= 1 && available_spice[4]) {
+            if (game.research_complete[29] >= 1 && available_spice[4]) {
                 game.spent_atomic_spice[3] =
                     game.spent_atomic_spice[3].add(atomic_amount)
                 let amount = game.spent_atomic_spice[3]
-                    .pow(game.atomic_efficiency / 2575)
+                    .pow(game.atomic_efficiency / 380)
+                    .div(108000)
                     .mul(green_amount)
-                if (amount.cmp(Decimal.pow(10, 48)) >= 0)
-                    amount = Decimal.pow(10, (amount.log(10) / 48) ** 0.8 * 48)
+                if (amount.cmp(Decimal.pow(10, 56)) >= 0)
+                    amount = amount
+                        .div(Decimal.pow(10, 56))
+                        .pow(0.55)
+                        .mul(Decimal.pow(10, 56))
+                if (amount.cmp(Decimal.pow(10, 225)) >= 0)
+                    amount = Decimal.pow(
+                        10,
+                        (amount.log(10) / 225) ** 0.5 * 225
+                    )
                 if (amount.floor().cmp(game.antispice[3]) >= 0)
                     game.antispice[3] = amount.floor()
             }
 
-            if (game.research_complete[30] >= 1 && available_spice[5]) {
+            if (game.research_complete[33] >= 1 && available_spice[5]) {
                 game.spent_atomic_spice[4] =
                     game.spent_atomic_spice[4].add(atomic_amount)
                 let amount = game.spent_atomic_spice[4]
-                    .pow(game.atomic_efficiency / 4850)
+                    .pow(game.atomic_efficiency / 494)
+                    .div(5.587e15)
                     .mul(blue_amount)
-                if (amount.cmp(Decimal.pow(10, 19)) >= 0)
-                    amount = Decimal.pow(10, (amount.log(10) / 19) ** 0.8 * 19)
+                if (amount.cmp(Decimal.pow(10, 40)) >= 0)
+                    amount = amount
+                        .div(Decimal.pow(10, 40))
+                        .pow(0.55)
+                        .mul(Decimal.pow(10, 40))
+                if (amount.cmp(Decimal.pow(10, 125)) >= 0)
+                    amount = Decimal.pow(
+                        10,
+                        (amount.log(10) / 125) ** 0.5 * 125
+                    )
                 if (amount.floor().cmp(game.antispice[4]) >= 0)
                     game.antispice[4] = amount.floor()
             }
 
-            if (game.research_complete[33] >= 1 && available_spice[6]) {
+            if (game.research_complete[36] >= 1 && available_spice[6]) {
                 game.spent_atomic_spice[5] =
                     game.spent_atomic_spice[5].add(atomic_amount)
                 let amount = game.spent_atomic_spice[5]
-                    .pow(game.atomic_efficiency / 16500)
+                    .pow(game.atomic_efficiency / 608)
+                    .div(8.098e34)
                     .mul(pink_amount)
-                if (amount.cmp(Decimal.pow(10, 7.5)) >= 0)
-                    amount = Decimal.pow(
-                        10,
-                        (amount.log(10) / 7.5) ** 0.8 * 7.5
-                    )
+                if (amount.cmp(Decimal.pow(10, 88)) >= 0)
+                    amount = Decimal.pow(10, (amount.log(10) / 88) ** 0.5 * 88)
                 if (amount.floor().cmp(game.antispice[5]) >= 0)
                     game.antispice[5] = amount.floor()
             }
 
-            if (game.research_complete[37] >= 1 && available_spice[7]) {
+            if (game.research_complete[39] >= 1 && available_spice[7]) {
                 game.spent_atomic_spice[6] =
                     game.spent_atomic_spice[6].add(atomic_amount)
 
                 atomic_amount2 =
-                    (game.spent_atomic_spice[6].log(10) - 30976) / 2048
+                    (game.spent_atomic_spice[6].log(10) - 32768) / 1984
                 if (atomic_amount2 > 0.5)
                     atomic_amount2 =
                         ((atomic_amount2 - 0.5) / 23.5) ** 1.5 * 23.5 + 0.5
@@ -4784,15 +4823,8 @@ function research_toggle() {
             game.research_complete[game.research_view - 1] === 0 ||
             research.researches[game.research_view - 1].repeat > 0
         ) {
-            if (game.research_view === 1) {
-                if (game.research_complete[0] < 40) {
-                    game.research_pause = false
-                    game.research_select = game.research_view
-                }
-            } else {
-                game.research_pause = false
-                game.research_select = game.research_view
-            }
+            game.research_pause = false
+            game.research_select = game.research_view
         }
     }
 }
@@ -4810,7 +4842,7 @@ function research_upgrade() {
                 game.data_boosts + Math.PI / 2,
                 game.data_boosts ** ((game.data_boosts + 1) ** 0.09)
             )
-                .mul(16384)
+                .mul(4096)
                 .round()
         ) >= 0
     ) {
@@ -4820,7 +4852,7 @@ function research_upgrade() {
                     game.data_boosts + Math.PI / 2,
                     game.data_boosts ** ((game.data_boosts + 1) ** 0.09)
                 )
-                    .mul(16384)
+                    .mul(4096)
                     .round()
             ),
             0
@@ -4830,39 +4862,44 @@ function research_upgrade() {
 }
 
 //entering a collapse challenge
-function enter_collapse_challenge(id) {
+function pre_enter_collapse_challenge(id) {
     if (game.collapse_challenge === 0) {
-        let challenge_ready = false
-        if (!game.challenge_confirm) challenge_ready = true
-        else {
-            if (
-                confirm(
-                    "您确定要进入挑战 " +
+        if (game.challenge_confirm) {
+            if (modal === "none") {
+                open_modal(
+                    "confirm",
+                    "Are you sure you want to enter Challenge " +
                         format_num(id, 0) +
-                        "? 你好坍缩!"
+                        "? You will Collapse!",
+                    function () {
+                        enter_collapse_challenge(id)
+                    }
                 )
-            ) {
-                challenge_ready = true
             }
-        }
-
-        if (challenge_ready) {
-            collapse(true)
-            game.collapse_challenge = id
-            game.pending_completions = 0
-
-            if (game.collapse_challenge === 7) game.ascend_challenge_timer = 0
-            if (game.collapse_challenge === 9) game.gamespeed = 1 / 99999
+        } else {
+            enter_collapse_challenge(id)
         }
     } else {
         if (game.collapse_challenge === id) {
-            collapse()
+            pre_collapse()
         } else {
-            alert(
-                "You cannot enter a Collapse Challenge if you are already in one!"
-            )
+            if (modal === "none") {
+                open_modal(
+                    "alert",
+                    "You cannot enter a Collapse Challenge if you are already in one!"
+                )
+            }
         }
     }
+}
+
+function enter_collapse_challenge(id) {
+    collapse(true)
+    game.collapse_challenge = id
+    game.pending_completions = 0
+
+    if (game.collapse_challenge === 7) game.ascend_challenge_timer = 0
+    if (game.collapse_challenge === 9) game.gamespeed = 1 / 99999
 }
 
 //exiting a collapse challenge
@@ -4870,7 +4907,7 @@ function exit_collapse_challenge() {
     if (game.collapse_challenge !== 0) {
         let challenge = game.collapse_challenge
         game.collapse_challenge = 0
-        collapse(true, challenge)
+        pre_collapse(true, challenge)
     }
 }
 
@@ -4894,30 +4931,63 @@ function buy_antispice_perk(id) {
 }
 
 //refunding antispice perks
-function refund_antispice_perks() {
+function pre_refund_antispice_perks() {
     if (
         game.antispice[6] < game.total_rainbow_antispice &&
         !game.antispice_bought[8]
     ) {
-        if (
-            confirm(
-                "Are you sure you want to refund all antispice perks? You will Collapse!"
-            )
-        ) {
-            for (let i = 0; i < 8; i++) {
-                if (game.antispice_bought[i])
-                    game.antispice[6] += game.antispice_order[i]
-                game.antispice_bought[i] = false
-                game.antispice_order[i] = 0
+        if (game.antispice_confirm) {
+            if (modal === "none") {
+                open_modal(
+                    "confirm",
+                    "Are you sure you want to refund all antispice perks? You will Collapse!",
+                    refund_antispice_perks
+                )
             }
-
-            collapse(true)
-
-            if (game.collapse_challenge === 9) {
-                game.gamespeed = 1 / 99999
-            } else {
-                game.gamespeed = 2 ** game.collapse_complete[2]
-            }
+        } else {
+            refund_antispice_perks()
         }
     }
+}
+
+function refund_antispice_perks() {
+    for (let i = 0; i < 8; i++) {
+        if (game.antispice_bought[i])
+            game.antispice[6] += game.antispice_order[i]
+        game.antispice_bought[i] = false
+        game.antispice_order[i] = 0
+    }
+
+    collapse(true)
+
+    if (game.collapse_challenge === 9) {
+        game.gamespeed = 1 / 99999
+    } else {
+        game.gamespeed = 2 ** game.collapse_complete[2]
+    }
+}
+
+//skipping offline ticks
+function offline_skip(type) {
+    if (type === "half") {
+        if (ticks_run < Math.floor(total_ticks / 2)) {
+            total_ticks = Math.floor(total_ticks / 2)
+            start_ms = ticks_run * 10
+            start_ticks = ticks_run
+        }
+    } else if (type === "all") {
+        ticks_run = total_ticks - game.catchup_rate
+    }
+}
+
+//leaving the title screen
+function start_game() {
+    document.getElementById("tabs_block").style.display = "block"
+    document.getElementsByTagName("main")[0].style.display = "block"
+    document.getElementById("catchup_screen").style.display = "none"
+
+    tick_time = Date.now()
+
+    tick_loop()
+    graphics_loop()
 }
