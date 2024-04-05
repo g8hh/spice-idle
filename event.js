@@ -2275,7 +2275,7 @@ function auto_toggle(color, unless) {
             if (game.autopr_mode === 0) {
                 game.autopr_mode = 1
                 document.getElementById("prestige_auto_mode").innerHTML =
-                    "Mode: SPICE"
+                    "Mode: " + spice_text[2]
             } else if (game.autopr_mode === 1) {
                 game.autopr_mode = 2
                 document.getElementById("prestige_auto_mode").innerHTML =
@@ -2369,7 +2369,7 @@ function auto_toggle(color, unless) {
             } else if (game.autoas_mode === 1) {
                 game.autoas_mode = 0
                 document.getElementById("ascend_auto_mode").innerHTML =
-                    "Mode: RUNES"
+                    "Mode: " + ansuz_rune_text[9] + "S"
             }
             break
         case "ascend_upgrade":
@@ -2448,10 +2448,16 @@ function auto_toggle(color, unless) {
                 game.autoco_mode = 2
                 document.getElementById("collapse_auto_mode").innerHTML =
                     "Mode: DECAY"
+                if (meme_condition)
+                    document.getElementById("collapse_auto_mode").innerHTML =
+                        "Mode: BREAKDOWN"
             } else if (game.autoco_mode === 2) {
                 game.autoco_mode = 0
                 document.getElementById("collapse_auto_mode").innerHTML =
                     "Mode: SPICE"
+                if (meme_condition)
+                    document.getElementById("collapse_auto_mode").innerHTML =
+                        "Mode: CARBS"
             }
             break
         case "collider":
@@ -3182,9 +3188,9 @@ function pre_enter_ascension_challenge(id) {
             if (modal === "none") {
                 open_modal(
                     "confirm",
-                    "您确定要进入挑战 " +
+                    "Are you sure you want to enter Challenge " +
                         format_num(id, 0) +
-                        "? 你将转生!",
+                        "? You will Ascend!",
                     function () {
                         enter_ascension_challenge(id)
                     }
@@ -3200,7 +3206,7 @@ function pre_enter_ascension_challenge(id) {
             if (modal === "none") {
                 open_modal(
                     "alert",
-                    "如果您已经进入了转生挑战，则无法重新开始该挑战!"
+                    "You cannot enter an Ascension Challenge if you are already in one!"
                 )
             }
         }
@@ -4868,9 +4874,9 @@ function pre_enter_collapse_challenge(id) {
             if (modal === "none") {
                 open_modal(
                     "confirm",
-                    "您确定要进入挑战 " +
+                    "Are you sure you want to enter Challenge " +
                         format_num(id, 0) +
-                        "? 你将进行坍缩!",
+                        "? You will Collapse!",
                     function () {
                         enter_collapse_challenge(id)
                     }
@@ -4886,7 +4892,7 @@ function pre_enter_collapse_challenge(id) {
             if (modal === "none") {
                 open_modal(
                     "alert",
-                    "如果您已经进入了坍缩挑战，则无法重新开始该挑战!"
+                    "You cannot enter a Collapse Challenge if you are already in one!"
                 )
             }
         }
@@ -4940,7 +4946,9 @@ function pre_refund_antispice_perks() {
             if (modal === "none") {
                 open_modal(
                     "confirm",
-                    "您确定要退还所有反香料特权吗？ 你会进行坍缩!",
+                    "Are you sure you want to refund all " +
+                        antispice_text[0] +
+                        " perks? You will Collapse!",
                     refund_antispice_perks
                 )
             }

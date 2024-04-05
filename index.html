@@ -19,7 +19,7 @@
                         Spice Idle
                     </p>
                     <p class="catchup_version">
-                        v1.7.4
+                        v1.7.5
                     </p>
                 </div>
                 <p id="catchup_header" class="catchup_header">
@@ -241,7 +241,7 @@
                     <p id="red_spice_num" class="spice_num red_spice">
                         5.00 g
                     </p>
-                    <p class="spice_text red_spice">
+                    <p id="red_spice_text" class="spice_text red_spice">
                         red spice
                     </p>
 
@@ -262,7 +262,7 @@
                     </div>
 
                     <div id="red_gen_s" class="spice_gen_s">
-                        <p class="spice_gen_name red_spice">
+                        <p id="red_gen_name_s" class="spice_gen_name red_spice">
                             Red Spice Strengthener
                         </p>
                         <p id="red_info_s" class="spice_gen_info">
@@ -281,7 +281,7 @@
                     <p id="yellow_spice_num" class="spice_num yellow_spice">
                         10.0 g
                     </p>
-                    <p class="spice_text yellow_spice">
+                    <p id="yellow_spice_text" class="spice_text yellow_spice">
                         yellow spice
                     </p>
 
@@ -302,7 +302,7 @@
                     </div>
 
                     <div id="yellow_gen_s" class="spice_gen_s">
-                        <p class="spice_gen_name yellow_spice">
+                        <p id="yellow_gen_name_s" class="spice_gen_name yellow_spice">
                             Yellow Spice Strengthener
                         </p>
                         <p id="yellow_info_s" class="spice_gen_info">
@@ -321,7 +321,7 @@
                     <p id="green_spice_num" class="spice_num green_spice">
                         20.0 g
                     </p>
-                    <p class="spice_text green_spice">
+                    <p id="green_spice_text" class="spice_text green_spice">
                         green spice
                     </p>
 
@@ -342,7 +342,7 @@
                     </div>
 
                     <div id="green_gen_s" class="spice_gen_s">
-                        <p class="spice_gen_name green_spice">
+                        <p id="green_gen_name_s" class="spice_gen_name green_spice">
                             Green Spice Strengthener
                         </p>
                         <p id="green_info_s" class="spice_gen_info">
@@ -361,7 +361,7 @@
                     <p id="blue_spice_num" class="spice_num blue_spice">
                         40.0 g
                     </p>
-                    <p class="spice_text blue_spice">
+                    <p id="blue_spice_text" class="spice_text blue_spice">
                         blue spice
                     </p>
 
@@ -382,7 +382,7 @@
                     </div>
 
                     <div id="blue_gen_s" class="spice_gen_s">
-                        <p class="spice_gen_name blue_spice">
+                        <p id="blue_gen_name_s" class="spice_gen_name blue_spice">
                             Blue Spice Strengthener
                         </p>
                         <p id="blue_info_s" class="spice_gen_info">
@@ -401,7 +401,7 @@
                     <p id="pink_spice_num" class="spice_num pink_spice">
                         80.0 g
                     </p>
-                    <p class="spice_text pink_spice">
+                    <p id="pink_spice_text" class="spice_text pink_spice">
                         pink spice
                     </p>
 
@@ -422,7 +422,7 @@
                     </div>
 
                     <div id="pink_gen_s" class="spice_gen_s">
-                        <p class="spice_gen_name pink_spice">
+                        <p id="pink_gen_name_s" class="spice_gen_name pink_spice">
                             Pink Spice Strengthener
                         </p>
                         <p id="pink_info_s" class="spice_gen_info">
@@ -444,7 +444,7 @@
                         <p id="rainbow_spice_num" class="spice_num rainbow_spice">
                             0.000 μg
                         </p>
-                        <p class="spice_text rainbow_spice">
+                        <p id="rainbow_spice_text" class="spice_text rainbow_spice">
                             rainbow spice
                         </p>
                         <p id="rainbow_spice_up" class="spice_up">
@@ -475,25 +475,25 @@
                                 </button>
                             </div>
                             <div id="prestige_boosts">
-                                <p class="p_auto_text">
+                                <p id="prestige_boosts_text" class="p_auto_text">
                                     Auto-Prestige Goal (Color Boosts):
                                 </p>
                                 <input class="input" id="p_boosts_input" type="number" value="10" min="10">
                             </div>
                             <div id="prestige_boosts_delta">
-                                <p class="p_auto_text">
+                                <p id="prestige_boosts_delta_text" class="p_auto_text">
                                     Auto-Prestige Delta (Color Boosts):
                                 </p>
                                 <input class="input" id="p_boosts_input2" type="number" value="5" min="0">
                             </div>
                             <div id="prestige_spice">
-                                <p class="p_auto_text">
+                                <p id="prestige_spice_text" class="p_auto_text">
                                     Auto-Prestige Goal (Rainbow Spice):
                                 </p>
                                 <input class="input" id="p_spice_input" type="text" value="1">
                             </div>
                             <div id="prestige_spice_delta">
-                                <p class="p_auto_text">
+                                <p id="prestige_spice_delta_text" class="p_auto_text">
                                     Auto-Prestige Delta (Rainbow Spice):
                                 </p>
                                 <input class="input" id="p_spice_input2" type="text" value="10">
@@ -534,7 +534,7 @@
                         <p id="crystal_spice_num" class="spice_num crystal_spice">
                             0.000 g
                         </p>
-                        <p class="spice_text crystal_spice">
+                        <p id="crystal_spice_text" class="spice_text crystal_spice">
                             crystallized spice
                         </p>
                         <p id="crystal_spice_up" class="spice_up">
@@ -555,7 +555,7 @@
                 </div>
 
                 <div id="crystal_gen_i" class="spice_gen_s">
-                    <p class="spice_gen_name crystal_spice">
+                    <p id="crystal_gen_name_i" class="spice_gen_name crystal_spice">
                         Crystal Infusion
                     </p>
                     <p id="crystal_info_i" class="spice_gen_info">
@@ -585,7 +585,7 @@
                 </div>
 
                 <div id="crystal_gen_s" class="spice_gen_s">
-                    <p class="spice_gen_name crystal_spice">
+                    <p id="crystal_gen_name_s" class="spice_gen_name crystal_spice">
                         Crystallized Spice Strengthener
                     </p>
                     <p id="crystal_info_s" class="spice_gen_info">
@@ -605,7 +605,7 @@
                     <p id="rainbow_spice_num3" class="spice_num rainbow_spice">
                         0.000 μg
                     </p>
-                    <p class="spice_text rainbow_spice">
+                    <p id="rainbow_spice_text3" class="spice_text rainbow_spice">
                         rainbow spice
                     </p>
 
@@ -625,18 +625,28 @@
             <div id="ascension_page">
                 <div class="ascension_header">
                     <div class="ansuz_panel">
-                        <p class="ansuz_text runes">
-                            Ansuz Runes
-                        </p>
-                        <p id="ansuz_num" class="ansuz_num runes">
-                            0 ᚫ
-                        </p>
+                        <div id="ansuz_div">
+                            <p class="ansuz_text runes">
+                                Ansuz Runes
+                            </p>
+                            <p id="ansuz_num" class="ansuz_num runes">
+                                0 ᚫ
+                            </p>
+                        </div>
+                        <div id="cube_div">
+                            <p id="cube_num" class="spice_num runes">
+                                0
+                            </p>
+                            <p id="cube_text" class="spice_text runes">
+                                sparkling sugar cubes
+                            </p>
+                        </div>
                         <p id="ansuz_up" class="spice_up">
                             +0.000 ᚫ/sec
                         </p>
                         <div id="rune_control_block">
                             <div id="distribute_buttons" class="rune_control2">
-                                <button class="rune_button a_unlocked" onclick="distribute_runes('all')">
+                                <button id="all_distribute" class="rune_button a_unlocked" onclick="distribute_runes('all')">
                                     Distribute ALL Runes
                                 </button>
                                 <button id="half_distribute" class="rune_button a_unlocked" onclick="distribute_runes('half')">
@@ -669,13 +679,13 @@
                                 </button>
                             </div>
                             <div id="ascend_runes">
-                                <p class="p_auto_text">
+                                <p id="ascend_runes_text" class="p_auto_text">
                                     Auto-Ascend Goal (Runes):
                                 </p>
                                 <input class="input" id="a_runes_input" type="text" value="1">
                             </div>
                             <div id="ascend_runes_delta">
-                                <p class="p_auto_text">
+                                <p id="ascend_runes_delta_text" class="p_auto_text">
                                     Auto-Ascend Delta (Runes):
                                 </p>
                                 <input class="input" id="a_runes_input2" type="text" value="5">
@@ -710,7 +720,7 @@
                         Auto: OFF
                     </button>
                     <div class="distributor_block">
-                        <p class="distributor_text">
+                        <p id="distributor_text" class="distributor_text">
                             Portion of rune gains to distribute:
                         </p>
                         <input class="input distributor_input" id="ds_portion_input" type="number" value="50" min="0" max="100">
@@ -720,14 +730,14 @@
                     </div>
                 </div>
 
-                <p class="ascend_info">
+                <p id="ascension_rune_info" class="ascend_info">
                     Your Ansuz runes can be converted into any of the three rune types below
                     <br>Each one makes rune power of its own variety, boosting spice production of its respective type(s)
                     <br>Ansuz runes can also be spent on other things than conversion
                 </p>
 
                 <div class="rune_panel">
-                    <p class="rune_header runes">
+                    <p id="jera_name" class="rune_header runes">
                         Jera Runes
                     </p>
                     <p id="jera_text" class="rune_text">
@@ -735,10 +745,10 @@
                         <br>You have 0 ᛡ power, boosting red spice production 1.00x
                     </p>
                     <div id="jera_menu" class="rune_menu">
-                        <button class="rune_button a_unlocked" onclick="convert_rune(0,false)">
+                        <button id="jera_single" class="rune_button a_unlocked" onclick="convert_rune(0,false)">
                             Convert 1 ᚫ
                         </button>
-                        <button class="rune_button a_unlocked" onclick="convert_rune(0,true)">
+                        <button id="jera_all" class="rune_button a_unlocked" onclick="convert_rune(0,true)">
                             Convert ALL ᚫ
                         </button>
                         <button id="jera_half" class="rune_button a_unlocked" onclick="convert_rune(0,true,true)">
@@ -747,7 +757,7 @@
                     </div>
                 </div>
                 <div class="rune_panel">
-                    <p class="rune_header runes">
+                    <p id="raido_name" class="rune_header runes">
                         Raido Runes
                     </p>
                     <p id="raido_text" class="rune_text">
@@ -755,10 +765,10 @@
                         <br>You have 0 ᚱ power, boosting yellow, green, & blue spice production 1.00x
                     </p>
                     <div id="raido_menu" class="rune_menu">
-                        <button class="rune_button a_unlocked" onclick="convert_rune(1,false)">
+                        <button id="raido_single" class="rune_button a_unlocked" onclick="convert_rune(1,false)">
                             Convert 1 ᚫ
                         </button>
-                        <button class="rune_button a_unlocked" onclick="convert_rune(1,true)">
+                        <button id="raido_all" class="rune_button a_unlocked" onclick="convert_rune(1,true)">
                             Convert ALL ᚫ
                         </button>
                         <button id="raido_half" class="rune_button a_unlocked" onclick="convert_rune(1,true,true)">
@@ -767,7 +777,7 @@
                     </div>
                 </div>
                 <div class="rune_panel">
-                    <p class="rune_header runes">
+                    <p id="othala_name" class="rune_header runes">
                         Othala Runes
                     </p>
                     <p id="othala_text" class="rune_text">
@@ -775,10 +785,10 @@
                         <br>You have 0 ᛟ power, boosting pink spice production 1.00x
                     </p>
                     <div class="rune_menu">
-                        <button class="rune_button a_unlocked" onclick="convert_rune(2,false)">
+                        <button id="othala_single" class="rune_button a_unlocked" onclick="convert_rune(2,false)">
                             Convert 1 ᚫ
                         </button>
-                        <button class="rune_button a_unlocked" onclick="convert_rune(2,true)">
+                        <button id="othala_all" class="rune_button a_unlocked" onclick="convert_rune(2,true)">
                             Convert ALL ᚫ
                         </button>
                         <button id="othala_half" class="rune_button a_unlocked" onclick="convert_rune(2,true,true)">
@@ -791,12 +801,22 @@
             <div id="ascension_page2">
                 <div id="ansuz_menu">
                     <div class="ansuz_panel">
-                        <p class="ansuz_text runes">
-                            Ansuz Runes
-                        </p>
-                        <p id="ansuz_num2" class="ansuz_num runes">
-                            0 ᚫ
-                        </p>
+                        <div id="ansuz_div2">
+                            <p class="ansuz_text runes">
+                                Ansuz Runes
+                            </p>
+                            <p id="ansuz_num2" class="ansuz_num runes">
+                                0 ᚫ
+                            </p>
+                        </div>
+                        <div id="cube_div2">
+                            <p id="cube_num2" class="spice_num runes">
+                                0
+                            </p>
+                            <p id="cube_text2" class="spice_text runes">
+                                sparkling sugar cubes
+                            </p>
+                        </div>
                         <p id="ansuz_up2" class="spice_up">
                             +0.000 ᚫ/sec
                         </p>
@@ -818,7 +838,7 @@
             </div>
 
             <div id="challenges_page">
-                <p class="challenge_info">
+                <p id="ascension_challenge_info" class="challenge_info">
                     Entering an Ascension Challenge will reset your current Ascension
                     <br>You must Ascend with the required amount of rainbow spice to complete the Challenge
                     <br><br>Ascension automation and rainbow spice multipliers are disabled in Ascension Challenges
@@ -837,7 +857,7 @@
                         <p id="arcane_spice_num" class="spice_num arcane_spice">
                             0.000 mg
                         </p>
-                        <p class="spice_text arcane_spice">
+                        <p id="arcane_spice_text" class="spice_text arcane_spice">
                             arcane spice
                         </p>
                         <p id="arcane_spice_up" class="spice_up">
@@ -845,12 +865,22 @@
                         </p>
                     </div>
                     <div class="ansuz_panel">
-                        <p id="ansuz_text2" class="ansuz_text runes">
-                            Ansuz Runes
-                        </p>
-                        <p id="ansuz_num3" class="ansuz_num runes">
-                            0 ᚫ
-                        </p>
+                        <div id="ansuz_div3">
+                            <p id="ansuz_text2" class="ansuz_text runes">
+                                Ansuz Runes
+                            </p>
+                            <p id="ansuz_num3" class="ansuz_num runes">
+                                0 ᚫ
+                            </p>
+                        </div>
+                        <div id="cube_div3">
+                            <p id="cube_num3" class="spice_num runes">
+                                0
+                            </p>
+                            <p id="cube_text3" class="spice_text runes">
+                                sparkling sugar cubes
+                            </p>
+                        </div>
                         <p id="ansuz_up3" class="spice_up">
                             +0.000 ᚫ/sec
                         </p>
@@ -858,7 +888,7 @@
                 </div>
 
                 <div id="arcane_gen_n" class="spice_gen_s">
-                    <p class="spice_gen_name arcane_spice">
+                    <p id="arcane_gen_name_n" class="spice_gen_name arcane_spice">
                         Arcane Enchantment
                     </p>
                     <p id="arcane_info_n" class="spice_gen_info">
@@ -888,7 +918,7 @@
                 </div>
 
                 <div id="arcane_gen_s" class="spice_gen_s">
-                    <p class="spice_gen_name arcane_spice">
+                    <p id="arcane_gen_name_s" class="spice_gen_name arcane_spice">
                         Arcane Spice Strengthener
                     </p>
                     <p id="arcane_info_s" class="spice_gen_info">
@@ -909,7 +939,7 @@
                         <p id="atomic_spice_num" class="spice_num atomic_spice">
                             0
                         </p>
-                        <p class="spice_text atomic_spice">
+                        <p id="atomic_spice_text" class="spice_text atomic_spice">
                             atomic spice
                         </p>
                     </div>
@@ -941,7 +971,7 @@
                                 </button>
                             </div>
                             <div id="collapse_spice">
-                                <p class="p_auto_text">
+                                <p id="collapse_spice_text" class="p_auto_text">
                                     Auto-Collapse Goal (Atomic Spice):
                                 </p>
                                 <input class="input" id="co_spice_input" type="text" value="1e50">
@@ -953,7 +983,7 @@
                                 <input class="input" id="co_time_input" type="number" step="0.01" value="120" min="0.01">
                             </div>
                             <div id="collapse_decay">
-                                <p class="p_auto_text">
+                                <p id="collapse_decay_text" class="p_auto_text">
                                     Auto-Collapse Goal (Real Seconds after Full Decay):
                                 </p>
                                 <input class="input" id="co_decay_input" type="number" step="0.01" value="10" min="0">
@@ -1039,7 +1069,7 @@
                 <p id="unstable_spice_num" class="spice_num unstable_spice">
                     0
                 </p>
-                <p class="spice_text unstable_spice">
+                <p id="unstable_spice_text" class="spice_text unstable_spice">
                     unstable spice
                 </p>
                 <p id="unstable_boost" class="unstable_text">
@@ -1050,7 +1080,7 @@
                 <p id="decayed_spice_num" class="spice_num decayed_spice">
                     0
                 </p>
-                <p class="spice_text decayed_spice">
+                <p id="decayed_spice_text" class="spice_text decayed_spice">
                     decayed spice
                 </p>
                 <p id="decay_time" class="unstable_text">
@@ -1063,7 +1093,7 @@
                     <p id="atomic_spice_num2" class="spice_num atomic_spice">
                         0
                     </p>
-                    <p class="spice_text atomic_spice">
+                    <p id="atomic_spice_text2" class="spice_text atomic_spice">
                         atomic spice
                     </p>
                 </div>
@@ -1139,7 +1169,7 @@
                         <p id="pure_antispice_num" class="spice_num pure_antispice">
                             0
                         </p>
-                        <p class="spice_text pure_antispice">
+                        <p id="basic_antispice_text" class="spice_text pure_antispice">
                             basic antispice
                         </p>
                         <p id="pure_antispice_boost" class="antispice_text">
@@ -1151,7 +1181,7 @@
                         <p id="red_antispice_num" class="spice_num red_antispice">
                             0
                         </p>
-                        <p class="spice_text red_antispice">
+                        <p id="red_antispice_text" class="spice_text red_antispice">
                             red antispice
                         </p>
                         <p id="red_antispice_boost" class="antispice_text">
@@ -1164,7 +1194,7 @@
                         <p id="yellow_antispice_num" class="spice_num yellow_antispice">
                             0
                         </p>
-                        <p class="spice_text yellow_antispice">
+                        <p id="yellow_antispice_text" class="spice_text yellow_antispice">
                             yellow antispice
                         </p>
                         <p id="yellow_antispice_boost" class="antispice_text">
@@ -1179,7 +1209,7 @@
                         <p id="green_antispice_num" class="spice_num green_antispice">
                             0
                         </p>
-                        <p class="spice_text green_antispice">
+                        <p id="green_antispice_text" class="spice_text green_antispice">
                             green antispice
                         </p>
                         <p id="green_antispice_boost" class="antispice_text">
@@ -1192,7 +1222,7 @@
                         <p id="blue_antispice_num" class="spice_num blue_antispice">
                             0
                         </p>
-                        <p class="spice_text blue_antispice">
+                        <p id="blue_antispice_text" class="spice_text blue_antispice">
                             blue antispice
                         </p>
                         <p id="blue_antispice_boost" class="antispice_text">
@@ -1205,7 +1235,7 @@
                         <p id="pink_antispice_num" class="spice_num pink_antispice">
                             0
                         </p>
-                        <p class="spice_text pink_antispice">
+                        <p id="pink_antispice_text" class="spice_text pink_antispice">
                             pink antispice
                         </p>
                         <p id="pink_antispice_boost" class="antispice_text">
@@ -1220,7 +1250,7 @@
                         <p id="rainbow_antispice_num" class="spice_num rainbow_antispice">
                             0
                         </p>
-                        <p class="spice_text rainbow_antispice">
+                        <p id="rainbow_antispice_text" class="spice_text rainbow_antispice">
                             rainbow antispice
                         </p>
                         <p id="total_rainbow_antispice" class="antispice_text">
@@ -1415,7 +1445,7 @@
             </div>
 
             <p id="version" class="info">
-                Spice Idle v1.7.4<br>Made by Zakuro<br><br>Last updated January 30, 2024
+                Spice Idle v1.7.5<br>Made by Zakuro<br><br>Last updated March 32, 2024
             </p>
 
             <p id="classic_info" class="info">
