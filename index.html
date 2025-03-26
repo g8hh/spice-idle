@@ -19,7 +19,7 @@
                         Spice Idle
                     </p>
                     <p class="catchup_version">
-                        v1.8.0
+                        v1.8.4
                     </p>
                 </div>
                 <p id="catchup_header" class="catchup_header">
@@ -1340,6 +1340,22 @@
                 <div id="exploration_screen" class="exploration_screen">
                     <div id="exploration_view">
                         <div id="exploration_map">
+                            <div id="exploration_bg">
+                                <svg id="turbulence">
+                                    <filter id="noise" x="0%" y="0%" width="100%" height="100%">
+                                        <feTurbulence id="noise_seed" baseFrequency="0.002" type="fractalNoise" numOctaves="4" seed="0"></feTurbulence>
+                                        <feColorMatrix
+                                            type="matrix"
+                                            values="1 0 0 0 0
+                                                    0 0 0 0 0
+                                                    0 0 1 0 0
+                                                    0 0 0 1 0">
+                                        </feColorMatrix>
+                                    </filter>
+                                    <rect x="0" y="0" width="100%" height="100%" filter="url(#noise)" fill="none"></rect>
+                                </svg>
+                            </div>
+                            <div id="exploration_bg2"></div>
                             <canvas id="exploration_selected" width="256" height="256"></canvas>
                         </div>
                     </div>
@@ -1379,6 +1395,7 @@
                         </div>
                     </div>
                 </div>
+                <canvas id="exploration_stars" width="4096" height="4096"></canvas>
 
                 <p id="exploration_more" class="exploration_text3">
                     ↓ More ↓
@@ -1436,7 +1453,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="exploration_block">
+                    <div id="realm_capacity_block" class="exploration_block">
                         <p id="realm_capacity_text" class="exploration_text3">
                             Realm Capacity
                             <br>1.000e4.053e18 g red spice
@@ -1755,6 +1772,9 @@
                     <button id="expand_confirm" class="settings_button" onclick="confirmations('expand')">
                         ?????
                     </button>
+                    <button id="realms_bg" class="settings_button" onclick="realms_bg(true)">
+                        ?????
+                    </button>
                 </div>
 
                 <div id="wipe_block" class="settings_block">
@@ -1795,7 +1815,7 @@
             </div>
 
             <p id="version" class="info">
-                Spice Idle v1.8.0<br>Made by Zakuro<br><br>Last updated March 13, 2025
+                Spice Idle v1.8.4<br>Made by Zakuro<br><br>Last updated March 25, 2025
             </p>
 
             <p id="classic_info" class="info">
@@ -1810,6 +1830,7 @@
             <a href="https://zakuro98.github.io/EXP-Simulator/" target="_blank" class="info link">EXP Simulator</a>
             <a href="https://discord.gg/fuQSBkYYqH" target="_blank" class="info link">Discord</a>
         </main>
+        <script src="lib/hack_timer.js" charset="utf-8" type="text/javascript"></script>
         <script src="lib/break_infinity.js" charset="utf-8" type="text/javascript"></script>
         <script src="lib/imperial.js" charset="utf-8" type="text/javascript"></script>
         <script src="lib/cancer.js" charset="utf-8" type="text/javascript"></script>
@@ -1820,7 +1841,12 @@
         <script src="settings.js" charset="utf-8" type="text/javascript"></script>
         <script src="reset.js" charset="utf-8" type="text/javascript"></script>
         <script src="event.js" charset="utf-8" type="text/javascript"></script>
-        <script src="graphics.js" charset="utf-8" type="text/javascript"></script>
+        <script src="ui/spices.js" charset="utf-8" type="text/javascript"></script>
+        <script src="ui/prestige.js" charset="utf-8" type="text/javascript"></script>
+        <script src="ui/ascension.js" charset="utf-8" type="text/javascript"></script>
+        <script src="ui/collapse.js" charset="utf-8" type="text/javascript"></script>
+        <script src="ui/expansion.js" charset="utf-8" type="text/javascript"></script>
+        <script src="ui/misc.js" charset="utf-8" type="text/javascript"></script>
         <script src="main.js" charset="utf-8" type="text/javascript"></script>
 <!--客服 开始-->
 <script src="//g8hh.github.io/static/js/jquery.min.js"></script>

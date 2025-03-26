@@ -1360,7 +1360,10 @@ function notation(not) {
     if (not === undefined) {
         game.notation++
         if (game.notation === 5) game.notation = 12
-        else if (game.notation === 14) game.notation = 5
+        else if (game.notation === 14) game.notation = 21
+        else if (game.notation === 22) game.notation = 5
+        else if (game.notation === 6) game.notation = 20
+        else if (game.notation === 21) game.notation = 6
         else if (game.notation === 8) {
             if (key.shift) game.notation = 16
             else game.notation = 9
@@ -1438,6 +1441,14 @@ function notation(not) {
             break
         case 19:
             document.getElementById("notation").innerHTML = "Notation<br>ARRAY"
+            break
+        case 20:
+            document.getElementById("notation").innerHTML =
+                "Notation<br>MIXED LOGARITHM"
+            break
+        case 21:
+            document.getElementById("notation").innerHTML =
+                "Notation<br>TRUNCATED STANDARD"
             break
     }
 }
@@ -1784,5 +1795,35 @@ function production_rates() {
         document.getElementById("production_rates").className =
             "settings_button"
         document.getElementById("production_rates").innerHTML = "?????"
+    }
+}
+
+//toggle fancy realms background
+function realms_bg(update) {
+    if (game.antispice_bought[8] >= 1 || game.expand >= 1) {
+        document.getElementById("realms_bg").className =
+            "settings_button can_modify"
+        if (game.fancy_realms) {
+            game.fancy_realms = false
+            document.getElementById("realms_bg").innerHTML =
+                "Exploration Background<br>SIMPLE"
+            if (update) {
+                document.getElementById("turbulence").style.display = "none"
+                document.getElementById("exploration_bg2").style.display =
+                    "none"
+            }
+        } else {
+            game.fancy_realms = true
+            document.getElementById("realms_bg").innerHTML =
+                "Exploration Background<br>FANCY"
+            if (update) {
+                document.getElementById("turbulence").style.display = "block"
+                document.getElementById("exploration_bg2").style.display =
+                    "block"
+            }
+        }
+    } else {
+        document.getElementById("realms_bg").className = "settings_button"
+        document.getElementById("realms_bg").innerHTML = "?????"
     }
 }

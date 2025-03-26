@@ -16,11 +16,12 @@ function fib(n, inf) {
 
 //initializing game variables
 let game = {
-    version: "1.8.0",
+    version: "1.8.4",
 
     tickspeed: 100,
     gamespeed: 1,
     seed: Array.from(crypto.getRandomValues(new Int32Array(4))),
+    new_generation: true,
 
     notation: 2,
     hotkeys: true,
@@ -39,6 +40,7 @@ let game = {
     realtime_production: false,
     antispice_confirm: true,
     expand_confirm: true,
+    fancy_realms: true,
 
     entry_hidden: new Array(23).fill(false),
     compendium_new: false,
@@ -46,7 +48,7 @@ let game = {
     global_spice_boost: new Decimal(1),
 
     red_spice: new Decimal(5),
-    highest_red_spice: new Decimal(5),
+    total_red_spice: new Decimal(5),
     red_spice_gen: [
         new Decimal(0),
         new Decimal(0),
@@ -85,7 +87,7 @@ let game = {
     red_strengthener_price: new Decimal(1000000),
 
     yellow_spice: new Decimal(5),
-    highest_yellow_spice: new Decimal(5),
+    total_yellow_spice: new Decimal(5),
     yellow_spice_gen: [
         new Decimal(0),
         new Decimal(0),
@@ -124,7 +126,7 @@ let game = {
     yellow_strengthener_price: new Decimal(3000000),
 
     green_spice: new Decimal(5),
-    highest_green_spice: new Decimal(5),
+    total_green_spice: new Decimal(5),
     green_spice_gen: [
         new Decimal(0),
         new Decimal(0),
@@ -163,7 +165,7 @@ let game = {
     green_strengthener_price: new Decimal(9000000),
 
     blue_spice: new Decimal(5),
-    highest_blue_spice: new Decimal(5),
+    total_blue_spice: new Decimal(5),
     blue_spice_gen: [
         new Decimal(0),
         new Decimal(0),
@@ -202,7 +204,7 @@ let game = {
     blue_strengthener_price: new Decimal(2.5e7),
 
     pink_spice: new Decimal(5),
-    highest_pink_spice: new Decimal(5),
+    total_pink_spice: new Decimal(5),
     pink_spice_gen: [
         new Decimal(0),
         new Decimal(0),
@@ -266,7 +268,7 @@ let game = {
     passive_prestige: 0,
 
     crystal_spice: new Decimal(0),
-    highest_crystal_spice: new Decimal(0),
+    total_crystal_spice: new Decimal(0),
     crystal_spice_gen: [
         new Decimal(0),
         new Decimal(0),
@@ -348,7 +350,7 @@ let game = {
     ascend_complete: new Array(6).fill(false),
 
     arcane_spice: new Decimal(0),
-    highest_arcane_spice: new Decimal(0),
+    total_arcane_spice: new Decimal(0),
     arcane_spice_gen: [
         new Decimal(0),
         new Decimal(0),
@@ -505,7 +507,7 @@ let game = {
     realm_effects: [0, 0, 0],
 
     dark_spice: new Decimal(0),
-    highest_dark_spice: new Decimal(0),
+    total_dark_spice: new Decimal(0),
     dark_spice_gen: [
         new Decimal(0),
         new Decimal(0),
@@ -707,6 +709,7 @@ function format_small(num, not) {
             }
         } else if (
             (not === 4 && num >= 1e9) ||
+            (not === 21 && num >= 1e9) ||
             ((not === 12 || not === 13) && num >= 1e9 && num < 1e36)
         ) {
             const single_array_cond = [
@@ -769,7 +772,10 @@ function format_small(num, not) {
 
             return lead_str + " " + one_str + ten_str
         } else if (not === 5 && num >= 1e9) {
-            return "e" + Math.log10(num).toFixed(6)
+            if (Math.log10(num) < 10) return "e" + Math.log10(num).toFixed(6)
+            else if (Math.log10(num) < 100)
+                return "e" + Math.log10(num).toFixed(5)
+            else return "e" + Math.log10(num).toFixed(4)
         } else if (not === 6 && num >= 1e9) {
             const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             let order = Math.floor(Math.log10(num) / 3) - 1
@@ -846,6 +852,11 @@ function format_small(num, not) {
             return format_cancer2(num, 6)
         } else if (not === 19) {
             return "[" + generate_string(num, false, 6) + "]"
+        } else if (not === 20 && num >= 1e9) {
+            let mantissa = num / 10 ** Math.floor(Math.log10(num))
+            if (Math.log10(num) < 100)
+                return mantissa.toFixed(6) + "e" + Math.floor(Math.log10(num))
+            else return mantissa.toFixed(5) + "e" + Math.floor(Math.log10(num))
         } else {
             return format_num(num, 0)
         }
@@ -1003,7 +1014,7 @@ if (meme_condition) {
     document.title = "Salt Idle"
     document.getElementById("spices").innerHTML = "SALTS"
     document.getElementById("version").innerHTML =
-        "Salt Idle v1.8.0<br>Made by Zakuro<br><br>Last updated March 13, 2025"
+        "Salt Idle v1.8.4<br>Made by Zakuro<br><br>Last updated March 25, 2025"
 }
 
 //initialize map
@@ -1195,12 +1206,12 @@ new spice_gen("crystal", 3, Decimal.pow(2, 84), "corporation", "corporations")
 new spice_gen("crystal", 4, Decimal.pow(2, 100), "planet", "planets")
 new spice_gen("crystal", 5, Decimal.pow(2, 124), "galaxy", "galaxies")
 //arcane
-new spice_gen("arcane", 0, new Decimal(531441), "glyph", "glyphs")
-new spice_gen("arcane", 1, Decimal.pow(3, 16), "spellbook", "spellbooks")
-new spice_gen("arcane", 2, Decimal.pow(3, 20), "wizard", "wizards")
-new spice_gen("arcane", 3, Decimal.pow(3, 36), "shrine", "shrines")
-new spice_gen("arcane", 4, Decimal.pow(3, 73), "cult", "cults")
-new spice_gen("arcane", 5, Decimal.pow(3, 107), "deity", "deities")
+new spice_gen("arcane", 0, new Decimal(177147), "glyph", "glyphs")
+new spice_gen("arcane", 1, Decimal.pow(3, 15), "spellbook", "spellbooks")
+new spice_gen("arcane", 2, Decimal.pow(3, 19), "wizard", "wizards")
+new spice_gen("arcane", 3, Decimal.pow(3, 35), "shrine", "shrines")
+new spice_gen("arcane", 4, Decimal.pow(3, 72), "cult", "cults")
+new spice_gen("arcane", 5, Decimal.pow(3, 106), "deity", "deities")
 //dark
 new spice_gen("dark", 0, new Decimal(1), "extractor", "extractors")
 new spice_gen("dark", 1, new Decimal(5), "replicator", "replicators")
@@ -1307,7 +1318,7 @@ new prestige_upgrade(
         spice_text[0] +
         "s boost the previous color based on that " +
         spice_text[0] +
-        "'s amount",
+        "'s total amount",
     new Decimal(32768),
     1
 )
@@ -1325,7 +1336,7 @@ new prestige_upgrade(
 )
 //[11]
 new prestige_upgrade(
-    "Red " + spice_text[0] + " boosts every other color by its amount",
+    "Red " + spice_text[0] + " boosts every other color by its total amount",
     new Decimal(2).pow(32),
     1
 )
@@ -1347,15 +1358,17 @@ new prestige_upgrade(
         spice_text[0] +
         " boosts pink " +
         spice_text[0] +
-        " by its amount",
+        " by its total amount",
     new Decimal(2).pow(81),
     1
 )
 //[15]
-new prestige_upgrade("Unlocks prestige automation", new Decimal(2).pow(100), 1)
+new prestige_upgrade("Unlocks Prestige automation", new Decimal(2).pow(100), 1)
 //[16]
 new prestige_upgrade(
-    "Crystallized " + spice_text[0] + " also boosts other colors by its amount",
+    "Crystallized " +
+        spice_text[0] +
+        " also boosts other colors by its total amount",
     new Decimal(2).pow(120),
     1
 )
@@ -1668,8 +1681,8 @@ new ascension_upgrade(
         spice_text[0] +
         " boosts crystallized " +
         spice_text[0] +
-        " by its amount",
-    new Decimal(29646),
+        " by its total amount",
+    new Decimal(14878),
     12,
     undefined,
     "0em",
@@ -1679,7 +1692,7 @@ new ascension_upgrade(
 //[14]
 new ascension_upgrade(
     "Increase boost from strengtheners/boosts<br>(4.00x -> 6.00x)",
-    new Decimal(169071),
+    new Decimal(56280),
     13,
     undefined,
     "0em",
@@ -1691,7 +1704,7 @@ new ascension_upgrade(
     "Times Ascended stat boosts rainbow " +
         spice_text[0] +
         " gains<br>(Currently: 1.00x)",
-    new Decimal(508536),
+    new Decimal(127260),
     14,
     undefined,
     "0em",
@@ -1701,7 +1714,7 @@ new ascension_upgrade(
 //[16]
 new ascension_upgrade(
     "Unlocks Challenge 1",
-    new Decimal(7336365),
+    new Decimal(733866),
     15,
     undefined,
     "0em",
@@ -1711,7 +1724,7 @@ new ascension_upgrade(
 //[17]
 new ascension_upgrade(
     "Unlocks automation for arcane enchantments",
-    new Decimal(66027286),
+    new Decimal(6601161),
     16,
     undefined,
     "-10em",
@@ -1724,7 +1737,7 @@ new ascension_upgrade(
         spice_text[0] +
         " boosts crystallized " +
         spice_text[0] +
-        " by its amount",
+        " by its total amount",
     new Decimal(9.007199321849856e15),
     17,
     undefined,
@@ -1770,7 +1783,7 @@ new ascension_upgrade(
         spice_text[0] +
         " boosts crystallized " +
         spice_text[0] +
-        " by its amount",
+        " by its total amount",
     new Decimal(4.137798775129687e30),
     21,
     undefined,
@@ -1856,7 +1869,7 @@ new ascension_upgrade(
         spice_text[0] +
         " boosts arcane " +
         spice_text[0] +
-        " by its amount",
+        " by its total amount",
     Decimal.pow(10, 385).mul(4.3167666593814529),
     28,
     undefined,
@@ -1866,7 +1879,7 @@ new ascension_upgrade(
 )
 //[31]
 new ascension_upgrade(
-    "Arcane " + spice_text[0] + " boosts itself by its amount",
+    "Arcane " + spice_text[0] + " boosts itself by its total amount",
     Decimal.pow(10, 501).mul(7.5039392714382114),
     27,
     28,
@@ -1978,7 +1991,7 @@ class ascension_challenge {
 new ascension_challenge(
     "Crystal infusions cannot be purchased<br>Reward: Unlock arcane " +
         spice_text[0],
-    Decimal.pow(10, 500),
+    Decimal.pow(10, 450),
     16
 )
 //challenge 2
@@ -3096,151 +3109,122 @@ function randn_bm() {
 
 const min_scaling = new Array()
 min_scaling.push([
-    [0, -50],
+    [0, -80],
     [0.2, -15],
     [0.35, -2],
     [0.5, 0],
     [0.9, 10],
+    [0.98, 20],
+    [1, 20],
 ])
 min_scaling.push([
-    [0, -50],
+    [0, -80],
     [0.2, -15],
     [0.35, -1],
     [0.5, 0],
     [0.9, 5],
+    [0.98, 15],
+    [1, 15],
 ])
 min_scaling.push([
-    [0, -25],
+    [0, -40],
     [0.2, 0],
     [0.9, 0],
+    [0.98, 10],
+    [1, 10],
 ])
 
 const max_scaling = new Array()
 max_scaling.push([
-    [0, -25],
+    [0, -40],
     [0.2, 0],
     [0.35, 4],
     [0.5, 15],
     [0.9, 50],
+    [0.98, 80],
+    [1, 80],
 ])
 max_scaling.push([
-    [0, -25],
+    [0, -40],
     [0.2, 0],
     [0.35, 2],
     [0.5, 10],
     [0.9, 40],
+    [0.98, 65],
+    [1, 65],
 ])
 max_scaling.push([
-    [0, -10],
+    [0, -20],
     [0.2, 0],
     [0.5, 0],
     [0.9, 30],
+    [0.98, 50],
+    [1, 50],
 ])
 
 function realm_randomize(type, distance) {
-    if (distance > 0.9) {
-        switch (type) {
-            case 0:
-                return 20 + 55 * randn_bm()
-            case 1:
-                return 15 + 45 * randn_bm()
-            case 2:
-                return 10 + 35 * randn_bm()
-        }
-    } else {
-        let min_index = 0
-        while (distance > min_scaling[type][min_index + 1][0]) {
-            min_index++
-        }
-        let max_index = 0
-        while (distance > max_scaling[type][max_index + 1][0]) {
-            max_index++
-        }
-
-        let min_domain =
-            min_scaling[type][min_index + 1][0] -
-            min_scaling[type][min_index][0]
-        let min_range =
-            min_scaling[type][min_index + 1][1] -
-            min_scaling[type][min_index][1]
-        let min_slope = min_range / min_domain
-        let min_value =
-            min_slope * (distance - min_scaling[type][min_index][0]) +
-            min_scaling[type][min_index][1]
-
-        let max_domain =
-            max_scaling[type][max_index + 1][0] -
-            max_scaling[type][max_index][0]
-        let max_range =
-            max_scaling[type][max_index + 1][1] -
-            max_scaling[type][max_index][1]
-        let max_slope = max_range / max_domain
-        let max_value =
-            max_slope * (distance - max_scaling[type][max_index][0]) +
-            max_scaling[type][max_index][1]
-
-        return min_value + (max_value - min_value) * randn_bm()
+    let min_index = 0
+    while (distance > min_scaling[type][min_index + 1][0]) {
+        min_index++
     }
+    let max_index = 0
+    while (distance > max_scaling[type][max_index + 1][0]) {
+        max_index++
+    }
+
+    let min_domain =
+        min_scaling[type][min_index + 1][0] - min_scaling[type][min_index][0]
+    let min_range =
+        min_scaling[type][min_index + 1][1] - min_scaling[type][min_index][1]
+    let min_slope = min_range / min_domain
+    let min_value =
+        min_slope * (distance - min_scaling[type][min_index][0]) +
+        min_scaling[type][min_index][1]
+
+    let max_domain =
+        max_scaling[type][max_index + 1][0] - max_scaling[type][max_index][0]
+    let max_range =
+        max_scaling[type][max_index + 1][1] - max_scaling[type][max_index][1]
+    let max_slope = max_range / max_domain
+    let max_value =
+        max_slope * (distance - max_scaling[type][max_index][0]) +
+        max_scaling[type][max_index][1]
+
+    return min_value + (max_value - min_value) * randn_bm()
 }
 
 function realm_range(type, distance, end) {
-    if (distance > 0.9) {
-        if (end === 1) {
-            switch (type) {
-                case 0:
-                    return 75
-                case 1:
-                    return 60
-                case 2:
-                    return 45
-            }
-        } else if (end === 0) {
-            switch (type) {
-                case 0:
-                    return 20
-                case 1:
-                    return 15
-                case 2:
-                    return 10
-            }
-        }
-    } else {
-        let min_index = 0
-        while (distance > min_scaling[type][min_index + 1][0]) {
-            min_index++
-        }
-        let max_index = 0
-        while (distance > max_scaling[type][max_index + 1][0]) {
-            max_index++
-        }
+    let min_index = 0
+    while (distance > min_scaling[type][min_index + 1][0]) {
+        min_index++
+    }
+    let max_index = 0
+    while (distance > max_scaling[type][max_index + 1][0]) {
+        max_index++
+    }
 
-        let min_domain =
-            min_scaling[type][min_index + 1][0] -
-            min_scaling[type][min_index][0]
-        let min_range =
-            min_scaling[type][min_index + 1][1] -
-            min_scaling[type][min_index][1]
-        let min_slope = min_range / min_domain
-        let min_value =
-            min_slope * (distance - min_scaling[type][min_index][0]) +
-            min_scaling[type][min_index][1]
+    let min_domain =
+        min_scaling[type][min_index + 1][0] - min_scaling[type][min_index][0]
+    let min_range =
+        min_scaling[type][min_index + 1][1] - min_scaling[type][min_index][1]
+    let min_slope = min_range / min_domain
+    let min_value =
+        min_slope * (distance - min_scaling[type][min_index][0]) +
+        min_scaling[type][min_index][1]
 
-        let max_domain =
-            max_scaling[type][max_index + 1][0] -
-            max_scaling[type][max_index][0]
-        let max_range =
-            max_scaling[type][max_index + 1][1] -
-            max_scaling[type][max_index][1]
-        let max_slope = max_range / max_domain
-        let max_value =
-            max_slope * (distance - max_scaling[type][max_index][0]) +
-            max_scaling[type][max_index][1]
+    let max_domain =
+        max_scaling[type][max_index + 1][0] - max_scaling[type][max_index][0]
+    let max_range =
+        max_scaling[type][max_index + 1][1] - max_scaling[type][max_index][1]
+    let max_slope = max_range / max_domain
+    let max_value =
+        max_slope * (distance - max_scaling[type][max_index][0]) +
+        max_scaling[type][max_index][1]
 
-        if (end === 1) {
-            return max_value
-        } else if (end === 0) {
-            return min_value
-        }
+    if (end === 1) {
+        return max_value
+    } else if (end === 0) {
+        return min_value
     }
 }
 
@@ -3364,9 +3348,9 @@ function generate_realms() {
                     Math.sin(
                         1 / (turn * dir) + order[i] * 0.4 * Math.PI + spin
                     ),
-                -80,
-                -80,
-                -50,
+                -99,
+                -99,
+                -90,
                 1.5,
                 "hsl(" +
                     random_float() * 360 +
@@ -3390,9 +3374,9 @@ function generate_realms() {
                     Math.sin(
                         1 / (turn * dir) + order[i] * 0.4 * Math.PI + spin
                     ),
-                -37.5,
-                -37.5,
-                -17.5,
+                -60,
+                -60,
+                -30,
                 1.5,
                 "hsl(" +
                     random_float() * 360 +
@@ -3415,13 +3399,37 @@ function generate_realms() {
         for (let j = 0; j < 98; j++) {
             distance.push(j * 0.01 + 0.02)
         }
-        if (i === 0) {
-            for (let j = 0; j < 600; j++) {
-                distance.push(random_float() ** 0.8 * 0.98 + 0.02)
+        if (game.new_generation) {
+            if (i === 0) {
+                for (let j = 0; j < 699; j++) {
+                    let rand = random_float()
+                    distance.push(
+                        ((2 * rand - rand ** 2) /
+                            (1 + 2 * rand - 2 * rand ** 2)) *
+                            0.98 +
+                            0.02
+                    )
+                }
+            } else {
+                for (let j = 0; j < 701; j++) {
+                    let rand = random_float()
+                    distance.push(
+                        ((2 * rand - rand ** 2) /
+                            (1 + 2 * rand - 2 * rand ** 2)) *
+                            0.98 +
+                            0.02
+                    )
+                }
             }
         } else {
-            for (let j = 0; j < 601; j++) {
-                distance.push(random_float() ** 0.8 * 0.98 + 0.02)
+            if (i === 0) {
+                for (let j = 0; j < 600; j++) {
+                    distance.push(random_float() ** 0.8 * 0.98 + 0.02)
+                }
+            } else {
+                for (let j = 0; j < 601; j++) {
+                    distance.push(random_float() ** 0.8 * 0.98 + 0.02)
+                }
             }
         }
         distance.sort(function (a, b) {
@@ -3434,12 +3442,19 @@ function generate_realms() {
         let fail_count = 0
 
         while (distance.length > 0) {
-            if (fail_count > 200) break
+            if (game.new_generation && fail_count > 1000) break
+            if (!game.new_generation && fail_count > 200) break
 
             let width = 1.25 - 1.25 * distance[0]
             if (distance[0] < 0.2) width = 1
             let shift =
                 random_float() * width * 0.4 * Math.PI - width * 0.2 * Math.PI
+            if (
+                game.new_generation &&
+                distance[0] === 0.65 &&
+                realm.realms.length <= 6
+            )
+                shift = 0
 
             let x =
                 radius *
@@ -3473,6 +3488,12 @@ function generate_realms() {
                             shift =
                                 random_float() * width * 0.4 * Math.PI -
                                 width * 0.2 * Math.PI
+                            if (
+                                game.new_generation &&
+                                distance[0] === 0.65 &&
+                                realm.realms.length <= 6
+                            )
+                                shift = 0
                             x =
                                 radius *
                                 distance[0] *
@@ -3508,7 +3529,11 @@ function generate_realms() {
             }
 
             if (status === "passed") {
-                if (distance[0] === 0.65 && i == 0) {
+                if (
+                    distance[0] === 0.65 &&
+                    ((realm.realms.length <= 6 && game.new_generation) ||
+                        (i === 0 && !game.new_generation))
+                ) {
                     new realm(
                         x,
                         y,
@@ -3528,6 +3553,51 @@ function generate_realms() {
                             "%)",
                         random_float() * 180
                     )
+                    if (game.new_generation) {
+                        let direction = Math.atan2(y, x) + Math.PI
+                        let normal_stat = realm_randomize(0, 0.375)
+                        let special_stat = realm_randomize(1, 0.375)
+                        let reset_stat = realm_randomize(2, 0.375)
+                        let normal_quality =
+                            0.5 +
+                            (normal_stat - realm_range(0, 0.375, 0)) /
+                                (realm_range(0, 0.375, 1) -
+                                    realm_range(0, 0.375, 0))
+                        let special_quality =
+                            0.5 +
+                            (special_stat - realm_range(1, 0.375, 0)) /
+                                (realm_range(1, 0.375, 1) -
+                                    realm_range(1, 0.375, 0))
+                        let size =
+                            0.5 +
+                            1 /
+                                (1 +
+                                    Math.exp(
+                                        -4.5 *
+                                            (normal_quality +
+                                                special_quality -
+                                                2)
+                                    ))
+                        new realm(
+                            x + 39.9 * Math.cos(direction),
+                            y + 39.9 * Math.sin(direction),
+                            normal_stat,
+                            special_stat,
+                            reset_stat,
+                            size,
+                            "hsl(" +
+                                random_float() * 360 +
+                                ", 100%, " +
+                                (random_float() ** 3 * 60 + 40) +
+                                "%)",
+                            "hsl(" +
+                                random_float() * 360 +
+                                ", 100%, " +
+                                (random_float() ** 3 * 60 + 40) +
+                                "%)",
+                            random_float() * 180
+                        )
+                    }
                 } else {
                     let normal_stat = realm_randomize(0, 1 - distance[0])
                     let special_stat = realm_randomize(1, 1 - distance[0])
@@ -3614,27 +3684,50 @@ function generate_realms() {
         )
     }
 
+    let mobile = Number(
+        getComputedStyle(document.body).getPropertyValue("--mobile")
+    )
+
     document.getElementsByTagName("main")[0].style.display = "block"
     document.getElementById("expansion_page").style.display = "block"
+
+    let total_length = document.getElementById("exploration_map").scrollWidth
 
     document.getElementById("exploration_view").style.zoom =
         (document.getElementById("exploration_screen").offsetWidth * 100) /
             2560 +
         "%"
+    if (mobile)
+        document.getElementById("exploration_view").style.zoom =
+            (document.getElementById("exploration_screen").offsetWidth *
+                100 *
+                29376) /
+                (2560 * 0.43 * total_length) +
+            "%"
 
-    let total_length = document.getElementById("exploration_map").scrollWidth
     let screen_width = document.getElementById("exploration_view").clientWidth
     let screen_height = document.getElementById("exploration_view").clientHeight
     let unit = total_length / 3400
 
-    document.getElementById("exploration_view").scrollLeft =
-        realm.realms[game.current_realm].x * unit +
-        total_length / 2 -
-        screen_width / 2
-    document.getElementById("exploration_view").scrollTop =
-        realm.realms[game.current_realm].y * unit +
-        total_length / 2 -
-        screen_height / 2
+    if (mobile) {
+        document.getElementById("exploration_view").scrollLeft =
+            -realm.realms[game.current_realm].y * unit +
+            total_length / 2 -
+            screen_width / 2
+        document.getElementById("exploration_view").scrollTop =
+            realm.realms[game.current_realm].x * unit +
+            total_length / 2 -
+            screen_height / 2
+    } else {
+        document.getElementById("exploration_view").scrollLeft =
+            realm.realms[game.current_realm].x * unit +
+            total_length / 2 -
+            screen_width / 2
+        document.getElementById("exploration_view").scrollTop =
+            realm.realms[game.current_realm].y * unit +
+            total_length / 2 -
+            screen_height / 2
+    }
 
     document.getElementsByTagName("main")[0].style.display = "none"
     if (game.tab !== 4 || game.subtab[5] !== 0)
@@ -3693,14 +3786,21 @@ function generate_realms() {
     let duplicate_count = 0
 
     let k = 200
+    if (game.new_generation) k = 228
     let clusters = new Array(k)
     for (let i = 0; i < k; i++) {
         clusters[i] = new Array()
     }
     let seeds = new Array()
     let temp_seeds = new Array()
-    for (let i = 0; i < 3495; i++) {
-        temp_seeds.push(realm.realms[i + 6])
+    if (game.new_generation) {
+        for (let i = 0; i < 3995; i++) {
+            temp_seeds.push(realm.realms[i + 6])
+        }
+    } else {
+        for (let i = 0; i < 3495; i++) {
+            temp_seeds.push(realm.realms[i + 6])
+        }
     }
     for (let i = 0; i < k; i++) {
         let s = Math.floor(random_float() * temp_seeds.length)
@@ -3913,6 +4013,75 @@ function generate_realms() {
 
     console.log("name generation failed " + duplicate_count + " times")
 
+    document.getElementById("noise_seed").seed.baseVal = Math.floor(
+        random_float() * 1000000
+    )
+
+    ctx = document.getElementById("exploration_stars").getContext("2d")
+    ctx.clearRect(0, 0, 4096, 4096)
+    ctx.fillStyle = "white"
+    for (let i = 0; i < 1000; i++) {
+        let rx = Math.floor(random_float() * 4096)
+        let ry = Math.floor(random_float() * 4096)
+        ctx.globalAlpha = random_float() ** 2.5
+        ctx.beginPath()
+        ctx.moveTo(rx + 2, ry)
+        ctx.lineTo(rx, ry + 2)
+        ctx.lineTo(rx - 2, ry)
+        ctx.lineTo(rx, ry - 2)
+        ctx.lineTo(rx + 2, ry)
+        ctx.closePath()
+        ctx.fill()
+    }
+
+    document.getElementById("exploration_bg2").style.backgroundImage =
+        "url(" + document.getElementById("exploration_stars").toDataURL() + ")"
+
+    if (game.fancy_realms) {
+        document.getElementById("turbulence").style.display = "block"
+        document.getElementById("exploration_bg2").style.display = "block"
+    } else {
+        document.getElementById("turbulence").style.display = "none"
+        document.getElementById("exploration_bg2").style.display = "none"
+    }
+
+    if (game.realms_visited.length >= 2) {
+        for (let i = 1; i < game.realms_visited.length; i++) {
+            let current = realm.realms[game.realms_visited[i]]
+            let closest = realm.realms[game.realms_visited[0]]
+            for (let j = 0; j < i; j++) {
+                if (
+                    (current.x - realm.realms[game.realms_visited[j]].x) ** 2 +
+                        (current.y - realm.realms[game.realms_visited[j]].y) **
+                            2 <
+                    (current.x - closest.x) ** 2 + (current.y - closest.y) ** 2
+                )
+                    closest = realm.realms[game.realms_visited[j]]
+            }
+
+            let line = document.createElement("DIV")
+            let rx = 1020 + 0.6 * current.x
+            let ry = 1020 + 0.6 * current.y
+            let tx = 1020 + 0.6 * closest.x
+            let ty = 1020 + 0.6 * closest.y
+            let length = ((rx - tx) ** 2 + (ry - ty) ** 2) ** 0.5 - 7.5
+            let cx = (rx + tx) / 2 - length / 2
+            let cy = (ry + ty) / 2 - 0.25
+
+            line.className = "realm_line"
+
+            line.style.left = cx + "em"
+            line.style.top = cy + "em"
+            line.style.width = length + "em"
+            line.style.transform =
+                "rotate(" +
+                Math.atan2(ry - ty, rx - tx) * (180 / Math.PI) +
+                "deg)"
+
+            document.getElementById("exploration_map").appendChild(line)
+        }
+    }
+
     console.log("took " + (Date.now() - start_time) + " ms")
 }
 
@@ -3959,7 +4128,7 @@ new galactic_upgrade(
         spice_text[0] +
         " boosts dark " +
         spice_text[0] +
-        " extractors by its amount",
+        " extractors by its total amount",
     new Decimal(1)
 )
 //[1]
@@ -4019,7 +4188,7 @@ new galactic_upgrade(
         spice_text[0] +
         " boosts arcane " +
         spice_text[0] +
-        " production by its amount",
+        " production by its total amount",
     fib(42, true)
 )
 //[12]
@@ -4138,7 +4307,7 @@ class compendium {
     }
 }
 
-let entry_unlocked = new Array(20).fill(false)
+let entry_unlocked = new Array(14).fill(false)
 
 function entry_unlock(id) {
     entry_unlocked[id] = true
@@ -4148,399 +4317,122 @@ function entry_unlock(id) {
 
 //initializing compendium entries
 new compendium(
-    "THE " + spice_text[2] + " UNIVERSE",
-    spice_text[1] +
-        "s are a fundamental substance that govern almost everything that goes on in your universe. " +
-        "They are the first commodity of any civilization, and become the most integral part of their economies." +
-        "<br><br>" +
-        spice_text[1] +
-        " deposits can be found on just about any planet, on the surface or underground. " +
-        "They can be gathered with a Harvester, a very basic tool that even primitive civilizations can make." +
-        "<br><br>" +
-        spice_text[1] +
-        "s can be found everywhere in this universe, and you've set it upon yourself to exploit them to conquer the universe with your " +
-        spice_text[0] +
-        " empire.",
-    "compendium_default"
-)
-new compendium(
     "RED " + spice_text[2],
-    "The " +
+    "- the most common natural " +
         spice_text[0] +
-        " native to your homeworld has a very red hue, giving it its name. " +
-        "Red " +
-        spice_text[0] +
-        " is quite common in the universe, and most " +
-        spice_text[0] +
-        " empires will start their journey with it." +
-        "<br><br>When subject to enough pressure, red " +
-        spice_text[0] +
-        " can emit a significant amount of heat, making it useful for a variety of industrial and culinary applications." +
-        "<br><br>Red " +
-        spice_text[0] +
-        " has the ordinary spicy flavor that you would expect from a " +
-        spice_text[0] +
-        ", and as such it is an obvious choice for many dishes.",
+        "<br>- emits heat when subject to enough pressure<br>- has a spicy flavor",
     "red_spice"
 )
 new compendium(
     "YELLOW " + spice_text[2],
-    "After a breakthrough, your empire discovered not only yellow " +
-        spice_text[0] +
-        ", but also that more " +
-        spice_text[0] +
-        " colors are probable to exist. " +
-        "While these " +
-        spice_text[0] +
-        " colors are unsurprisingly far less ubiquitous than red " +
-        spice_text[0] +
-        ", it seems large " +
-        spice_text[0] +
-        " empires have already been utilizing them before you." +
-        "<br><br>Yellow " +
-        spice_text[0] +
-        " has an exceptional capacity for absorbing and retaining energy, making it useful as both an energy source and an efficient method of energy storage. " +
-        "Due to these properties, natural yellow " +
-        spice_text[0] +
-        " is often found already full of energy." +
-        "<br><br>Yellow " +
-        spice_text[0] +
-        " has a distinctive sour, almost citrusy flavor, and is now often used in sour candies and other similar foods in that niche.",
+    "- capable of absorbing and retaining energy<br>- often found in an energized state already<br>- has a sour, citrus-like flavor",
     "yellow_spice",
     0
 )
 new compendium(
     "GREEN " + spice_text[2],
-    "Green " +
-        spice_text[0] +
-        " has an incredibly nutrient-rich composition, allowing it to perform very well as a fertilizer. " +
-        "For this reason, it is now the dominant resource for your empire's agricultural practices." +
-        "<br><br>However, this nutrient-rich composition gives it a considerable earthy flavor, so it is rarely seen used as an actual " +
-        spice_text[0] +
-        ".",
+    "- an effective fertilizer due to its nutrient-rich composition<br>- has an earthy flavor",
     "green_spice",
     1
 )
 new compendium(
     "BLUE " + spice_text[2],
-    "Blue " +
-        spice_text[0] +
-        "'s structure causes it to favor endothermic reactions. Because of this, it has an exceptional ability to cool things. " +
-        "This has a variety of applications such as refrigeration, or as a coolant for mechanical or electrical systems." +
-        "<br><br>Similarly, it has a cool and refreshing flavor, finding its way as an ingredient in many cold beverages.",
+    "- its inherent structure enables efficient heat absorption<br>- thus a very good coolant<br>- has a cool and refreshing flavor",
     "blue_spice",
     2
 )
 new compendium(
     "PINK " + spice_text[2],
-    "Pink " +
+    "- the most valuable natural " +
         spice_text[0] +
-        " has a surprising amount of structural integrity. " +
-        "It loves to stick together, and as such it makes for a very good adhesive. " +
-        "It is also useful as an ingredient in building materials to make them more durable." +
-        "<br><br>The flavor of pink " +
-        spice_text[0] +
-        " is sweet and intensely fruity, making it a highly sought after ingredient for many confections and candies." +
-        "<br><br>These two properties together make pink " +
-        spice_text[0] +
-        " the most valuable " +
-        spice_text[0] +
-        " you've discovered by far, and it easily becomes the defining commodity in the economies of all " +
-        spice_text[0] +
-        " empires that get their hands on it.",
+        "<br>- exhibits remarkable structural integrity<br>- has a strong tendency to adhere to itself<br>- has a sweet and intensely fruity flavor",
     "pink_spice",
     3
 )
 new compendium(
-    "COLOR SHIFTS",
-    "Your empire has found a device that - when fed a large amount of " +
+    "RAINBOW " + spice_text[2],
+    "- created by the fusion of all natural " +
         spice_text[0] +
-        "s - returns a lot of energy and data, leading your researchers to discover a new 'color' of " +
-        spice_text[0] +
-        ". " +
-        'This event has been dubbed a "Color Shift", and your researchers predict that subsequent Color Shifts may reveal even more colors.',
-    "compendium_default",
-    0
-)
-new compendium(
-    "COLOR BOOSTS",
-    "The data from your last Color Shift led you to the discovery of pink " +
-        spice_text[0] +
-        ", but it also seems to suggest that there are no more natural " +
-        spice_text[0] +
-        "s to discover. " +
-        "Following this realization, your empire has decided to instead focus the gathered energy on empowering the production of the five " +
-        spice_text[0] +
-        " colors you already have in your inventory. " +
-        'This new, different usage of the Color Shift device is instead called a "Color Boost".',
-    "compendium_default",
+        "s<br>- explosively reactive, even in small quantities<br>- flavor unknown due to its lethal properties",
+    "rainbow_spice",
     4
 )
 new compendium(
-    "PRESTIGE",
-    "Each Color Boost gathers more and more energy, and with enough of it, " +
+    "CRYSTALLIZED " + spice_text[2],
+    "- produced by smelting pink " +
         spice_text[0] +
-        " fusion is possible. " +
-        "All five of your " +
+        " into a solid form<br>- a nearly indestructible material<br>- the smelting process utilizes rainbow " +
         spice_text[0] +
-        " colors can be fused together, although without even more energy an efficient fusion isn't possible. " +
-        "As such, most of your " +
-        spice_text[0] +
-        "s will be lost in the process, but what survives will be in the form of a new " +
-        spice_text[0] +
-        ": rainbow " +
-        spice_text[0] +
-        "." +
-        "<br><br>This " +
-        spice_text[0] +
-        ' fusion event is known as "Prestige".',
-    "rainbow_spice",
+        " as a fuel source",
+    "crystal_spice",
     5
 )
 new compendium(
-    "RAINBOW " + spice_text[2],
-    "The first type of " +
+    "RUNES",
+    "- can be found in higher dimensional space<br>- appear to manifest in one of four varieties<br>- radiate powerful energy that can be channeled into specific " +
         spice_text[0] +
-        " produced unnaturally, rainbow " +
-        spice_text[0] +
-        " exists as the fusion of the five natural " +
-        spice_text[0] +
-        " colors into one " +
-        spice_text[0] +
-        ". " +
-        "This amalgamation causes rainbow " +
-        spice_text[0] +
-        " to be very highly reactive, even in small quantities." +
-        "<br><br>The flavor of rainbow " +
-        spice_text[0] +
-        " is unknown, as consuming enough rainbow " +
-        spice_text[0] +
-        " to get any sense of flavor from it would be almost instantly lethal." +
-        "<br><br>However, the explosive abilities of rainbow " +
-        spice_text[0] +
-        " are not to be underestimated, and they have many applications if used in a controlled manner. " +
-        "The study of rainbow " +
-        spice_text[0] +
-        " is sure to unveil many powerful tools for your empire.",
-    "rainbow_spice",
+        "s",
+    "runes",
     6
 )
 new compendium(
-    "CRYSTALLIZED " + spice_text[2],
-    "Crystallized " +
-        spice_text[0] +
-        " is created by placing pink " +
-        spice_text[0] +
-        " into a blast furnace, and heating it up until it melts. " +
-        "After removing it from the furnace, it will cool and crystallize into a solid form. " +
-        "The explosive properties of rainbow " +
-        spice_text[0] +
-        " are integral to the operation of this furnace." +
-        "<br><br>This new solid form of pink " +
-        spice_text[0] +
-        " enhances its cohesiveness even further, making crystallized " +
-        spice_text[0] +
-        " a nearly indestructible material. " +
-        "This will be incredibly useful for just about anything your empire could build.",
-    "crystal_spice",
+    "ARCANE " + spice_text[2],
+    "- the material runes are made of<br>- has magic-like influence over the spacetime continuum<br>- has an unexpectedly strong bitter flavor",
+    "arcane_spice",
     7
 )
 new compendium(
-    "CRYSTAL INFUSIONS",
-    "The device behind Color Shifts and Color Boosts can be modified to create a new device. " +
-        "This device can instead be fed with crystallized " +
+    "ATOMIC " + spice_text[2],
+    "- the smallest, indivisible and most fundamental unit of " +
         spice_text[0] +
-        ", and produces a much more substantial boost to the production of the ordinary " +
-        spice_text[0] +
-        " colors. " +
-        'This third iteration of the Color Shift idea is called a "Crystal Infusion".',
-    "crystal_spice",
+        "<br>- all spices are made up of atomic spice",
+    "atomic_spice",
     8
 )
 new compendium(
-    "ASCENSION",
-    "Your empire is now starting to rival even the largest " +
+    "UNSTABLE " + spice_text[2],
+    "- created by colliding atomic " +
         spice_text[0] +
-        " empires, and your studies have led to the discovery of the ways of Ascension. " +
-        "You can now Ascend your empire to the next plane of being. " +
-        "All will be left behind, but in the process, mysterious cosmic runes manifest into existence.",
-    "runes",
+        ' together<br>- highly radioactive and undergoes decay into a lower energy state known as "decayed ' +
+        spice_text[0] +
+        '"<br>- the decay process releases tremendous energy',
+    "unstable_spice",
     9
 )
 new compendium(
-    "RUNES",
-    "The raw runes conjured into being by Ascension are all of the same composition, and they all bear the same glyph: the Ansuz rune. " +
-        "These Ansuz runes have no inherent abilities. " +
-        "Their purpose lies instead in serving as a vessel for transmutation into other rune types. " +
-        "These other runes continuously radiate energies of different kinds, which will greatly empower your empire moving forward." +
-        "<br><br>The material these runes are constructed out of remains a mystery, but studying them may unlock some very strong abilities for your " +
+    "ANTI" + spice_text[2],
+    '- each spice has an opposite form, referred to as its "anti' +
         spice_text[0] +
-        " empire.",
-    "runes",
+        '"<br>- the most fundamental anti' +
+        spice_text[0] +
+        " is the inverse counterpart of atomic " +
+        spice_text[0] +
+        "<br>- other anti" +
+        spice_text[0] +
+        "s can be synthesized by bombarding their ordinary form with basic anti" +
+        spice_text[0] +
+        "<br>- anti" +
+        spice_text[0] +
+        "s exhibit significantly amplified properties compared to their original forms",
+    "pure_antispice",
     10
 )
 new compendium(
-    "ARCANE " + spice_text[2],
-    "The material the cosmic runes are made of has finally been identified. " +
-        "It is an entirely new type of " +
-        spice_text[0] +
-        ' your researchers are calling "arcane ' +
-        spice_text[0] +
-        '". ' +
-        "You've also found a way to use the powers of the runes to channel it into being in " +
-        spice_text[0] +
-        " form." +
-        "<br><br>Arcane " +
-        spice_text[0] +
-        "'s influence over the spacetime continuum seems to transcend the very laws of physics themselves - almost like magic - and this ability is still not well understood." +
-        "<br><br>Arcane " +
-        spice_text[0] +
-        " has an unexpectedly strong bitter flavor, but this does not stop it from finding its niche in your culinary industry.",
-    "arcane_spice",
+    "REALMS",
+    '- the largest known structures in the universe<br>- each Realm exists as a separate, self-contained "bubble" encompassing countless galaxies<br>- travelling between Realms requires immense energy',
+    "rainbow_antispice",
     11
 )
 new compendium(
-    "ARCANE ENCHANTMENTS",
-    "Rehashing the same idea as Crystal Infusions, a similar device can be created that utilizes arcane " +
-        spice_text[0] +
-        "'s abilities to enhance the efficiency of your crystallized " +
-        spice_text[0] +
-        " production by an enormous amount. " +
-        'This higher, more specialized variant of the Crystal Infusion has been dubbed an "Arcane Enchantment".',
-    "arcane_spice",
+    "GALACTIC SHARDS",
+    "- remnants of the cosmos left behind by your past journeys<br>- full of cosmic essence, enabling advanced study of and power over the workings of the universe<br>- they seem incomplete, as if they could be combined to form something",
+    "galactic_shards",
     12
 )
 new compendium(
-    "COLOR AUGMENTS",
-    "Your empire has finally surpassed all other " +
-        spice_text[0] +
-        " empires, and you should be proud of this accomplishment. " +
-        "But, you now find trouble gathering enough " +
-        spice_text[0] +
-        "s for Color Boosts, when you didn't before. " +
-        "Perhaps you're missing something...",
-    "rainbow_spice",
+    "DARK " + spice_text[2],
+    "- predominantly found within black holes<br>- exhibits rapidly increasing gravitational pull as its mass accumulates<br>- can only be extracted by warping the gravitational field to draw it out<br>- has a vague raspberry-like flavor when consumed in safe amounts",
+    "dark_spice",
     13
-)
-new compendium(
-    "COLLAPSE",
-    "Your researchers have been on the issue for awhile, and they've found that you have just enough resources to Collapse the universe. " +
-        'By dismantling the entire universe, a new entity known as "atomic ' +
-        spice_text[0] +
-        '" can be extracted. ' +
-        "The universe is then reassembled.",
-    "atomic_spice",
-    14
-)
-new compendium(
-    "ATOMIC " + spice_text[2],
-    "The discovery of atomic " +
-        spice_text[0] +
-        " may just be the key to the continued growth of your " +
-        spice_text[0] +
-        " empire. " +
-        "Atomic " +
-        spice_text[0] +
-        " is the smallest, indivisible and most fundamental unit of " +
-        spice_text[0] +
-        ". " +
-        "All " +
-        spice_text[0] +
-        " types are ultimately made of atomic " +
-        spice_text[0] +
-        ", arranged into different structures and formations." +
-        "<br><br>The study and mastery of atomic " +
-        spice_text[0] +
-        " manipulation may pave the way to some interesting new means of progression.",
-    "atomic_spice",
-    15
-)
-new compendium(
-    "THE " + spice_text[2] + " COLLIDER",
-    "Following the discovery of atomic " +
-        spice_text[0] +
-        ", your scientists invented an enormous contraption: the " +
-        spice_text[1] +
-        " Collider. " +
-        "It accelerates individual units of atomic " +
-        spice_text[0] +
-        " to incredible speeds before letting them collide, for the purpose of researching whatever may result from this event. " +
-        "The " +
-        spice_text[1] +
-        " Collider will allow you to gain further insights into atomic " +
-        spice_text[0] +
-        " and the nature of all " +
-        spice_text[0] +
-        "s, and potentially even create new " +
-        spice_text[0] +
-        "s.",
-    "atomic_spice",
-    16
-)
-new compendium(
-    "UNSTABLE " + spice_text[2],
-    '"Unstable ' +
-        spice_text[0] +
-        '" is the first new ' +
-        spice_text[0] +
-        " that was created in the " +
-        spice_text[1] +
-        " Collider. " +
-        'It is highly radioactive and does not want to stay in this form, thus it decays over time into its lower energy form, known as "decayed ' +
-        spice_text[0] +
-        '".' +
-        "<br><br>Unstable " +
-        spice_text[0] +
-        " was initially thought of as a failure of the " +
-        spice_text[1] +
-        " Collider. " +
-        "However, your scientists soon noticed that the transformation from unstable " +
-        spice_text[0] +
-        " into decayed " +
-        spice_text[0] +
-        " releases an incredible amount of energy. " +
-        "This has many applications for potential weaponry, or in the energy industry. " +
-        "It may even be yet another source of power for your " +
-        spice_text[0] +
-        " empire's growth.",
-    "unstable_spice",
-    17
-)
-new compendium(
-    "ANTI" + spice_text[2],
-    "The second discovery brought by the " +
-        spice_text[1] +
-        " Collider: smashing units of atomic " +
-        spice_text[0] +
-        ' together sometimes creates the "opposite" of atomic ' +
-        spice_text[0] +
-        ', which is now considered as the basic form of "anti' +
-        spice_text[0] +
-        '". ' +
-        "Additionally, your researchers theorize that colliding ordinary " +
-        spice_text[0] +
-        " types with basic anti" +
-        spice_text[0] +
-        ' may create the "opposite" of those ' +
-        spice_text[0] +
-        " types." +
-        "<br><br>Rather than negating the properties of their ordinary counterparts, the anti" +
-        spice_text[0] +
-        " variants of a " +
-        spice_text[0] +
-        " may instead amplify their abilities, and may even cause entirely new abilities to manifest. " +
-        "The efficiency of harvest of that " +
-        spice_text[0] +
-        " type might also be increased.",
-    "pure_antispice",
-    18
-)
-new compendium(
-    "REALMS",
-    "After your empire seemingly somehow exhausted all resources in the universe, the discovery of Realms followed almost immediately. " +
-        "What you once thought was the whole universe was really just a single Realm in the incomprehensibly even more vast universe. " +
-        'The new theory is that each Realm is a separate, self-contained "bubble" in the universe, and that most civilizations inside them consider their Realm to be all there is.',
-    "rainbow_antispice",
-    19
 )
 //done initializing compendium entries
