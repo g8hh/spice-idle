@@ -627,25 +627,26 @@ const rn_scale = [0.202, 0.188, 0.174, 0.16, 0.145, 0.131]
 const rc_scale = [0.233, 0.206, 0.18, 0.153, 0.127, 0.101]
 
 let key = {
-    digit: [false, false, false, false, false, false],
-    shift: false,
-    escape: false,
-    enter: false,
+    digit: [-1, -1, -1, -1, -1, -1],
+    shift: -1,
+    escape: -1,
+    enter: -1,
 
-    s: false,
-    m: false,
-    b: false,
-    p: false,
-    i: false,
-    a: false,
-    r: false,
-    n: false,
-    c: false,
-    x: false,
-    y: false,
-    e: false,
-    k: false,
-    v: false,
+    s: -1,
+    m: -1,
+    b: -1,
+    p: -1,
+    i: -1,
+    a: -1,
+    d: -1,
+    n: -1,
+    c: -1,
+    x: -1,
+    y: -1,
+    r: -1,
+    e: -1,
+    k: -1,
+    v: -1,
 }
 
 function format_small(num, not) {
@@ -970,9 +971,25 @@ if (meme_condition) {
     document.getElementById("prestige_spice_delta_text").innerHTML =
         "Auto-Prestige Delta (Rainbow Salt):"
 
+    document.getElementById("ascend_info").innerHTML =
+        "Your Ansuz runes can be converted into any of the three rune types below" +
+        "<br>Each one makes rune power of its own variety, boosting salt production of its respective type(s)" +
+        "<br>Ansuz runes can also be spent on other things than conversion"
+
+    document.getElementById("ascend_challenge_info").innerHTML =
+        "Entering an Ascension Challenge will reset your current Ascension" +
+        "<br>You must Ascend with the required amount of rainbow salt to complete the Challenge" +
+        "<br><br>Ascension automation and rainbow salt multipliers are disabled in Ascension Challenges"
+
+    document.getElementById("arcane_unlock").innerHTML =
+        "Complete Challenge 1 to unlock arcane salt!"
     document.getElementById("arcane_spice_text").innerHTML = "arcane salt"
     document.getElementById("arcane_gen_name_s").innerHTML =
         "Arcane Salt Strengthener"
+
+    document.getElementById("collapse_info2").innerHTML =
+        "Atomic salt gains are based on total salt produced" +
+        '<span id="research_unlock"><br>Collapse 5 times to unlock Research</span>'
 
     document.getElementById("atomic_spice_text").innerHTML = "atomic salt"
     document.getElementById("atomic_spice_text2").innerHTML = "atomic salt"
@@ -1005,16 +1022,21 @@ if (meme_condition) {
     document.getElementById("antiperks_title").innerHTML = "Antisalt Perks"
     document.getElementById("refund_perks").innerHTML = "Refund Antisalt Perks"
 
+    document.getElementById("expand_req2").innerHTML =
+        "Antisalt perk 9 required"
+
     document.getElementById("dark_spice").innerHTML = "DARK SALT"
     document.getElementById("dark_spice_text").innerHTML = "dark salt"
     document.getElementById("dark_gen_name_s").innerHTML =
         "Dark Salt Strengthener"
+    document.getElementById("dark_gen_name_a").innerHTML =
+        "Dark Salt Accelerator"
 
     document.getElementById("spice_idle").innerHTML = "Salt Idle"
     document.title = "Salt Idle"
     document.getElementById("spices").innerHTML = "SALTS"
     document.getElementById("version").innerHTML =
-        "Salt Idle v1.8.4<br>Made by Zakuro<br><br>Last updated March 25, 2025"
+        "Salt Idle v1.8.6<br>Made by Zakuro<br><br>Last updated April 17, 2025"
 }
 
 //initialize map
@@ -1028,6 +1050,7 @@ const research_map = new Map()
 const research_map2 = new Map()
 const antispice_map = new Map()
 const galactic_map = new Map()
+const realm_map = new Map()
 const compendium_map = new Map()
 
 //spice generator class
@@ -3395,6 +3418,8 @@ function generate_realms() {
 
     let distance = new Array()
 
+    let chosen = undefined
+
     for (let i = 0; i < 5; i++) {
         for (let j = 0; j < 98; j++) {
             distance.push(j * 0.01 + 0.02)
@@ -3643,25 +3668,51 @@ function generate_realms() {
                                                 special_quality -
                                                 2)
                                     ))
-                    new realm(
-                        x,
-                        y,
-                        normal_stat,
-                        special_stat,
-                        reset_stat,
-                        size,
-                        "hsl(" +
-                            random_float() * 360 +
-                            ", 100%, " +
-                            (random_float() ** 3 * 60 + 40) +
-                            "%)",
-                        "hsl(" +
-                            random_float() * 360 +
-                            ", 100%, " +
-                            (random_float() ** 3 * 60 + 40) +
-                            "%)",
-                        random_float() * 180
-                    )
+                    if (
+                        i === order[0] &&
+                        distance[0] === 0.11 &&
+                        chosen === undefined
+                    ) {
+                        chosen = new realm(
+                            x,
+                            y,
+                            normal_stat,
+                            special_stat,
+                            reset_stat,
+                            0.5 + 1 / (1 + Math.exp(-2.043)),
+                            "hsl(" +
+                                random_float() * 360 +
+                                ", 100%, " +
+                                (random_float() ** 3 * 60 + 40) +
+                                "%)",
+                            "hsl(" +
+                                random_float() * 360 +
+                                ", 100%, " +
+                                (random_float() ** 3 * 60 + 40) +
+                                "%)",
+                            random_float() * 180
+                        )
+                    } else {
+                        new realm(
+                            x,
+                            y,
+                            normal_stat,
+                            special_stat,
+                            reset_stat,
+                            size,
+                            "hsl(" +
+                                random_float() * 360 +
+                                ", 100%, " +
+                                (random_float() ** 3 * 60 + 40) +
+                                "%)",
+                            "hsl(" +
+                                random_float() * 360 +
+                                ", 100%, " +
+                                (random_float() ** 3 * 60 + 40) +
+                                "%)",
+                            random_float() * 180
+                        )
+                    }
                 }
             } else if (status === "failed") {
                 let new_distance = random_float() * 0.8 + 0.2
@@ -3683,6 +3734,16 @@ function generate_realms() {
                 " times"
         )
     }
+
+    chosen.normal =
+        (realm_range(0, 0.89, 1) - realm_range(0, 0.89, 0)) * 0.727 +
+        realm_range(0, 0.89, 0)
+    chosen.special =
+        (realm_range(1, 0.89, 1) - realm_range(1, 0.89, 0)) * 0.727 +
+        realm_range(1, 0.89, 0)
+    chosen.reset =
+        (realm_range(2, 0.89, 1) - realm_range(2, 0.89, 0)) * 0.727 +
+        realm_range(2, 0.89, 0)
 
     let mobile = Number(
         getComputedStyle(document.body).getPropertyValue("--mobile")
@@ -4385,7 +4446,10 @@ new compendium(
     "ATOMIC " + spice_text[2],
     "- the smallest, indivisible and most fundamental unit of " +
         spice_text[0] +
-        "<br>- all spices are made up of atomic spice",
+        "<br>- all " +
+        spice_text[0] +
+        "s are made up of atomic " +
+        spice_text[0],
     "atomic_spice",
     8
 )
@@ -4401,7 +4465,9 @@ new compendium(
 )
 new compendium(
     "ANTI" + spice_text[2],
-    '- each spice has an opposite form, referred to as its "anti' +
+    "- each " +
+        spice_text[0] +
+        ' has an opposite form, referred to as its "anti' +
         spice_text[0] +
         '"<br>- the most fundamental anti' +
         spice_text[0] +
